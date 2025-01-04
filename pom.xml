@@ -8,10 +8,10 @@
 		<version>3.3.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>gr.hua.dit.ds</groupId>
-	<artifactId>ds-lab-2024</artifactId>
+	<groupId>pet.lovers</groupId>
+	<artifactId>petLovers</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ds-lab-2024</name>
+	<name>petLovers</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
