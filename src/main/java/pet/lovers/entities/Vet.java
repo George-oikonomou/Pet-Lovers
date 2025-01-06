@@ -6,12 +6,9 @@ import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 
 @Entity
-@Table
+@Table(name = "vets")
+@PrimaryKeyJoinColumn(name = "user_id")
 public class Vet extends User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int vetID;
 
     @Column
     @NotBlank
@@ -30,13 +27,8 @@ public class Vet extends User {
 
     public Vet(String username, String email, String password, int vetID, String fullName, String specialization) {
         super(username, email, password);
-        this.vetID = vetID;
         this.fullName = fullName;
         this.specialization = specialization;
-    }
-
-    public int getVetID() {
-        return vetID;
     }
 
     public String getFullName() {

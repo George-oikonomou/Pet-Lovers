@@ -10,6 +10,7 @@ import java.util.Set;
 
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(	name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
