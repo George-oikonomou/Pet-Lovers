@@ -6,14 +6,17 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 import java.time.Year;
+import java.util.List;
 
 @Entity
 @Table
 public class Pet {
 
+
+    //TABLE COLUMNS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int petID;
+    private int id;
 
     @Column
     @NotEmpty(message = "Name is required")
@@ -46,14 +49,18 @@ public class Pet {
     @NotBlank
     private HealthStatus healthStatus;
 
+    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
+    private AdoptionRequest adoptionRequest;
 
 //    private Shelter shelterHost;
 
     @Enumerated
     private PetStatus petStatus;
+    //END TABLE COLUMNS
 
-    public Pet(int petID, String name, int yearBirthed, String type, String breed, float weight, boolean adoptedStatus, HealthStatus healthStatus, PetStatus petStatus) {
-        this.petID = petID;
+
+    //CONSTRUCTORS
+    public Pet(String name, int yearBirthed, String type, String breed, float weight, boolean adoptedStatus, HealthStatus healthStatus, PetStatus petStatus) {
         this.name = name;
         this.yearBirthed = yearBirthed;
         this.type = type;
@@ -70,10 +77,11 @@ public class Pet {
         breed = "null";
     }
 
+
+    //GETTERS AND SETTERS
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -93,7 +101,6 @@ public class Pet {
     public float getWeight() {
         return weight;
     }
-
     public void setWeight(float weight) {
         this.weight = weight;
     }
@@ -101,7 +108,6 @@ public class Pet {
     public boolean isAdoptedStatus() {
         return adoptedStatus;
     }
-
     public void setAdoptedStatus(boolean adoptedStatus) {
         this.adoptedStatus = adoptedStatus;
     }
@@ -109,7 +115,6 @@ public class Pet {
     public HealthStatus getHealthStatus() {
         return healthStatus;
     }
-
     public void setHealthStatus(HealthStatus healthStatus) {
         this.healthStatus = healthStatus;
     }
@@ -130,12 +135,20 @@ public class Pet {
         this.petStatus = petStatus;
     }
 
-    public int getPetID() {
-        return petID;
+    public int getId() {
+        return id;
+    }
+
+    public AdoptionRequest getAdoptionRequest() {
+        return adoptionRequest;
+    }
+
+    public void setAdoptionRequest(AdoptionRequest adoptionRequest) {
+        this.adoptionRequest = adoptionRequest;
     }
 
     @Override
     public String toString() {
-        return "PET\nid: " + petID + "\nname: " + name + "\nage: " + (Year.now().getValue() - yearBirthed) + "\ntype: " + type + "\nbreed: " + breed + "\nweight: " + weight;
+        return "PET\nname: " + name + "\nage: " + (Year.now().getValue() - yearBirthed) + "\ntype: " + type + "\nbreed: " + breed + "\nweight: " + weight;
     }
 }
