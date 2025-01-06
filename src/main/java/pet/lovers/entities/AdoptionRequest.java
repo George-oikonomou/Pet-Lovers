@@ -52,10 +52,6 @@ public class AdoptionRequest {    //TODO REQUESTED VISIT
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public Boolean getStatus() {
         return Status;
     }
