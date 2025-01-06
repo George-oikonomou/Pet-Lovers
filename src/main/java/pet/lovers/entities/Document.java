@@ -28,8 +28,7 @@ public class Document {
     @Size(max = 200)
     private String descriptor;
 
-    public Document(int id,String path, String name, boolean approved, String descriptor) {
-        this.id = id;
+    public Document(String path, String name, boolean approved, String descriptor) {
         this.path = path;
         this.name = name;
         this.approved = approved;
