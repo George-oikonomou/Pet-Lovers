@@ -11,7 +11,7 @@ public class AdoptionRequest {    //TODO REQUESTED VISIT
     //TABLE COLUMNS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column
     @NotBlank
@@ -25,10 +25,9 @@ public class AdoptionRequest {    //TODO REQUESTED VISIT
     @JoinColumn(name="adopter_id")
     private Adopter adopter;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name="pet_id")
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "pet_id", referencedColumnName = "id")
     private Pet pet;
-
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name="shelter_id")
@@ -49,11 +48,11 @@ public class AdoptionRequest {    //TODO REQUESTED VISIT
 
 
     //GETTERS AND SETTERS
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

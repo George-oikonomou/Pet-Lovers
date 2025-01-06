@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CollectionIdMutability;
 import org.springframework.data.annotation.Id;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -22,13 +24,14 @@ public class Adopter extends User {
 
     @Column
     @NotBlank
-    private String birthDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime birthDate;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "identification", referencedColumnName = "id")
     private Document identification;
 
-    @OneToMany(mappedBy = "adopter", cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "adopter", cascade= CascadeType.ALL)
     private List<AdoptionRequest> adoptionRequests;
 
 //    @OneToMany(mappedBy = "vet")
@@ -39,7 +42,7 @@ public class Adopter extends User {
     //CONSTRUCTORS
     public Adopter() {}
 
-    public Adopter(String username, String email, String password,String fullName, String birthDate, Document identification) {
+    public Adopter(String username, String email, String password,String fullName, LocalDateTime birthDate, Document identification) {
         super(username, email, password);
         this.fullName = fullName;
         this.birthDate = birthDate;
@@ -56,11 +59,11 @@ public class Adopter extends User {
         this.fullName = fullName;
     }
 
-    public String getBirthDate() {
+    public LocalDateTime getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
     }
 

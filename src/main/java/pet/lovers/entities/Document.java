@@ -83,7 +83,4 @@ public class Document {
     public Adopter getAdopter() {
         return adopter;
     }
-    public void setAdopter(Adopter adopter) {
-        this.adopter = adopter;
-    }
 }

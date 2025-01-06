@@ -49,8 +49,9 @@ public class Pet {
     @NotBlank
     private HealthStatus healthStatus;
 
-    @OneToMany(mappedBy = "pet", cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    private List<AdoptionRequest> adoptionRequests;
+    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
+    private AdoptionRequest adoptionRequest;
+
 //    private Shelter shelterHost;
 
     @Enumerated
@@ -138,12 +139,12 @@ public class Pet {
         return id;
     }
 
-    public List<AdoptionRequest> getAdoptionRequests() {
-        return adoptionRequests;
+    public AdoptionRequest getAdoptionRequest() {
+        return adoptionRequest;
     }
 
-    public void setAdoptionRequests(List<AdoptionRequest> adoptionRequests) {
-        this.adoptionRequests = adoptionRequests;
+    public void setAdoptionRequest(AdoptionRequest adoptionRequest) {
+        this.adoptionRequest = adoptionRequest;
     }
 
     @Override

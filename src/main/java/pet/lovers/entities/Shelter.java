@@ -20,7 +20,7 @@ public class Shelter extends User{
     private String name;
 
 
-    @OneToMany(mappedBy = "shelter", cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "shelter", cascade= CascadeType.ALL)
     private List<AdoptionRequest> adoptionRequests;
 //    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Pet> pets;
