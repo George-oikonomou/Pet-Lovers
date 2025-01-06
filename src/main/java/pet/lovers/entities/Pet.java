@@ -50,6 +50,7 @@ public class Pet {
     @Enumerated
     private PetStatus petStatus;
 
+
     public Pet(int petID, String name, int yearBirthed, String type, String breed, float weight, HealthStatus healthStatus, PetStatus petStatus) {
         this.petID = petID;
         this.name = name;
