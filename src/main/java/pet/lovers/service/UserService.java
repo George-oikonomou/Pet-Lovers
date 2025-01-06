@@ -1,5 +1,7 @@
 package pet.lovers.service;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import pet.lovers.entities.Role;
 import pet.lovers.entities.User;
 import pet.lovers.repositories.RoleRepository;
@@ -82,6 +84,11 @@ public class UserService implements UserDetailsService {
 
     public Object getUser(Long userId) {
         return userRepository.findById(userId).get();
+    }
+
+    public User getCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByUsername(authentication.getName()).orElseThrow();
     }
 
     @Transactional
