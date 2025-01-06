@@ -24,10 +24,9 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String register(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
-        return "auth/register";
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
+        return "auth/register"; // Ensure this template exists
     }
 
     @PostMapping("/saveUser")

@@ -3,7 +3,8 @@ package pet.lovers.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import org.springframework.data.annotation.Id;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "vets")
@@ -23,10 +24,12 @@ public class Vet extends User {
 //    @JoinColumn(name = "shelterID", referencedColumnName = "shelterID")
 //    private Shelter shelter;
 
-    public Vet() {}
+    public Vet() {
+        super();
+    }
 
-    public Vet(String username, String email, String password, int vetID, String fullName, String specialization) {
-        super(username, email, password);
+    public Vet(Integer id, String username, String email, String password, long contact_number, String location, String role, Set<Role> roles, String fullName, String specialization) {
+        super(id, username, email, password, contact_number, location, role, roles);
         this.fullName = fullName;
         this.specialization = specialization;
     }

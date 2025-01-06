@@ -3,6 +3,7 @@ package pet.lovers.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
@@ -34,6 +35,17 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @NotBlank
+    @Pattern(regexp = "^\\d{10}$", message = "The number must be exactly 10 digits.")
+    private long contact_number;
+
+    @NotBlank
+    @Size(max = 100)
+    private String location;
+
+    @NotBlank
+    private String role;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -43,10 +55,39 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String password) {
+    public User(Integer id, String username, String email, String password, long contact_number, String location, String role, Set<Role> roles) {
+        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.contact_number = contact_number;
+        this.location = location;
+        this.role = role;
+        this.roles = roles;
+    }
+
+    public long getContact_number() {
+        return contact_number;
+    }
+
+    public void setContact_number(@NotBlank @Pattern(regexp = "^\\d{10}$", message = "The number must be exactly 10 digits.") long contact_number) {
+        this.contact_number = contact_number;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(@NotBlank @Size(max = 100) String location) {
+        this.location = location;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(@NotBlank String role) {
+        this.role = role;
     }
 
     public Integer getId() {
