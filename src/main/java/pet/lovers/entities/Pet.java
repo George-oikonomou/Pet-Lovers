@@ -13,7 +13,7 @@ public class Pet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long petID;
+    private int petID;
 
     @Column
     @NotEmpty(message = "Name is required")
@@ -52,7 +52,7 @@ public class Pet {
     @Enumerated
     private PetStatus petStatus;
 
-    public Pet(long petID, String name, int yearBirthed, String type, String breed, float weight, boolean adoptedStatus, HealthStatus healthStatus, PetStatus petStatus) {
+    public Pet(int petID, String name, int yearBirthed, String type, String breed, float weight, boolean adoptedStatus, HealthStatus healthStatus, PetStatus petStatus) {
         this.petID = petID;
         this.name = name;
         this.yearBirthed = yearBirthed;
@@ -130,12 +130,8 @@ public class Pet {
         this.petStatus = petStatus;
     }
 
-    public long getPetID() {
+    public int getPetID() {
         return petID;
-    }
-
-    public void setPetID(long petID) {
-        this.petID = petID;
     }
 
     @Override
