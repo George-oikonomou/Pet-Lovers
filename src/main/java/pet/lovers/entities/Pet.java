@@ -13,7 +13,7 @@ public class Pet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long petID;
+    private int petID;
 
     @Column
     @NotEmpty(message = "Name is required")
@@ -23,52 +23,45 @@ public class Pet {
     @Column
     @NotBlank
     @Size(min = 2000, max = 2025)
-    private final int yearBirthed;
+    private int yearBirthed;
 
     @Column
     @NotBlank
 
-    private final String type;
+    private String type;
 
     @Column
     @NotBlank
-    private final String breed;
+    private String breed;
 
     @Column
     @Size(min = 1, max = 90)
     private float weight;
 
-    @Column
-    @NotBlank
-    private boolean adoptedStatus;
-
     @Enumerated
     @NotBlank
     private HealthStatus healthStatus;
 
-
-//    private Shelter shelterHost;
-
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH},
+            fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "shelter_id", nullable = false)
+    private Shelter shelter;
     @Enumerated
     private PetStatus petStatus;
 
-    public Pet(long petID, String name, int yearBirthed, String type, String breed, float weight, boolean adoptedStatus, HealthStatus healthStatus, PetStatus petStatus) {
+    public Pet(int petID, String name, int yearBirthed, String type, String breed, float weight, HealthStatus healthStatus, PetStatus petStatus) {
         this.petID = petID;
         this.name = name;
         this.yearBirthed = yearBirthed;
         this.type = type;
         this.breed = breed;
         this.weight = weight;
-        this.adoptedStatus = adoptedStatus;
         this.healthStatus = healthStatus;
         this.petStatus = petStatus;
     }
 
-    public Pet() {
-        yearBirthed = 0;
-        type = "null";
-        breed = "null";
-    }
+    public Pet() {}
 
     public String getName() {
         return name;
@@ -98,14 +91,6 @@ public class Pet {
         this.weight = weight;
     }
 
-    public boolean isAdoptedStatus() {
-        return adoptedStatus;
-    }
-
-    public void setAdoptedStatus(boolean adoptedStatus) {
-        this.adoptedStatus = adoptedStatus;
-    }
-
     public HealthStatus getHealthStatus() {
         return healthStatus;
     }
@@ -114,13 +99,13 @@ public class Pet {
         this.healthStatus = healthStatus;
     }
 
-//    public Shelter getShelter() {
-//        return shelter;
-//    }
-//
-//    public void setShelter(Shelter shelter) {
-//        this.shelter = shelter;
-//    }
+    public Shelter getShelter() {
+        return shelter;
+    }
+
+    public void setShelter(Shelter shelter) {
+        this.shelter = shelter;
+    }
 
     public PetStatus getPetStatus() {
         return petStatus;
@@ -130,12 +115,8 @@ public class Pet {
         this.petStatus = petStatus;
     }
 
-    public long getPetID() {
+    public int getPetID() {
         return petID;
-    }
-
-    public void setPetID(long petID) {
-        this.petID = petID;
     }
 
     @Override
