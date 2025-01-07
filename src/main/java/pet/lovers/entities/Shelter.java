@@ -32,8 +32,8 @@ public class Shelter extends User{
 
 
 
-    public Shelter(String username, String email, String password, long contact_number, String location, Role role, Set<Role> roles, String name) {
-        super(username, email, password, contact_number, location, role, roles);
+    public Shelter(String username, String email, String password, long contact_number, String location, String name) {
+        super(username, email, password, contact_number, location);
         this.name = name;
     }
 
