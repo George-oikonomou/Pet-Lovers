@@ -26,12 +26,10 @@ public class Vet extends User {
     // END TABLE COLUMNS
 
 
-    public Vet() {
-        super();
-    }
+    public Vet() {}
 
-    public Vet(Integer id, String username, String email, String password, long contact_number, String location, String role, Set<Role> roles, String fullName, String specialization) {
-        super(id, username, email, password, contact_number, location, role, roles);
+    public Vet(Integer id, String username, String email, String password, long contactNumber, String location, String fullName, String specialization) {
+        super(id, username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.specialization = specialization;
     }
