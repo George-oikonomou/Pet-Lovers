@@ -37,7 +37,7 @@ public class User {
 
     @NotBlank
     @Pattern(regexp = "^\\d{10}$", message = "The number must be exactly 10 digits.")
-    private String contact_number;
+    private String contactNumber;
 
     @NotBlank
     @Size(max = 100)
@@ -52,21 +52,21 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String username, String email, String password, String contact_number, String location) {
+    public User(Integer id, String username, String email, String password, String contactNumber, String location) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.contact_number = contact_number;
+        this.contactNumber = contactNumber;
         this.location = location;
     }
 
-    public String getContact_number() {
-        return contact_number;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
-    public void setContact_number(String contact_number) {
-        this.contact_number = contact_number;
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
     public String getLocation() {
