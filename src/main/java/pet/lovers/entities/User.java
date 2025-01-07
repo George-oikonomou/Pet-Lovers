@@ -70,7 +70,7 @@ public class User {
         return contact_number;
     }
 
-    public void setContact_number(@NotBlank @Pattern(regexp = "^\\d{10}$", message = "The number must be exactly 10 digits.") String contact_number) {
+    public void setContact_number(String contact_number) {
         this.contact_number = contact_number;
     }
 
@@ -78,7 +78,7 @@ public class User {
         return location;
     }
 
-    public void setLocation(@NotBlank @Size(max = 100) String location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
