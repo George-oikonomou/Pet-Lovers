@@ -44,7 +44,7 @@ public class User {
     private String location;
 
     @NotBlank
-    private String role;
+    private Role role;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "user_roles",
@@ -55,7 +55,7 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String username, String email, String password, long contact_number, String location, String role, Set<Role> roles) {
+    public User(Integer id, String username, String email, String password, long contact_number, String location, Role role, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -84,10 +84,6 @@ public class User {
 
     public String getRole() {
         return role;
-    }
-
-    public void setRole(@NotBlank String role) {
-        this.role = role;
     }
 
     public Integer getId() {
