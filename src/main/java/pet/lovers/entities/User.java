@@ -52,8 +52,7 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String username, String email, String password, String contactNumber, String location) {
-        this.id = id;
+    public User(String username, String email, String password, String contactNumber, String location) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -75,10 +74,6 @@ public class User {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public String getRole() {
-        return role;
     }
 
     public Integer getId() {

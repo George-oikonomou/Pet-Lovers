@@ -28,8 +28,8 @@ public class Vet extends User {
 
     public Vet() {}
 
-    public Vet(Integer id, String username, String email, String password, long contactNumber, String location, String fullName, String specialization) {
-        super(id, username, email, password, contactNumber, location);
+    public Vet(String username, String email, String password, String contactNumber, String location, String fullName, String specialization) {
+        super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.specialization = specialization;
     }

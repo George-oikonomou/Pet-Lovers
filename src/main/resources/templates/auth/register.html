@@ -25,13 +25,20 @@
         </div>
 
         <div class="form-group">
-            <label for="contact_number">Contact number</label>
-            <input type="number" class="form-control" th:field="*{contact_number}" id="contact_number" required/>
-            <span th:if="${#fields.hasErrors('contact_number')}" th:errors="*{contact_number}"></span>
+            <label for="contactNumber">Contact number</label>
+            <input type="text" class="form-control"
+                   th:field="*{contactNumber}"
+                   id="contact_number"
+                   required
+                   pattern="[0-9]{10}"
+                   title="Contact number must be exactly 10 digits"
+                   maxlength="10"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+            <span th:if="${#fields.hasErrors('contactNumber')}" th:errors="*{contactNumber}"></span>
         </div>
 
         <script>
-            // Clear the input field if it has a default value of '0' when the page loads
+            //clear the input field if it has a default value of '0' when the page loads
             window.onload = function() {
                 var contactNumberInput = document.getElementById('contact_number');
                 if (contactNumberInput.value === '0') {
@@ -41,18 +48,17 @@
         </script>
 
         <style>
-            /* Remove number spinner arrows for webkit browsers (Chrome, Safari, Edge) */
             input[type="number"]::-webkit-outer-spin-button,
             input[type="number"]::-webkit-inner-spin-button {
                 -webkit-appearance: none;
                 margin: 0;
             }
 
-            /* Remove number spinner arrows for Firefox */
             input[type="number"] {
                 -moz-appearance: textfield;
             }
         </style>
+
         <div class="form-group">
             <label for="location">Location</label>
             <input type="text" class="form-control" th:field="*{location}" id="location" required/>

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,10 +32,10 @@ public class Shelter extends User{
 // END TABLE COLUMNS
 
 
-
-    public Shelter(String username, String email, String password, long contact_number, String location, String name) {
-        super(username, email, password, contact_number, location);
+    public Shelter(String username, String email, String password, String contactNumber, String location, String name, List<AdoptionRequest> adoptionRequests) {
+        super(username, email, password, contactNumber, location);
         this.name = name;
+        this.adoptionRequests = adoptionRequests;
     }
 
     public Shelter() {
