@@ -3,6 +3,7 @@ package pet.lovers.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
@@ -34,6 +35,14 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @NotBlank
+    @Pattern(regexp = "^\\d{10}$", message = "The number must be exactly 10 digits.")
+    private String contactNumber;
+
+    @NotBlank
+    @Size(max = 100)
+    private String location;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -43,10 +52,28 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, String contactNumber, String location) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.contactNumber = contactNumber;
+        this.location = location;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public Integer getId() {

@@ -25,11 +25,11 @@ public class Vet extends User {
 //    private Shelter shelter;
     // END TABLE COLUMNS
 
-    // CONSTRUCTORS
+
     public Vet() {}
 
-    public Vet(String username, String email, String password, int vetID, String fullName, String specialization) {
-        super(username, email, password);
+    public Vet(String username, String email, String password, String contactNumber, String location, String fullName, String specialization) {
+        super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.specialization = specialization;
     }

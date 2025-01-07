@@ -42,13 +42,13 @@ public class Adopter extends User {
     //CONSTRUCTORS
     public Adopter() {}
 
-    public Adopter(String username, String email, String password,String fullName, LocalDateTime birthDate, Document identification) {
-        super(username, email, password);
+    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDateTime birthDate, Document identification, List<AdoptionRequest> adoptionRequests) {
+        super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.identification = identification;
+        this.adoptionRequests = adoptionRequests;
     }
-
 
     //GETTERS AND SETTERS
     public String getFullName() {
