@@ -42,12 +42,13 @@ public class UserService implements UserDetailsService {
         String encodedPassword = passwordEncoder.encode(passwd);
         user.setPassword(encodedPassword);
 
-        Role role = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
+        Set<Role> existingRoles = user.getRoles() != null ? user.getRoles() : new HashSet<>();
 
+        Role role = roleRepository.findByName("ROLE_ADOPTER")
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        existingRoles.add(role);
+
+        user.setRoles(existingRoles);
         user = userRepository.save(user);
         return user.getId();
     }

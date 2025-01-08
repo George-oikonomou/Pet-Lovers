@@ -2,13 +2,12 @@ package pet.lovers.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.CollectionIdMutability;
-import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "adopters")
@@ -23,7 +22,7 @@ public class Adopter extends User {
     private String fullName;
 
     @Column
-    @NotBlank
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime birthDate;
 
@@ -32,7 +31,7 @@ public class Adopter extends User {
     private Document identification;
 
     @OneToMany(mappedBy = "adopter", cascade= CascadeType.ALL)
-    private List<AdoptionRequest> adoptionRequests;
+    private Set<AdoptionRequest> adoptionRequests;
 
 //    @OneToMany(mappedBy = "vet")
 //    @JoinColumn(name = "shelterID", referencedColumnName = "shelterID")
@@ -42,12 +41,11 @@ public class Adopter extends User {
     //CONSTRUCTORS
     public Adopter() {}
 
-    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDateTime birthDate, Document identification, List<AdoptionRequest> adoptionRequests) {
+    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDateTime birthDate, Document identification) {
         super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.identification = identification;
-        this.adoptionRequests = adoptionRequests;
     }
 
     //GETTERS AND SETTERS
@@ -75,11 +73,11 @@ public class Adopter extends User {
         this.identification = identification;
     }
 
-    public List<AdoptionRequest> getAdoptionRequests() {
+    public Set<AdoptionRequest> getAdoptionRequests() {
         return adoptionRequests;
     }
 
-    public void setAdoptionRequests(List<AdoptionRequest> adoptionRequests) {
+    public void setAdoptionRequests(Set<AdoptionRequest> adoptionRequests) {
         this.adoptionRequests = adoptionRequests;
     }
 }

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -21,9 +21,11 @@ public class Shelter extends User{
 
 
     @OneToMany(mappedBy = "shelter", cascade= CascadeType.ALL)
-    private List<AdoptionRequest> adoptionRequests;
-//    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Pet> pets;
+    private Set<AdoptionRequest> adoptionRequests;
+
+    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL)
+    private Set<Pet> pets;
+
 
 //    @Column
 //    @NotBlank
@@ -31,10 +33,9 @@ public class Shelter extends User{
 // END TABLE COLUMNS
 
 
-    public Shelter(String username, String email, String password, String contactNumber, String location, String name, List<AdoptionRequest> adoptionRequests) {
+    public Shelter(String username, String email, String password, String contactNumber, String location, String name) {
         super(username, email, password, contactNumber, location);
         this.name = name;
-        this.adoptionRequests = adoptionRequests;
     }
 
     public Shelter() {
@@ -49,5 +50,19 @@ public class Shelter extends User{
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<AdoptionRequest> getAdoptionRequests() {
+        return adoptionRequests;
+    }
+    public void setAdoptionRequests(Set<AdoptionRequest> adoptionRequests) {
+        this.adoptionRequests = adoptionRequests;
+    }
+
+    public Set<Pet> getPets() {
+        return pets;
+    }
+    public void setPets(Set<Pet> pets) {
+        this.pets = pets;
     }
 }

@@ -39,7 +39,7 @@ public class Pet {
 
     @Column
     @Size(min = 1, max = 90)
-    private float weight;
+    private double weight;
 
     @Column
     @NotBlank
@@ -52,7 +52,9 @@ public class Pet {
     @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
     private AdoptionRequest adoptionRequest;
 
-//    private Shelter shelterHost;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name="shelter_id")
+    private Shelter shelter;
 
     @Enumerated
     private PetStatus petStatus;
@@ -60,7 +62,7 @@ public class Pet {
 
 
     //CONSTRUCTORS
-    public Pet(String name, int yearBirthed, String type, String breed, float weight, boolean adoptedStatus, HealthStatus healthStatus, PetStatus petStatus) {
+    public Pet(String name, int yearBirthed, String type, String breed, double weight, boolean adoptedStatus, HealthStatus healthStatus, PetStatus petStatus, Shelter shelter) {
         this.name = name;
         this.yearBirthed = yearBirthed;
         this.type = type;
@@ -69,6 +71,7 @@ public class Pet {
         this.adoptedStatus = adoptedStatus;
         this.healthStatus = healthStatus;
         this.petStatus = petStatus;
+        this.shelter = shelter;
     }
 
     public Pet() {
@@ -98,7 +101,7 @@ public class Pet {
         return breed;
     }
 
-    public float getWeight() {
+    public double getWeight() {
         return weight;
     }
     public void setWeight(float weight) {
@@ -119,13 +122,13 @@ public class Pet {
         this.healthStatus = healthStatus;
     }
 
-//    public Shelter getShelter() {
-//        return shelter;
-//    }
-//
-//    public void setShelter(Shelter shelter) {
-//        this.shelter = shelter;
-//    }
+    public Shelter getShelter() {
+        return shelter;
+    }
+
+    public void setShelter(Shelter shelter) {
+        this.shelter = shelter;
+    }
 
     public PetStatus getPetStatus() {
         return petStatus;
