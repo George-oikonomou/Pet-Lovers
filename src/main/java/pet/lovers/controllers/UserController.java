@@ -1,7 +1,6 @@
 package pet.lovers.controllers;
 
 import pet.lovers.entities.Role;
-import pet.lovers.entities.Shelter;
 import pet.lovers.entities.User;
 import pet.lovers.entities.Vet;
 import pet.lovers.repositories.RoleRepository;
@@ -93,9 +92,7 @@ public class UserController {
     @GetMapping("/register/vet")
     public String vetRegister(Model model) {
         Vet vet = new Vet();
-//        List<Shelter> shelters = shelterService.findAll(); // Fetching all shelters from the service
         model.addAttribute("vet", vet);
-//        model.addAttribute("shelters", shelters);
         return "auth/vetRegister";
     }
 //
