@@ -23,15 +23,22 @@ public class Vet extends User {
     private String specialization;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "identification", referencedColumnName = "id")
-    private Document identification;
+    @JoinColumn(name = "documents", referencedColumnName = "id")
+    private Document documents;
 
     @OneToMany(mappedBy = "vet", cascade= CascadeType.ALL)
-    @JoinColumn(name = "shelterID", referencedColumnName = "shelterID")
     private List<Shelter> shelters;
     // END TABLE COLUMNS
 
     public Vet() {}
+
+    public Vet(String username, String email, String password, String contactNumber, String location, String fullName, String specialization, Document documents, List<Shelter> shelters) {
+        super(username, email, password, contactNumber, location);
+        this.fullName = fullName;
+        this.specialization = specialization;
+        this.documents = documents;
+        this.shelters = shelters;
+    }
 
     // GETTERS AND SETTERS
     public String getFullName() {
@@ -46,5 +53,21 @@ public class Vet extends User {
     }
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
+    }
+
+    public Document getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(Document documents) {
+        this.documents = documents;
+    }
+
+    public List<Shelter> getShelters() {
+        return shelters;
+    }
+
+    public void setShelters(List<Shelter> shelters) {
+        this.shelters = shelters;
     }
 }

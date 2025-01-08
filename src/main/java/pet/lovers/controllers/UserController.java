@@ -91,9 +91,11 @@ public class UserController {
     }
 
     @GetMapping("/register/vet")
-    public String showRegistrationForVet(Model model) {
+    public String vetRegister(Model model) {
         Vet vet = new Vet();
+//        List<Shelter> shelters = shelterService.findAll(); // Fetching all shelters from the service
         model.addAttribute("vet", vet);
+//        model.addAttribute("shelters", shelters);
         return "auth/vetRegister";
     }
 //

@@ -46,7 +46,6 @@ public class AdoptionRequest {    //TODO REQUESTED VISIT
         this.shelter = shelter;
     }
 
-
     //GETTERS AND SETTERS
     public int getId() {
         return id;
