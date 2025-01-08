@@ -77,13 +77,6 @@ public class Document {
         this.name = name;
     }
 
-    public boolean getApproved() {
-        return approved;
-    }
-    public void setApproved(boolean approved) {
-        this.approved = approved;
-    }
-
     public String getDescriptor() {
         return descriptor;
     }
