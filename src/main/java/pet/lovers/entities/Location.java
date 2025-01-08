@@ -33,9 +33,6 @@ public class Location {
     @NotBlank
     private String postalCode;
 
-    @OneToMany(mappedBy = "location")  // Bidirectional relationship (optional)
-    private List<Visit> visits;
-
     public Location(int id, String regionalUnit, String city, String address, String number, String postalCode) {
         this.id = id;
         this.regionalUnit = regionalUnit;
