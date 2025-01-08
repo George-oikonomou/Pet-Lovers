@@ -14,9 +14,9 @@
         <p>Invalid username or password.</p>
     </div>
 
-    <h3>User Registration</h3>
+    <h3>Vet Registration</h3>
 
-    <form th:action="@{/saveUser}" method="post" th:object="${user}">
+    <form th:action="@{/saveVet}" method="post" th:object="${vet}">
 
         <div class="form-group">
             <label for="email">Email</label>
@@ -78,11 +78,6 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Register</button>
-
-        <div class="form-group">
-            <a th:href="@{/register/vet}"><u>Sign up as a Vet</u></a><br>
-            <a th:href="@{/register/shelter}"><u>Sign up as a Shelter</u></a>
-        </div>
     </form>
 </div>
 </body>

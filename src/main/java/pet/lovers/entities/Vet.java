@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Entity
 @Table(name = "vets")
 @PrimaryKeyJoinColumn(name = "user_id")
@@ -20,20 +22,16 @@ public class Vet extends User {
     @NotBlank
     private String specialization;
 
-//    @OneToMany(mappedBy = "vet")
-//    @JoinColumn(name = "shelterID", referencedColumnName = "shelterID")
-//    private Shelter shelter;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "identification", referencedColumnName = "id")
+    private Document identification;
+
+    @OneToMany(mappedBy = "vet", cascade= CascadeType.ALL)
+    @JoinColumn(name = "shelterID", referencedColumnName = "shelterID")
+    private List<Shelter> shelters;
     // END TABLE COLUMNS
 
-
     public Vet() {}
-
-    public Vet(String username, String email, String password, String contactNumber, String location, String fullName, String specialization) {
-        super(username, email, password, contactNumber, location);
-        this.fullName = fullName;
-        this.specialization = specialization;
-    }
-
 
     // GETTERS AND SETTERS
     public String getFullName() {

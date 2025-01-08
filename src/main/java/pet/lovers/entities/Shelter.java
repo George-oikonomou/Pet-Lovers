@@ -20,14 +20,15 @@ public class Shelter extends User{
     private String name;
 
 
-    @OneToMany(mappedBy = "shelter", cascade= CascadeType.ALL)
+    @OneToMany(mappedBy = "adoptionRequest", cascade= CascadeType.ALL)
     private List<AdoptionRequest> adoptionRequests;
-//    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Pet> pets;
+    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pet> pets;
 
-//    @Column
-//    @NotBlank
-//    private Vet  vet;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name="vet_id")
+    private Vet vet;
 // END TABLE COLUMNS
 
 
