@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/user/{user_id}")
-    public String saveStudent(@PathVariable Long user_id, @ModelAttribute("user") User user, Model model) {
+    public String editUser(@PathVariable Long user_id, @ModelAttribute("user") User user, Model model) {
         User the_user = (User) userService.getUser(user_id);
         the_user.setEmail(user.getEmail());
         the_user.setUsername(user.getUsername());
