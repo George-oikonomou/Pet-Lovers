@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AuthController {
 
-
     RoleRepository roleRepository;
 
     public AuthController(RoleRepository roleRepository) {
@@ -30,8 +29,4 @@ public class AuthController {
         return "auth/login";
     }
 
-    @GetMapping("/register")
-    public String register() {
-        return "auth/register";
-    }
 }
