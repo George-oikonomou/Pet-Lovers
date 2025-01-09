@@ -17,7 +17,7 @@ public class AuthController {
     RoleRepository roleRepository;
     UserRepository userRepository;
 
-    public AuthController(RoleRepository roleRepository, UserRepository userRepository) {
+    public AuthController(RoleRepository roleRepository, UserRepository userRepository, UserService userService) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.userService = userService;
