@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.format.annotation.DateTimeFormat;
-
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,7 +16,7 @@ public class Visit {
     private int id;
 
     @Column
-    @NotBlank
+    @NotNull
     @DateTimeFormat(pattern = " D:yyyy-MM-dd' T:'HH:mm:ss")
     private LocalDateTime DateTime;
 
