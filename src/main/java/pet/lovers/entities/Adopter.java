@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "adopters")
@@ -30,12 +30,11 @@ public class Adopter extends User {
     @JoinColumn(name = "identification", referencedColumnName = "id")
     private Document identification;
 
-    @OneToMany(mappedBy = "adopter", cascade= CascadeType.ALL)
-    private Set<AdoptionRequest> adoptionRequests;
+    @OneToMany(mappedBy = "adopter", cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Visit> visits;
 
-//    @OneToMany(mappedBy = "vet")
-//    @JoinColumn(name = "shelterID", referencedColumnName = "shelterID")
-//    private Shelter shelter;
+    @OneToMany(mappedBy = "adopter", cascade= CascadeType.ALL)
+    private List<AdoptionRequest> adoptionRequests;
     //END TABLE COLUMNS
 
     //CONSTRUCTORS
@@ -73,11 +72,19 @@ public class Adopter extends User {
         this.identification = identification;
     }
 
-    public Set<AdoptionRequest> getAdoptionRequests() {
+    public List<AdoptionRequest> getAdoptionRequests() {
         return adoptionRequests;
     }
 
-    public void setAdoptionRequests(Set<AdoptionRequest> adoptionRequests) {
+    public void setAdoptionRequests(List<AdoptionRequest> adoptionRequests) {
         this.adoptionRequests = adoptionRequests;
+    }
+
+    public List<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(List<Visit> visits) {
+        this.visits = visits;
     }
 }

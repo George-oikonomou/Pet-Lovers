@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Entity
 @Table(name = "vets")
 @PrimaryKeyJoinColumn(name = "user_id")
@@ -20,20 +22,23 @@ public class Vet extends User {
     @NotBlank
     private String specialization;
 
-//    @OneToMany(mappedBy = "vet")
-//    @JoinColumn(name = "shelterID", referencedColumnName = "shelterID")
-//    private Shelter shelter;
-    // END TABLE COLUMNS
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "documents", referencedColumnName = "id")
+    private Document documents;
 
+    @OneToMany(mappedBy = "vet", cascade= CascadeType.ALL)
+    private List<Shelter> shelters;
+    // END TABLE COLUMNS
 
     public Vet() {}
 
-    public Vet(String username, String email, String password, String contactNumber, String location, String fullName, String specialization) {
+    public Vet(String username, String email, String password, String contactNumber, String location, String fullName, String specialization, Document documents, List<Shelter> shelters) {
         super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.specialization = specialization;
+        this.documents = documents;
+        this.shelters = shelters;
     }
-
 
     // GETTERS AND SETTERS
     public String getFullName() {
@@ -48,5 +53,21 @@ public class Vet extends User {
     }
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
+    }
+
+    public Document getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(Document documents) {
+        this.documents = documents;
+    }
+
+    public List<Shelter> getShelters() {
+        return shelters;
+    }
+
+    public void setShelters(List<Shelter> shelters) {
+        this.shelters = shelters;
     }
 }

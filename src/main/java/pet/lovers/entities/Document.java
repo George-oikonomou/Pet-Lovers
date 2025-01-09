@@ -20,6 +20,7 @@ public class Document {
     private String path;
 
     @Column
+    @NotBlank
     @Size(min = 1, max = 50)
     private String name;
 
@@ -28,11 +29,18 @@ public class Document {
     private boolean approved;
 
     @Column
+    @NotBlank
     @Size(max = 200)
     private String descriptor;
 
     @OneToOne(mappedBy = "identification", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
     private Adopter adopter;
+
+    @OneToOne(mappedBy = "documents", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+    private Shelter shelter;
+
+    @OneToOne(mappedBy = "documents", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+    private Vet vet;
     //END TABLE COLUMNS
 
 
@@ -67,13 +75,6 @@ public class Document {
         this.name = name;
     }
 
-    public boolean getApproved() {
-        return approved;
-    }
-    public void setApproved(boolean approved) {
-        this.approved = approved;
-    }
-
     public String getDescriptor() {
         return descriptor;
     }
@@ -83,5 +84,29 @@ public class Document {
 
     public Adopter getAdopter() {
         return adopter;
+    }
+    public void setAdopter(Adopter adopter) {
+        this.adopter = adopter;
+    }
+    
+    public boolean isApproved() {
+        return approved;
+    }
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
+    public Shelter getShelter() {
+        return shelter;
+    }
+    public void setShelter(Shelter shelter) {
+        this.shelter = shelter;
+    }
+
+    public Vet getVet() {
+        return vet;
+    }
+    public void setVet(Vet vet) {
+        this.vet = vet;
     }
 }

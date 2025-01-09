@@ -2,6 +2,7 @@ package pet.lovers.controllers;
 
 import pet.lovers.entities.Role;
 import pet.lovers.entities.User;
+import pet.lovers.entities.Vet;
 import pet.lovers.repositories.RoleRepository;
 import pet.lovers.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -88,5 +89,17 @@ public class UserController {
 
     }
 
-
+    @GetMapping("/register/vet")
+    public String vetRegister(Model model) {
+        Vet vet = new Vet();
+        model.addAttribute("vet", vet);
+        return "auth/vetRegister";
+    }
+//
+//    @GetMapping("/register/shelter")
+//    public String shelterRegister(Model model) {
+//        Shelter shelter = new Shelter();
+//        model.addAttribute("shelter", shelter);
+//        return "shelterRegister";
+//    }
 }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Controller
 public class AuthController {
 
+
     UserService userService;
     RoleRepository roleRepository;
     UserRepository userRepository;
@@ -26,6 +27,8 @@ public class AuthController {
     @PostConstruct
     public void setup() {
         Document document = new Document("path", "name", true, "descriptor");
+        Document documentOfVet = new Document("path2", "name2", true, "descriptor2");
+        Document documentOfShelter = new Document("path3", "name3", true, "descriptor3");
 
         // Save roles to ensure they are managed by the persistence context
         Role role_adopter = roleRepository.updateOrInsert(new Role("ROLE_ADOPTER"));
@@ -41,12 +44,13 @@ public class AuthController {
         }
 
         if (!userRepository.existsByUsername("vet")) {
-            Vet vet = new Vet("vet", "vet@gmail.com", "vet", "1234567890", "lorem ipsum", "full name", "lorem ipsum");
+            Vet vet = new Vet("vet", "vet@gmail.com", "vet", "1234567890", "lorem ipsum", "full name", "lorem ipsum", documentOfVet, null);
             vet.getRoles().add(role_vet);
             userService.saveUser(vet);
         }
+
         if (!userRepository.existsByUsername("shelter")) {
-            Shelter shelter = new Shelter("shelter", "shelter@gmail.com", "shelter", "1345678902", "lorem ipsum", "shelter name");
+            Shelter shelter = new Shelter("shelter", "shelter@gmail.com", "shelter", "1345678902", "lorem ipsum", "shelter name", documentOfShelter);
             shelter.getRoles().add(role_shelter);
             userService.saveUser(shelter);
         }
@@ -61,4 +65,5 @@ public class AuthController {
     public String login() {
         return "auth/login";
     }
+
 }

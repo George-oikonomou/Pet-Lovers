@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
         Set<Role> existingRoles = user.getRoles() != null ? user.getRoles() : new HashSet<>();
 
         Role role = roleRepository.findByName("ROLE_ADOPTER")
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         existingRoles.add(role);
 
         user.setRoles(existingRoles);
