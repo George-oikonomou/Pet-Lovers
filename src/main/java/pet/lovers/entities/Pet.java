@@ -30,7 +30,6 @@ public class Pet {
 
     @Column
     @NotBlank
-
     private String type;
 
     @Column
@@ -39,11 +38,7 @@ public class Pet {
 
     @Column
     @Size(min = 1, max = 90)
-    private float weight;
-
-    @Column
-    @NotBlank
-    private boolean adoptedStatus;
+    private double weight;
 
     @Enumerated
     @NotBlank
@@ -62,21 +57,24 @@ public class Pet {
 
 
     //CONSTRUCTORS
-    public Pet(String name, int yearBirthed, String type, String breed, float weight, boolean adoptedStatus, HealthStatus healthStatus, Shelter shelter, PetStatus petStatus) {
+    public Pet(String name,Shelter shelter, int yearBirthed, String type, String breed, double weight, HealthStatus healthStatus, PetStatus petStatus) {
         this.name = name;
+        this.shelter = shelter;
         this.yearBirthed = yearBirthed;
         this.type = type;
         this.breed = breed;
         this.weight = weight;
-        this.adoptedStatus = adoptedStatus;
         this.healthStatus = healthStatus;
-        this.shelter = shelter;
         this.petStatus = petStatus;
     }
 
     public Pet() {}
 
     //GETTERS AND SETTERS
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
@@ -84,8 +82,18 @@ public class Pet {
         this.name = name;
     }
 
-    public int getBirthdate() {
+    public Shelter getShelter() {
+        return shelter;
+    }
+    public void setShelter(Shelter shelter) {
+        this.shelter = shelter;
+    }
+
+    public int getYearBirthed() {
         return yearBirthed;
+    }
+    public void setYearBirthed(int yearBirthed) {
+        this.yearBirthed = yearBirthed;
     }
 
     public String getType() {
@@ -96,19 +104,14 @@ public class Pet {
         return breed;
     }
 
-    public float getWeight() {
+    public double getWeight() {
         return weight;
     }
-    public void setWeight(float weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 
-    public boolean isAdoptedStatus() {
-        return adoptedStatus;
-    }
-    public void setAdoptedStatus(boolean adoptedStatus) {
-        this.adoptedStatus = adoptedStatus;
-    }
+
 
     public HealthStatus getHealthStatus() {
         return healthStatus;
@@ -117,30 +120,16 @@ public class Pet {
         this.healthStatus = healthStatus;
     }
 
-//    public Shelter getShelter() {
-//        return shelter;
-//    }
-//
-//    public void setShelter(Shelter shelter) {
-//        this.shelter = shelter;
-//    }
-
     public PetStatus getPetStatus() {
         return petStatus;
     }
-
     public void setPetStatus(PetStatus petStatus) {
         this.petStatus = petStatus;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public AdoptionRequest getAdoptionRequest() {
         return adoptionRequest;
     }
-
     public void setAdoptionRequest(AdoptionRequest adoptionRequest) {
         this.adoptionRequest = adoptionRequest;
     }
@@ -148,29 +137,5 @@ public class Pet {
     @Override
     public String toString() {
         return "PET\nname: " + name + "\nage: " + (Year.now().getValue() - yearBirthed) + "\ntype: " + type + "\nbreed: " + breed + "\nweight: " + weight;
-    }
-
-    public int getYearBirthed() {
-        return yearBirthed;
-    }
-
-    public void setYearBirthed(int yearBirthed) {
-        this.yearBirthed = yearBirthed;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setBreed(String breed) {
-        this.breed = breed;
-    }
-
-    public Shelter getShelter() {
-        return shelter;
-    }
-
-    public void setShelter(Shelter shelter) {
-        this.shelter = shelter;
     }
 }
