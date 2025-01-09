@@ -2,6 +2,7 @@ package pet.lovers.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -19,14 +20,16 @@ public class Document {
     private String path;
 
     @Column
+    @NotBlank
     @Size(min = 1, max = 50)
     private String name;
 
     @Column
-    @NotBlank
+    @NotNull
     private boolean approved;
 
     @Column
+    @NotBlank
     @Size(max = 200)
     private String descriptor;
 
@@ -43,16 +46,11 @@ public class Document {
 
 
     //CONSTRUCTORS
-
-
-    public Document(String path, String name, boolean approved, String descriptor, Adopter adopter, Shelter shelter, Vet vet) {
+    public Document(String path, String name, boolean approved, String descriptor) {
         this.path = path;
         this.name = name;
         this.approved = approved;
         this.descriptor = descriptor;
-        this.adopter = adopter;
-        this.shelter = shelter;
-        this.vet = vet;
     }
 
     public Document() {}
@@ -87,7 +85,6 @@ public class Document {
     public Adopter getAdopter() {
         return adopter;
     }
-
     public void setAdopter(Adopter adopter) {
         this.adopter = adopter;
     }
@@ -95,7 +92,6 @@ public class Document {
     public boolean isApproved() {
         return approved;
     }
-
     public void setApproved(boolean approved) {
         this.approved = approved;
     }
@@ -103,7 +99,6 @@ public class Document {
     public Shelter getShelter() {
         return shelter;
     }
-
     public void setShelter(Shelter shelter) {
         this.shelter = shelter;
     }
@@ -111,7 +106,6 @@ public class Document {
     public Vet getVet() {
         return vet;
     }
-
     public void setVet(Vet vet) {
         this.vet = vet;
     }

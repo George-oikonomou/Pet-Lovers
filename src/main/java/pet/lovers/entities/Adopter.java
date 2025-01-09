@@ -2,9 +2,8 @@ package pet.lovers.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.CollectionIdMutability;
-import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -23,7 +22,7 @@ public class Adopter extends User {
     private String fullName;
 
     @Column
-    @NotBlank
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime birthDate;
 
@@ -31,26 +30,21 @@ public class Adopter extends User {
     @JoinColumn(name = "identification", referencedColumnName = "id")
     private Document identification;
 
-    @OneToMany(mappedBy = "adopter", cascade= {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "adopter", cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private List<Visit> visits;
-
 
     @OneToMany(mappedBy = "adopter", cascade= CascadeType.ALL)
     private List<AdoptionRequest> adoptionRequests;
-
     //END TABLE COLUMNS
 
     //CONSTRUCTORS
     public Adopter() {}
 
-    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDateTime birthDate, Document identification, List<AdoptionRequest> adoptionRequests, List<Visit> visits) {
+    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDateTime birthDate, Document identification) {
         super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.identification = identification;
-        this.adoptionRequests = adoptionRequests;
-        this.visits = visits;
     }
 
     //GETTERS AND SETTERS

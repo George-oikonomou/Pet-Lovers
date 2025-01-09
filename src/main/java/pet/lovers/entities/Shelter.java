@@ -22,8 +22,10 @@ public class Shelter extends User{
 
     @OneToMany(mappedBy = "shelter", cascade= CascadeType.ALL)
     private List<AdoptionRequest> adoptionRequests;
+
     @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pet> pets;
+
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
@@ -36,11 +38,14 @@ public class Shelter extends User{
     private Document documents;
 // END TABLE COLUMNS
 
+
+
+
+
     //CONSTRUCTORS
-    public Shelter(String username, String email, String password, String contactNumber, String location, String name, List<AdoptionRequest> adoptionRequests, Document documents) {
+    public Shelter(String username, String email, String password, String contactNumber, String location, String name,Document documents) {
         super(username, email, password, contactNumber, location);
         this.name = name;
-        this.adoptionRequests = adoptionRequests;
         this.documents = documents;
     }
 
@@ -57,7 +62,6 @@ public class Shelter extends User{
     public List<AdoptionRequest> getAdoptionRequests() {
         return adoptionRequests;
     }
-
     public void setAdoptionRequests(List<AdoptionRequest> adoptionRequests) {
         this.adoptionRequests = adoptionRequests;
     }
@@ -65,7 +69,6 @@ public class Shelter extends User{
     public List<Pet> getPets() {
         return pets;
     }
-
     public void setPets(List<Pet> pets) {
         this.pets = pets;
     }
@@ -73,7 +76,6 @@ public class Shelter extends User{
     public Vet getVet() {
         return vet;
     }
-
     public void setVet(Vet vet) {
         this.vet = vet;
     }
@@ -81,7 +83,6 @@ public class Shelter extends User{
     public Document getDocuments() {
         return documents;
     }
-
     public void setDocuments(Document documents) {
         this.documents = documents;
     }

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public class ShelterService {
-    ShelterRepository shelterRepository;
+    private final ShelterRepository shelterRepository;
 
     public ShelterService(ShelterRepository shelterRepository) {
         this.shelterRepository = shelterRepository;
