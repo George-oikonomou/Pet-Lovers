@@ -4,8 +4,18 @@
       layout:decorate="~{page_layout/layout}">
 
 <head>
+    <script th:inline="javascript">
+        var googleApiKey = [[${googleApiKey}]];
+    </script>
+    <script th:src="@{'https://maps.googleapis.com/maps/api/js?key=' + ${googleApiKey} + '&libraries=places'}"></script>
     <meta charset="UTF-8">
     <title>Register</title>
+    <style>
+        /* Prevent browser autofill styles */
+        input:-webkit-autofill {
+            box-shadow: 0 0 0px 1000px white inset;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="main-content">
@@ -14,7 +24,10 @@
         <p>Invalid username or password.</p>
     </div>
 
-    <h3>Adopter Registration</h3>
+    <h3>AdopterA Registration</h3>
+    <div style="display: none;" id="googleApiKeyDiv">
+        Google API Key: <span th:text="${googleApiKey}"></span>
+    </div>
 
     <form th:action="@{/saveAdopter}" method="post" th:object="${adopter}">
 
@@ -32,23 +45,23 @@
             <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
         </div>
 
-        <div class="form-group row">
-            <!-- ID Card/Passport Number URL -->
-            <div class="col-md-6">
-                <label for="identification">ID card/Passport Number URL</label>
-                <input type="url" class="form-control" th:field="*{identification}" id="identification" required
-                       pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
-                       title="Please enter a valid URL starting with 'http://' or 'https://'" />
-                <span th:if="${#fields.hasErrors('identification')}" th:errors="*{identification}"></span>
-            </div>
+<!--        <div class="form-group row">-->
+<!--            &lt;!&ndash; ID Card/Passport Number URL &ndash;&gt;-->
+<!--            <div class="col-md-6">-->
+<!--                <label for="identification">ID card/Passport Number URL</label>-->
+<!--                <input type="url" class="form-control" th:field="*{identification}" id="identification" required-->
+<!--                       pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"-->
+<!--                       title="Please enter a valid URL starting with 'http://' or 'https://'" />-->
+<!--                <span th:if="${#fields.hasErrors('identification')}" th:errors="*{identification}"></span>-->
+<!--            </div>-->
 
-            <!-- Birthdate -->
-            <div class="col-md-6">
-                <label for="birthDate">Birthdate</label>
-                <input type="date" class="form-control" th:field="*{birthDate}" id="birthDate" required />
-                <span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
-            </div>
-        </div>
+<!--            &lt;!&ndash; Birthdate &ndash;&gt;-->
+<!--            <div class="col-md-6">-->
+<!--                <label for="birthDate">Birthdate</label>-->
+<!--                <input type="date" class="form-control" th:field="*{birthDate}" id="birthDate" required />-->
+<!--                <span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>-->
+<!--            </div>-->
+<!--        </div>-->
 
 
         <div class="form-group">
@@ -98,41 +111,13 @@
             }
         </style>
         <label><b>Location:</b></label>
-        <div class="form-group row">
-            <div class="col-md-4">
-                <label for="location.regionalUnit">Regional Unit</label>
-                <input type="text" class="form-control" th:field="*{location.regionalUnit}" id="location.regionalUnit" required />
-                <span th:if="${#fields.hasErrors('location.regionalUnit')}" th:errors="*{location.regionalUnit}"></span>
-            </div>
-
-            <div class="col-md-4">
-                <label for="location.city">City</label>
-                <input type="text" class="form-control" th:field="*{location.city}" id="location.city" required />
-                <span th:if="${#fields.hasErrors('location.city')}" th:errors="*{location.city}"></span>
-            </div>
-
-            <div class="col-md-4">
-                <label for="location.address">Address</label>
-                <input type="text" class="form-control" th:field="*{location.address}" id="location.address" required />
-                <span th:if="${#fields.hasErrors('location.address')}" th:errors="*{location.address}"></span>
-            </div>
+        <div class="form-group">
+            <label for="location-autocomplete">Search Address</label>
+            <input type="text" class="form-control" id="location-autocomplete" placeholder="Start typing your address..." required />
+            <small class="form-text text-muted">Use the autocomplete field to quickly find your address.</small>
         </div>
 
-        <div class="form-group row mt-3">
-            <div class="col-md-6">
-                <label for="location.number">Number</label>
-                <input type="text" class="form-control" th:field="*{location.number}" id="location.number" required />
-                <span th:if="${#fields.hasErrors('location.number')}" th:errors="*{location.number}"></span>
-            </div>
-
-            <div class="col-md-6">
-                <label for="location.postalCode">Postal Code</label>
-                <input type="text" class="form-control" th:field="*{location.postalCode}" id="location.postalCode" required />
-                <span th:if="${#fields.hasErrors('location.postalCode')}" th:errors="*{location.postalCode}"></span>
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Register</button>
 
         <div class="form-group">
             <a th:href="@{/register/vet}"><u>Sign up as a Vet</u></a><br>
@@ -142,3 +127,28 @@
 </div>
 </body>
 </html>
+<script>
+    let selectedPlace = null;
+
+    function initializeAutocomplete() {
+        const input = document.getElementById('location-autocomplete');
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+            types: ['address'],
+            componentRestrictions: { country: 'gr' },
+        });
+
+        autocomplete.addListener('place_changed', () => {
+            selectedPlace = autocomplete.getPlace();
+            document.getElementById('submitBtn').disabled = false;
+        });
+
+        input.addEventListener('input', () => {
+            if (selectedPlace) {
+                document.getElementById('submitBtn').disabled = true;
+            }
+        });
+    }
+
+    window.addEventListener('load', initializeAutocomplete);
+
+</script>

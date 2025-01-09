@@ -39,7 +39,7 @@ public class Adopter extends User {
     //CONSTRUCTORS
     public Adopter() {}
 
-    public Adopter(String username, String email, String password, String contactNumber, Location location, String fullName, LocalDateTime birthDate, Document identification) {
+    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDateTime birthDate, Document identification) {
         super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.birthDate = birthDate;

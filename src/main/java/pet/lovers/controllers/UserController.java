@@ -1,5 +1,8 @@
 package pet.lovers.controllers;
 
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.BindingResult;
 import pet.lovers.entities.*;
 import pet.lovers.repositories.RoleRepository;
 import pet.lovers.service.UserService;
@@ -13,6 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
 
+
+    @Value("${google.api.key}")
+    private String googleApiKey;
+
     private UserService userService;
 
     private RoleRepository roleRepository;
@@ -25,13 +32,17 @@ public class UserController {
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         Adopter adopter = new Adopter();
+        model.addAttribute("googleApiKey", googleApiKey);
         model.addAttribute("adopter", adopter);
         return "auth/register";
     }
 
     @PostMapping("/saveAdopter")
-    public String saveAdopter(@ModelAttribute Adopter adopter, Model model) {
-        System.out.println("Adopter: " + adopter.getRoles());
+    public String saveAdopter(@ModelAttribute @Valid Adopter adopter, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            System.out.println("Validation errors: " + result.getAllErrors());
+            return "auth/register";
+        }
         System.out.println("Adopter: " + adopter);
         Integer id = userService.saveUser(adopter);
         String message = "User '" + id + "' saved successfully !";
