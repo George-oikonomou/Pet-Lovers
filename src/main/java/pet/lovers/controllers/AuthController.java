@@ -31,6 +31,7 @@ public class AuthController {
         Document documentOfShelter = new Document("path3", "name3", true, "descriptor3");
 
         // Save roles to ensure they are managed by the persistence context
+        Role role_user = roleRepository.updateOrInsert(new Role("ROLE_USER"));
         Role role_adopter = roleRepository.updateOrInsert(new Role("ROLE_ADOPTER"));
         Role role_admin = roleRepository.updateOrInsert(new Role("ROLE_ADMIN"));
         Role role_vet = roleRepository.updateOrInsert(new Role("ROLE_VET"));
@@ -57,6 +58,7 @@ public class AuthController {
 
         if (!userRepository.existsByUsername("adopter")) {
             Adopter adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "lorem ipsum", "full name", LocalDateTime.now().minusYears(21), document);
+            adopter.getRoles().add(role_adopter);
             userService.saveUser(adopter);
         }
     }
