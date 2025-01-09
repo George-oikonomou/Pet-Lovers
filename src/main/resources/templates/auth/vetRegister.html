@@ -14,9 +14,34 @@
         <p>Invalid username or password.</p>
     </div>
 
-    <h3>User Registration</h3>
+    <h3>Vet Registration</h3>
 
-    <form th:action="@{/saveUser}" method="post" th:object="${user}">
+    <form th:action="@{/saveVet}" method="post" th:object="${vet}">
+
+        <div class="form-group">
+            <label for="fullName">Full name</label>
+            <input type="text" class="form-control" th:field="*{fullName}" id="fullName" required
+                   pattern="[A-Za-z]+(?: [A-Za-z]+){1,2}"
+                   title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')"/>
+            <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="specialization">Specialization</label>
+            <input type="text" class="form-control" th:field="*{specialization}" id="specialization" required
+            pattern="^[A-Za-z]+(?: [A-Za-z]+)+$"
+            title="Specialization contains only alphabetic characters"/>
+            <span th:if="${#fields.hasErrors('specialization')}" th:errors="*{specialization}"></span>
+        </div>
+
+
+        <div class="form-group">
+            <label for="documents">Documents URL</label>
+            <input type="url" class="form-control" th:field="*{documents}" id="documents" required
+            pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
+            title="Please enter a valid URL starting with 'http://' or 'https://'"/>
+            <span th:if="${#fields.hasErrors('documents')}" th:errors="*{documents}"></span>
+        </div>
 
         <div class="form-group">
             <label for="email">Email</label>
@@ -78,11 +103,6 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Register</button>
-
-        <div class="form-group">
-            <a th:href="@{/register/vet}"><u>Sign up as a Vet</u></a><br>
-            <a th:href="@{/register/shelter}"><u>Sign up as a Shelter</u></a>
-        </div>
     </form>
 </div>
 </body>

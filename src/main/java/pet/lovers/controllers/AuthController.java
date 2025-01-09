@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AuthController {
 
-
     RoleRepository roleRepository;
 
     public AuthController(RoleRepository roleRepository) {
@@ -29,4 +28,5 @@ public class AuthController {
     public String login() {
         return "auth/login";
     }
+
 }

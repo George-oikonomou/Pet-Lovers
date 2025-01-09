@@ -31,23 +31,26 @@ public class Adopter extends User {
     @JoinColumn(name = "identification", referencedColumnName = "id")
     private Document identification;
 
+    @OneToMany(mappedBy = "adopter", cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Visit> visits;
+
+
     @OneToMany(mappedBy = "adopter", cascade= CascadeType.ALL)
     private List<AdoptionRequest> adoptionRequests;
 
-//    @OneToMany(mappedBy = "vet")
-//    @JoinColumn(name = "shelterID", referencedColumnName = "shelterID")
-//    private Shelter shelter;
     //END TABLE COLUMNS
 
     //CONSTRUCTORS
     public Adopter() {}
 
-    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDateTime birthDate, Document identification, List<AdoptionRequest> adoptionRequests) {
+    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDateTime birthDate, Document identification, List<AdoptionRequest> adoptionRequests, List<Visit> visits) {
         super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.identification = identification;
         this.adoptionRequests = adoptionRequests;
+        this.visits = visits;
     }
 
     //GETTERS AND SETTERS
@@ -81,5 +84,13 @@ public class Adopter extends User {
 
     public void setAdoptionRequests(List<AdoptionRequest> adoptionRequests) {
         this.adoptionRequests = adoptionRequests;
+    }
+
+    public List<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(List<Visit> visits) {
+        this.visits = visits;
     }
 }

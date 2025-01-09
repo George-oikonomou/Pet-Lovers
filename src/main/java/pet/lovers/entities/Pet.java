@@ -26,16 +26,16 @@ public class Pet {
     @Column
     @NotBlank
     @Size(min = 2000, max = 2025)
-    private final int yearBirthed;
+    private int yearBirthed;
 
     @Column
     @NotBlank
 
-    private final String type;
+    private String type;
 
     @Column
     @NotBlank
-    private final String breed;
+    private String breed;
 
     @Column
     @Size(min = 1, max = 90)
@@ -52,7 +52,9 @@ public class Pet {
     @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
     private AdoptionRequest adoptionRequest;
 
-//    private Shelter shelterHost;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name="shelter_id")
+    private Shelter shelter;
 
     @Enumerated
     private PetStatus petStatus;
@@ -60,7 +62,7 @@ public class Pet {
 
 
     //CONSTRUCTORS
-    public Pet(String name, int yearBirthed, String type, String breed, float weight, boolean adoptedStatus, HealthStatus healthStatus, PetStatus petStatus) {
+    public Pet(String name, int yearBirthed, String type, String breed, float weight, boolean adoptedStatus, HealthStatus healthStatus, Shelter shelter, PetStatus petStatus) {
         this.name = name;
         this.yearBirthed = yearBirthed;
         this.type = type;
@@ -68,15 +70,11 @@ public class Pet {
         this.weight = weight;
         this.adoptedStatus = adoptedStatus;
         this.healthStatus = healthStatus;
+        this.shelter = shelter;
         this.petStatus = petStatus;
     }
 
-    public Pet() {
-        yearBirthed = 0;
-        type = "null";
-        breed = "null";
-    }
-
+    public Pet() {}
 
     //GETTERS AND SETTERS
     public String getName() {
@@ -150,5 +148,29 @@ public class Pet {
     @Override
     public String toString() {
         return "PET\nname: " + name + "\nage: " + (Year.now().getValue() - yearBirthed) + "\ntype: " + type + "\nbreed: " + breed + "\nweight: " + weight;
+    }
+
+    public int getYearBirthed() {
+        return yearBirthed;
+    }
+
+    public void setYearBirthed(int yearBirthed) {
+        this.yearBirthed = yearBirthed;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+
+    public Shelter getShelter() {
+        return shelter;
+    }
+
+    public void setShelter(Shelter shelter) {
+        this.shelter = shelter;
     }
 }

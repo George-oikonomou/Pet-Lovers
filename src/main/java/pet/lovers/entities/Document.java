@@ -32,16 +32,27 @@ public class Document {
 
     @OneToOne(mappedBy = "identification", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
     private Adopter adopter;
+
+    @OneToOne(mappedBy = "documents", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+    private Shelter shelter;
+
+    @OneToOne(mappedBy = "documents", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+    private Vet vet;
     //END TABLE COLUMNS
 
 
 
     //CONSTRUCTORS
-    public Document(String path, String name, boolean approved, String descriptor) {
+
+
+    public Document(String path, String name, boolean approved, String descriptor, Adopter adopter, Shelter shelter, Vet vet) {
         this.path = path;
         this.name = name;
         this.approved = approved;
         this.descriptor = descriptor;
+        this.adopter = adopter;
+        this.shelter = shelter;
+        this.vet = vet;
     }
 
     public Document() {}
@@ -66,13 +77,6 @@ public class Document {
         this.name = name;
     }
 
-    public boolean getApproved() {
-        return approved;
-    }
-    public void setApproved(boolean approved) {
-        this.approved = approved;
-    }
-
     public String getDescriptor() {
         return descriptor;
     }
@@ -82,5 +86,33 @@ public class Document {
 
     public Adopter getAdopter() {
         return adopter;
+    }
+
+    public void setAdopter(Adopter adopter) {
+        this.adopter = adopter;
+    }
+    
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
+    public Shelter getShelter() {
+        return shelter;
+    }
+
+    public void setShelter(Shelter shelter) {
+        this.shelter = shelter;
+    }
+
+    public Vet getVet() {
+        return vet;
+    }
+
+    public void setVet(Vet vet) {
+        this.vet = vet;
     }
 }
