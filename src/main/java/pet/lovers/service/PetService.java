@@ -21,8 +21,13 @@ public class PetService {
     }
 
     @Transactional
-    public savePet(Pet pet){
-        petRepository.save(pet)
+    public void savePet(Pet pet){
+        petRepository.save(pet);
+    }
+
+    @Transactional
+    public void deletePet(Integer petId) {
+        petRepository.deleteById(petId);
     }
 
 }
