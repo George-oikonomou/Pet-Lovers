@@ -1,8 +1,6 @@
 package pet.lovers.controllers;
 
-import pet.lovers.entities.Role;
-import pet.lovers.entities.User;
-import pet.lovers.entities.Vet;
+import pet.lovers.entities.*;
 import pet.lovers.repositories.RoleRepository;
 import pet.lovers.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -26,9 +24,19 @@ public class UserController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
+        Adopter adopter = new Adopter();
+        model.addAttribute("adopter", adopter);
         return "auth/register";
+    }
+
+    @PostMapping("/saveAdopter")
+    public String saveAdopter(@ModelAttribute Adopter adopter, Model model) {
+        System.out.println("Adopter: " + adopter.getRoles());
+        System.out.println("Adopter: " + adopter);
+        Integer id = userService.saveUser(adopter);
+        String message = "User '" + id + "' saved successfully !";
+        model.addAttribute("msg", message);
+        return "index";
     }
 
     @PostMapping("/saveUser")
@@ -95,11 +103,11 @@ public class UserController {
         model.addAttribute("vet", vet);
         return "auth/vetRegister";
     }
-//
-//    @GetMapping("/register/shelter")
-//    public String shelterRegister(Model model) {
-//        Shelter shelter = new Shelter();
-//        model.addAttribute("shelter", shelter);
-//        return "shelterRegister";
-//    }
+
+    @GetMapping("/register/shelter")
+    public String shelterRegister(Model model) {
+        Shelter shelter = new Shelter();
+        model.addAttribute("shelter", shelter);
+        return "auth/shelterRegister";
+    }
 }

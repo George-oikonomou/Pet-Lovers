@@ -39,9 +39,9 @@ public class User {
     @Pattern(regexp = "^\\d{10}$", message = "The number must be exactly 10 digits.")
     private String contactNumber;
 
-    @NotBlank
-    @Size(max = 100)
-    private String location;
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "user_roles",
@@ -52,7 +52,7 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String password, String contactNumber, String location) {
+    public User(String username, String email, String password, String contactNumber, Location location) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -68,11 +68,11 @@ public class User {
         this.contactNumber = contactNumber;
     }
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 

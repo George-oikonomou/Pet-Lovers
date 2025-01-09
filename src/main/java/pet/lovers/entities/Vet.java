@@ -32,7 +32,7 @@ public class Vet extends User {
 
     public Vet() {}
 
-    public Vet(String username, String email, String password, String contactNumber, String location, String fullName, String specialization, Document documents, List<Shelter> shelters) {
+    public Vet(String username, String email, String password, String contactNumber, Location location, String fullName, String specialization, Document documents, List<Shelter> shelters) {
         super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.specialization = specialization;

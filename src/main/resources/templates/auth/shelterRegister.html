@@ -14,26 +14,17 @@
         <p>Invalid username or password.</p>
     </div>
 
-    <h3>Vet Registration</h3>
+    <h3>Shelter Registration</h3>
 
-    <form th:action="@{/saveVet}" method="post" th:object="${vet}">
-
-        <div class="form-group">
-            <label for="fullName">Full name</label>
-            <input type="text" class="form-control" th:field="*{fullName}" id="fullName" required
-                   pattern="[A-Za-z]+(?: [A-Za-z]+){1,2}"
-                   title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')"/>
-            <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
-        </div>
+    <form th:action="@{/saveShelter}" method="post" th:object="${shelter}">
 
         <div class="form-group">
-            <label for="specialization">Specialization</label>
-            <input type="text" class="form-control" th:field="*{specialization}" id="specialization" required
+            <label for="name">Name</label>
+            <input type="text" class="form-control" th:field="*{name}" id="name" required
                    pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
-                   title="Specialization contains only alphabetic characters"/>
-            <span th:if="${#fields.hasErrors('specialization')}" th:errors="*{specialization}"></span>
+                   title="Name must contain with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')"/>
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
         </div>
-
 
         <div class="form-group">
             <label for="documents">Documents URL</label>

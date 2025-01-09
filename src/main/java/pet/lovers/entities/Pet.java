@@ -78,7 +78,7 @@ public class Pet {
     public String getName() {
         return name;
     }
-    public void setName(String name) {
+    public void setName (String name) {
         this.name = name;
     }
 
@@ -99,6 +99,9 @@ public class Pet {
     public String getType() {
         return type;
     }
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getBreed() {
         return breed;
@@ -110,8 +113,6 @@ public class Pet {
     public void setWeight(Double weight) {
         this.weight = weight;
     }
-
-
 
     public HealthStatus getHealthStatus() {
         return healthStatus;

@@ -33,8 +33,10 @@ public class Location {
     @NotBlank
     private String postalCode;
 
-    public Location(int id, String regionalUnit, String city, String address, String number, String postalCode) {
-        this.id = id;
+    @OneToOne(mappedBy = "location", cascade = CascadeType.MERGE)
+    private User user;
+
+    public Location(String regionalUnit, String city, String address, String number, String postalCode) {
         this.regionalUnit = regionalUnit;
         this.city = city;
         this.address = address;
@@ -88,6 +90,14 @@ public class Location {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
