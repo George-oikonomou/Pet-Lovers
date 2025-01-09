@@ -40,13 +40,6 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping("/users")
-    public String showUsers(Model model){
-        model.addAttribute("users", userService.getUsers());
-        model.addAttribute("roles", roleRepository.findAll());
-        return "auth/users";
-    }
-
     @GetMapping("/user/{user_id}")
     public String showUser(@PathVariable Long user_id, Model model){
         model.addAttribute("user", userService.getUser(user_id));

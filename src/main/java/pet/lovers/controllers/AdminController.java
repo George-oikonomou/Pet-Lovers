@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 import java.util.List;
 import pet.lovers.entities.User;
+import pet.lovers.repositories.RoleRepository;
 import pet.lovers.service.UserService;
 
 
@@ -14,16 +15,23 @@ import pet.lovers.service.UserService;
 @RequestMapping("/admin")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
-    private UserService userService;
+    UserService userService;
+    RoleRepository roleRepository;
+
+    public AdminController(UserService userService, RoleRepository roleRepository) {
+        this.userService = userService;
+        this.roleRepository = roleRepository;
+    }
 
     @GetMapping("/dashboard")
     public String dashboard() {
-        return "admin/dashboard";
+        return "index";
     }
 
     @GetMapping("/users")
-    public String manageUsers(Model model) {
+    public String showUsers(Model model){
         model.addAttribute("users", userService.getUsers());
+        model.addAttribute("roles", roleRepository.findAll());
         return "admin/users";
     }
 
