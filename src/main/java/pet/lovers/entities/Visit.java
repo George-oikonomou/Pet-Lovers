@@ -26,12 +26,12 @@ public class Visit {
     private String contact_number;
 
     @Column
-    @NotBlank
+    @NotNull
     private boolean confirmedAdoption;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id")
-    private Location location;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "shelter_id")
+    private Shelter shelter;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
@@ -41,13 +41,13 @@ public class Visit {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "pet_id")
-    private Pet pet;
+    private Pet pet; //TODO maybe instead of pet, use adoption request?
 
-    public Visit(LocalDateTime dateTime, String contact_number, boolean confirmedAdoption, Location location, Adopter adopter, Pet pet) {
+    public Visit(LocalDateTime dateTime, String contact_number, boolean confirmedAdoption, Shelter shelter, Adopter adopter, Pet pet) {
         DateTime = dateTime;
         this.contact_number = contact_number;
         this.confirmedAdoption = confirmedAdoption;
-        this.location = location;
+        this.shelter = shelter;
         this.adopter = adopter;
         this.pet = pet;
     }
@@ -80,12 +80,12 @@ public class Visit {
         this.confirmedAdoption = !this.confirmedAdoption;
     }
 
-    public Location getLocation() {
-        return location;
+    public Shelter getShelter() {
+        return shelter;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setShelter(Shelter shelter) {
+        this.shelter = shelter;
     }
 
     public Adopter getAdopter() {
