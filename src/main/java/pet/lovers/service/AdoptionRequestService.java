@@ -21,9 +21,4 @@ public class AdoptionRequestService {
         return adoptionRequestRepository.findAll();
     }
 
-    @Transactional
-    public Optional<AdoptionRequest> getAdoptionRequestsShelter(Integer shelterId) {
-        return adoptionRequestRepository.findByShelter_Id(shelterId);
-    }
-
 }

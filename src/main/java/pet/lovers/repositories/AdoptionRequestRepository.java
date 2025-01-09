@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface AdoptionRequestRepository extends JpaRepository<AdoptionRequest, Integer> {
 
-    Optional<AdoptionRequest> findByShelter_Id(Integer shelterId);
 }
