@@ -88,12 +88,16 @@ public class Document {
         return adopter;
     }
 
+    public void setAdopter(Adopter adopter) {
+        this.adopter = adopter;
+    }
+    
     public boolean isApproved() {
         return approved;
     }
 
-    public void setAdopter(Adopter adopter) {
-        this.adopter = adopter;
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     public Shelter getShelter() {
