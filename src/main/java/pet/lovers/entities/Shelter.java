@@ -37,12 +37,10 @@ public class Shelter extends User{
 // END TABLE COLUMNS
 
     //CONSTRUCTORS
-    public Shelter(String username, String email, String password, String contactNumber, String location, String name, List<AdoptionRequest> adoptionRequests, List<Pet> pets, Vet vet, Document documents) {
+    public Shelter(String username, String email, String password, String contactNumber, String location, String name, List<AdoptionRequest> adoptionRequests, Document documents) {
         super(username, email, password, contactNumber, location);
         this.name = name;
         this.adoptionRequests = adoptionRequests;
-        this.pets = pets;
-        this.vet = vet;
         this.documents = documents;
     }
 
