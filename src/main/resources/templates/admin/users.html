@@ -24,12 +24,12 @@
       <tr th:each="user : ${users}">
         <td th:text="${user.username}"></td>
         <td th:text="${user.email}"></td>
-        <td th:if="${user.id}"><a class="btn btn-info" th:href="@{/user/{id}(id=${user.id})}">Edit</a>
+        <td th:if="${user.id}"><a class="btn btn-info" th:href="@{/admin/user/{id}(id=${user.id})}">Edit</a>
           <span th:each="role : ${user.roles}">
-                    <a class="btn btn-danger" th:href="@{/user/role/delete/{id}/{role_id}(id=${user.id},role_id=${role.id})}" th:utext="'Delete '+  ${role.name}"></a>
+                    <a class="btn btn-danger" th:href="@{/admin/user/role/delete/{id}/{role_id}(id=${user.id},role_id=${role.id})}" th:utext="'Delete '+  ${role.name}"></a>
                 </span>
           <span th:each="role : ${roles}">
-                        <a  class="btn btn-success" th:href="@{/user/role/add/{id}/{role_id}(id=${user.id},role_id=${role.id})}" th:if="${! user.roles.contains(role)}" th:utext="'Add ' + ${role.name}"></a>
+                        <a  class="btn btn-success" th:href="@{/admin/user/role/add/{id}/{role_id}(id=${user.id},role_id=${role.id})}" th:if="${! user.roles.contains(role)}" th:utext="'Add ' + ${role.name}"></a>
 
                     </span>
         </td>

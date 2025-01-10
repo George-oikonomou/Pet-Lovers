@@ -40,48 +40,6 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping("/user/{user_id}")
-    public String showUser(@PathVariable Long user_id, Model model){
-        model.addAttribute("user", userService.getUser(user_id));
-        return "auth/user";
-    }
-
-    @PostMapping("/user/{user_id}")
-    public String editUser(@PathVariable Long user_id, @ModelAttribute("user") User user, Model model) {
-        User the_user = (User) userService.getUser(user_id);
-        the_user.setEmail(user.getEmail());
-        the_user.setUsername(user.getUsername());
-        userService.updateUser(the_user);
-        model.addAttribute("users", userService.getUsers());
-        return "auth/users";
-    }
-
-    @GetMapping("/user/role/delete/{user_id}/{role_id}")
-    public String deleteRolefromUser(@PathVariable Long user_id, @PathVariable Integer role_id, Model model){
-        User user = (User) userService.getUser(user_id);
-        Role role = roleRepository.findById(role_id).get();
-        user.getRoles().remove(role);
-        System.out.println("Roles: "+user.getRoles());
-        userService.updateUser(user);
-        model.addAttribute("users", userService.getUsers());
-        model.addAttribute("roles", roleRepository.findAll());
-        return "auth/users";
-
-    }
-
-    @GetMapping("/user/role/add/{user_id}/{role_id}")
-    public String addRoletoUser(@PathVariable Long user_id, @PathVariable Integer role_id, Model model){
-        User user = (User) userService.getUser(user_id);
-        Role role = roleRepository.findById(role_id).get();
-        user.getRoles().add(role);
-        System.out.println("Roles: "+user.getRoles());
-        userService.updateUser(user);
-        model.addAttribute("users", userService.getUsers());
-        model.addAttribute("roles", roleRepository.findAll());
-        return "auth/users";
-
-    }
-
     @GetMapping("/register/vet")
     public String vetRegister(Model model) {
         Vet vet = new Vet();
