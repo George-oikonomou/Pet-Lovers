@@ -97,13 +97,13 @@ public class AdminController {
     @GetMapping("/shelters/approve/{id}")
     public String approveShelter(@PathVariable int id) {
         shelterService.approveShelter(id);
-        return "/admin/shelters";
+        return "redirect:/admin/shelters";
     }
 
     @GetMapping("/shelters/reject/{id}")
     public String rejectShelter(@PathVariable int id) {
         shelterService.rejectShelter(id);
-        return "/admin/shelters";
+        return "redirect:/admin/shelters";
     }
 
     //PET MANAGEMENT
@@ -116,20 +116,21 @@ public class AdminController {
     @GetMapping("/pets/approve/{id}")
     public String approvePet(@PathVariable int id) {
         petService.approvePet(id);
-        return "/admin/pets";
+        return "redirect:/admin/pets";
     }
 
     @GetMapping("/pets/reject/{id}")
     public String rejectPet(@PathVariable int id) {
         petService.rejectPet(id);
-        return "/admin/pets";
+        return "redirect:/admin/pets";
     }
 
     // VIEW ADOPTION REQUESTS
     @GetMapping("/adoption-requests")
     public String viewAdoptions(Model model) {
-        model.addAttribute("adoptions", adoptionRequestService.getAdoptionRequests());
+        model.addAttribute("adoptionRequests", adoptionRequestService.getAdoptionRequests());
         return "admin/adoption-requests";
     }
+
 
 }

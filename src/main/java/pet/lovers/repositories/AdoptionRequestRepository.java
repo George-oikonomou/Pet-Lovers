@@ -11,5 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface AdoptionRequestRepository extends JpaRepository<AdoptionRequest, Integer> {
-//    List<AdoptionRequest> findByRequestStatus(UserStatus RequestStatus);
+
 }

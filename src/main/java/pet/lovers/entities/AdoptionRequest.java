@@ -6,63 +6,62 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
-public class AdoptionRequest {    //TODO REQUESTED VISIT
+public class AdoptionRequest {
 
-    //TABLE COLUMNS
+    // TABLE COLUMNS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Enumerated(EnumType.STRING)
-    private UserStatus RequestStatus = UserStatus.PENDING; // Default status
+    private UserStatus requestStatus = UserStatus.PENDING; // Default status
 
     @Column
     @NotBlank
-    private LocalDateTime DateTime;
+    private LocalDateTime dateTime;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name="adopter_id")
+    @JoinColumn(name = "adopter_id")
     private Adopter adopter;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "pet_id", referencedColumnName = "id")
     private Pet pet;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name="shelter_id")
+    @JoinColumn(name = "shelter_id")
     private Shelter shelter;
-    //END TABLE COLUMNS
 
-    //CONSTRUCTORS
+    // CONSTRUCTORS
     public AdoptionRequest() {
     }
 
     public AdoptionRequest(LocalDateTime dateTime, Adopter adopter, Pet pet, Shelter shelter) {
-        DateTime = dateTime;
+        this.dateTime = dateTime;
         this.adopter = adopter;
         this.pet = pet;
         this.shelter = shelter;
     }
 
-    //GETTERS AND SETTERS
+    // GETTERS AND SETTERS
     public int getId() {
         return id;
     }
 
     public UserStatus getRequestStatus() {
-        return RequestStatus;
+        return requestStatus;
     }
 
     public void setRequestStatus(UserStatus requestStatus) {
-        RequestStatus = requestStatus;
+        this.requestStatus = requestStatus;
     }
 
     public LocalDateTime getDateTime() {
-        return DateTime;
+        return dateTime;
     }
 
     public void setDateTime(LocalDateTime dateTime) {
-        DateTime = dateTime;
+        this.dateTime = dateTime;
     }
 
     public Adopter getAdopter() {
@@ -93,8 +92,8 @@ public class AdoptionRequest {    //TODO REQUESTED VISIT
     public String toString() {
         return "AdoptionRequest{" +
                 "id=" + id +
-                ", Status=" + RequestStatus +
-                ", DateTime=" + DateTime +
+                ", requestStatus=" + requestStatus +
+                ", dateTime=" + dateTime +
                 ", adopter=" + adopter +
                 ", pet=" + pet +
                 ", shelter=" + shelter +

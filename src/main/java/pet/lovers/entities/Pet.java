@@ -42,8 +42,8 @@ public class Pet {
     @Enumerated(EnumType.STRING)
     private HealthStatus healthStatus = HealthStatus.UNKNOWN; // Default health status
 
-    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
-    private AdoptionRequest adoptionRequest;
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
+    private List<AdoptionRequest> adoptionRequests;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name="shelter_id")
@@ -126,11 +126,12 @@ public class Pet {
         this.petStatus = petStatus;
     }
 
-    public AdoptionRequest getAdoptionRequest() {
-        return adoptionRequest;
+    public List<AdoptionRequest> getAdoptionRequests() {
+        return adoptionRequests;
     }
-    public void setAdoptionRequest(AdoptionRequest adoptionRequest) {
-        this.adoptionRequest = adoptionRequest;
+
+    public void setAdoptionRequests(List<AdoptionRequest> adoptionRequests) {
+        this.adoptionRequests = adoptionRequests;
     }
 
     public void setId(int id) {

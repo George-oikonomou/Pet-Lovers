@@ -7,15 +7,37 @@
 <head>
   <meta charset="UTF-8">
   <title>Adoption Requests</title>
+  <script>
+    function filterSelection(status) {
+      var adoptionRequests = document.querySelectorAll('.adoption-request-row');
+      adoptionRequests.forEach(function(request) {
+        if (status === "ALL" || request.dataset.status === status) {
+          request.style.display = "table-row";
+        } else {
+          request.style.display = "none";
+        }
+      });
+    }
+  </script>
 </head>
 <body>
 <div layout:fragment="main-content">
   <h1>Adoption Requests</h1>
 
-  <div th:if="${#lists.isEmpty(adoptionRequests)}">
-    <p>No adoption requests at the moment.</p>
+  <!-- Filter Buttons -->
+  <div id="myBtnContainer">
+    <button class="btn active" onclick="filterSelection('ALL')"> Show All</button>
+    <button class="btn" onclick="filterSelection('PENDING')"> Pending</button>
+    <button class="btn" onclick="filterSelection('APPROVED')"> Approved</button>
+    <button class="btn" onclick="filterSelection('REJECTED')"> Rejected</button>
   </div>
 
+  <!-- Message if no requests -->
+  <div th:if="${#lists.isEmpty(adoptionRequests)}">
+    <p>No adoption requests found for the selected filter.</p>
+  </div>
+
+  <!-- Table displaying filtered adoption requests -->
   <div th:if="${not #lists.isEmpty(adoptionRequests)}">
     <table class="table">
       <thead>
@@ -23,21 +45,27 @@
         <th>Adopter Name</th>
         <th>Adopter Email</th>
         <th>Pet Name</th>
-        <th>Request Date</th>
-        <th>Actions</th>
+        <th>Pet ID</th>
+        <th>Shelter</th>
+        <th>Status</th>
       </tr>
       </thead>
       <tbody>
-      <tr th:each="request : ${adoptionRequests}">
+      <tr th:each="request : ${adoptionRequests}" class="adoption-request-row"
+          th:data-status="${request.requestStatus}">
         <td th:text="${request.adopter.fullName}"></td>
         <td th:text="${request.adopter.email}"></td>
         <td th:text="${request.pet.name}"></td>
-        <td th:text="${#dates.format(request.requestDate, 'yyyy-MM-dd')}"></td>
+        <td th:text="${request.pet.id}"></td>
+        <td th:text="${request.pet.shelter.name}"></td>
+        <td th:text="${request.requestStatus}"></td>
         <td>
           <a class="btn btn-success"
-             th:href="@{/admin/adoptions/approve/{id}(id=${request.id})}">Approve</a>
+             th:href="@{/admin/adoptions/approve/{id}(id=${request.id})}"
+             th:if="${request.requestStatus == 'PENDING'}">Approve</a>
           <a class="btn btn-danger"
-             th:href="@{/admin/adoptions/reject/{id}(id=${request.id})}">Reject</a>
+             th:href="@{/admin/adoptions/reject/{id}(id=${request.id})}"
+             th:if="${request.requestStatus == 'PENDING'}">Reject</a>
         </td>
       </tr>
       </tbody>

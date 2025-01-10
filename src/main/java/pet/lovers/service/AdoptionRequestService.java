@@ -21,9 +21,5 @@ public class AdoptionRequestService {
         return adoptionRequestRepository.findAll();
     }
 
-//    @Transactional
-//    public List<AdoptionRequest> getAdoptionRequestsByUserStatus(UserStatus status){
-//        return adoptionRequestRepository.findByRequestStatus(status);
-//    }
 
 }
