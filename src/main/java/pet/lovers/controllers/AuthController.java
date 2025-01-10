@@ -1,11 +1,13 @@
 package pet.lovers.controllers;
 
 import pet.lovers.entities.*;
+import pet.lovers.repositories.PetRepository;
 import pet.lovers.repositories.RoleRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import pet.lovers.repositories.UserRepository;
+import pet.lovers.service.PetService;
 import pet.lovers.service.UserService;
 
 import java.time.LocalDateTime;
@@ -17,11 +19,15 @@ public class AuthController {
     UserService userService;
     RoleRepository roleRepository;
     UserRepository userRepository;
+    PetRepository petRepository;
+    PetService petService;
 
-    public AuthController(RoleRepository roleRepository, UserRepository userRepository, UserService userService) {
+    public AuthController(RoleRepository roleRepository, UserRepository userRepository, UserService userService, PetRepository petRepository, PetService petService) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.petRepository = petRepository;
+        this.petService = petService;
     }
 
     @PostConstruct
@@ -54,6 +60,15 @@ public class AuthController {
             Shelter shelter = new Shelter("shelter", "shelter@gmail.com", "shelter", "1345678902", "lorem ipsum", "shelter name", documentOfShelter);
             shelter.getRoles().add(role_shelter);
             userService.saveUser(shelter);
+
+            if (!petRepository.existsByName("Rocky")) {
+                Pet pet = new Pet("Rocky", shelter, 2018, "Dog", "Lab", 10.0);
+                petService.savePet(pet);
+            }
+            if (!petRepository.existsByName("Meow")) {
+                Pet pet = new Pet("Meow", shelter, 2023, "Cat", "Unknown", 3.5);
+                petService.savePet(pet);
+            }
         }
 
         if (!userRepository.existsByUsername("adopter")) {
@@ -61,6 +76,7 @@ public class AuthController {
             adopter.getRoles().add(role_adopter);
             userService.saveUser(adopter);
         }
+
     }
 
     @GetMapping("/login")

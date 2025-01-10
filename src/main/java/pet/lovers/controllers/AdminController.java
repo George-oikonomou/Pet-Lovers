@@ -8,7 +8,9 @@ import java.util.List;
 
 import pet.lovers.entities.Role;
 import pet.lovers.entities.User;
+import pet.lovers.entities.UserStatus;
 import pet.lovers.repositories.RoleRepository;
+import pet.lovers.service.PetService;
 import pet.lovers.service.ShelterService;
 import pet.lovers.service.UserService;
 
@@ -20,11 +22,13 @@ public class AdminController {
     UserService userService;
     RoleRepository roleRepository;
     ShelterService shelterService;
+    PetService petService;
 
-    public AdminController(UserService userService, RoleRepository roleRepository, ShelterService shelterService) {
+    public AdminController(UserService userService, RoleRepository roleRepository, ShelterService shelterService, PetService petService) {
         this.userService = userService;
         this.roleRepository = roleRepository;
         this.shelterService = shelterService;
+        this.petService = petService;
     }
 
     @GetMapping("/dashboard")
@@ -84,7 +88,7 @@ public class AdminController {
     //SHELTER MANAGEMENT
     @GetMapping("/shelters")
     public String viewPendingShelters(Model model) {
-        model.addAttribute("shelters", shelterService.getPendingShelters());
+        model.addAttribute("shelters", shelterService.getSheltersByUserStatus(UserStatus.PENDING));
         return "admin/shelters";
     }
 
@@ -98,6 +102,25 @@ public class AdminController {
     public String rejectShelter(@PathVariable int id) {
         shelterService.rejectShelter(id);
         return "redirect:/admin/shelters";
+    }
+
+    //PET MANAGEMENT
+    @GetMapping("/pets")
+    public String viewPets(Model model) {
+        model.addAttribute("pets", petService.getPetsByUserStatus(UserStatus.PENDING));
+        return "admin/pets";
+    }
+
+    @GetMapping("/pets/approve/{id}")
+    public String approvePet(@PathVariable int id) {
+        petService.approvePet(id);
+        return "redirect:/admin/pets";
+    }
+
+    @GetMapping("/pets/reject/{id}")
+    public String rejectPet(@PathVariable int id) {
+        petService.rejectPet(id);
+        return "redirect:/admin/pets";
     }
 
 }

@@ -21,8 +21,8 @@ public class ShelterService {
     }
 
     @Transactional
-    public List<Shelter> getPendingShelters(){
-        return shelterRepository.findByUserStatus(UserStatus.PENDING);
+    public List<Shelter> getSheltersByUserStatus(UserStatus status){
+        return shelterRepository.findByUserStatus(status);
     }
 
     @Transactional
