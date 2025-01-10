@@ -7,8 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import pet.lovers.repositories.UserRepository;
 import pet.lovers.service.UserService;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Controller
 public class AuthController {
@@ -26,9 +25,9 @@ public class AuthController {
 
     @PostConstruct
     public void setup() {
-        Document document = new Document("path", "name", true, "descriptor");
-        Document documentOfVet = new Document("path2", "name2", true, "descriptor2");
-        Document documentOfShelter = new Document("path3", "name3", true, "descriptor3");
+        Document document = new Document("path", true);
+        Document documentOfVet = new Document("path2", true);
+        Document documentOfShelter = new Document("path3",true);
 
         // Save roles to ensure they are managed by the persistence context
         Role role_user = roleRepository.updateOrInsert(new Role("ROLE_USER"));
@@ -57,7 +56,7 @@ public class AuthController {
         }
 
         if (!userRepository.existsByUsername("adopter")) {
-            Adopter adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "location", "full name", LocalDateTime.now().minusYears(21), document);
+            Adopter adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "location", "full name", LocalDate.now().minusYears(21), document);
             adopter.getRoles().add(role_adopter);
             userService.saveUser(adopter);
         }

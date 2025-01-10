@@ -20,18 +20,8 @@ public class Document {
     private String path;
 
     @Column
-    @NotBlank
-    @Size(min = 1, max = 50)
-    private String name;
-
-    @Column
     @NotNull
     private boolean approved;
-
-    @Column
-    @NotBlank
-    @Size(max = 200)
-    private String descriptor;
 
     @OneToOne(mappedBy = "identification", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
     private Adopter adopter;
@@ -46,11 +36,9 @@ public class Document {
 
 
     //CONSTRUCTORS
-    public Document(String path, String name, boolean approved, String descriptor) {
+    public Document(String path, boolean approved) {
         this.path = path;
-        this.name = name;
         this.approved = approved;
-        this.descriptor = descriptor;
     }
 
     public Document() {}
@@ -66,20 +54,6 @@ public class Document {
     }
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescriptor() {
-        return descriptor;
-    }
-    public void setDescriptor(String descriptor) {
-        this.descriptor = descriptor;
     }
 
     public Adopter getAdopter() {
