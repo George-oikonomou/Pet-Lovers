@@ -45,6 +45,7 @@ public class Adopter extends User {
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.identification = identification;
+        super.setUserStatus(UserStatus.APPROVED); //adopter is automatically approved
     }
 
     //GETTERS AND SETTERS

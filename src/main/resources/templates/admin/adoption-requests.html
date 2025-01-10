@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Adoption Requests</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+  <h1>Adoption Requests</h1>
+
+  <div th:if="${#lists.isEmpty(adoptionRequests)}">
+    <p>No adoption requests at the moment.</p>
+  </div>
+
+  <div th:if="${not #lists.isEmpty(adoptionRequests)}">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Adopter Name</th>
+        <th>Adopter Email</th>
+        <th>Pet Name</th>
+        <th>Request Date</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="request : ${adoptionRequests}">
+        <td th:text="${request.adopter.fullName}"></td>
+        <td th:text="${request.adopter.email}"></td>
+        <td th:text="${request.pet.name}"></td>
+        <td th:text="${#dates.format(request.requestDate, 'yyyy-MM-dd')}"></td>
+        <td>
+          <a class="btn btn-success"
+             th:href="@{/admin/adoptions/approve/{id}(id=${request.id})}">Approve</a>
+          <a class="btn btn-danger"
+             th:href="@{/admin/adoptions/reject/{id}(id=${request.id})}">Reject</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

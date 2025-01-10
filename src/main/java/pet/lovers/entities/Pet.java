@@ -1,9 +1,7 @@
 package pet.lovers.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.time.Year;
 import java.util.List;
@@ -24,48 +22,49 @@ public class Pet {
     private String name;
 
     @Column
-    @NotBlank
-    @Size(min = 2000, max = 2025)
+    @Min(2000)
+    @Max(2025)
     private int yearBirthed;
 
     @Column
     @NotBlank
-    private String type;
+    private String type; //cat, dog, etc
 
     @Column
     @NotBlank
     private String breed;
 
     @Column
-    @Size(min = 1, max = 90)
-    private double weight;
+    @DecimalMin(value = "0.0", inclusive = false, message = "Weight must be greater than 0")
+    @DecimalMax(value = "100.0", message = "Weight must be less than or equal to 100")
+    private Double weight;
 
-    @Enumerated
-    @NotBlank
-    private HealthStatus healthStatus;
+    @Enumerated(EnumType.STRING)
+    private HealthStatus healthStatus = HealthStatus.UNKNOWN; // Default health status
 
     @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
     private AdoptionRequest adoptionRequest;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name="shelter_id")
     private Shelter shelter;
 
-    @Enumerated
-    private PetStatus petStatus;
+    @Enumerated(EnumType.STRING)
+    private PetStatus petStatus = PetStatus.AVAILABLE; // Default status
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus = UserStatus.PENDING; // Default status
     //END TABLE COLUMNS
 
 
     //CONSTRUCTORS
-    public Pet(String name,Shelter shelter, int yearBirthed, String type, String breed, double weight, HealthStatus healthStatus, PetStatus petStatus) {
+    public Pet(String name,Shelter shelter, int yearBirthed, String type, String breed, double weight) {
         this.name = name;
         this.shelter = shelter;
         this.yearBirthed = yearBirthed;
         this.type = type;
         this.breed = breed;
         this.weight = weight;
-        this.healthStatus = healthStatus;
-        this.petStatus = petStatus;
     }
 
     public Pet() {}
@@ -132,6 +131,30 @@ public class Pet {
     }
     public void setAdoptionRequest(AdoptionRequest adoptionRequest) {
         this.adoptionRequest = adoptionRequest;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 
     @Override

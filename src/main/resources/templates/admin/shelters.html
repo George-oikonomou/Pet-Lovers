@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pending Shelter Approvals</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>Pending Shelter Approvals</h1>
+
+    <div th:if="${#lists.isEmpty(shelters)}">
+        <p>No shelters are pending approval at the moment.</p>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(shelters)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Documents</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="shelter : ${shelters}">
+                <td th:text="${shelter.name}"></td>
+                <td th:text="${shelter.location}"></td>
+                <td th:text="${shelter.email}"></td>
+                <td th:text="${shelter.contactNumber}"></td>
+                <td th:text="${shelter.documents}"></td>
+                <td>
+                    <a class="btn btn-success"
+                       th:href="@{/admin/shelters/approve/{id}(id=${shelter.id})}">Approve</a>
+                    <a class="btn btn-danger"
+                       th:href="@{/admin/shelters/reject/{id}(id=${shelter.id})}">Reject</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -2,15 +2,28 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       layout:decorate="~{page_layout/layout}">
 
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Index Page</title>
 </head>
 <body>
 <div layout:fragment="main-content">
   <h1>This is Index Page!</h1>
+
+  <!-- Content for Admin -->
+  <div sec:authorize="hasRole('ROLE_ADMIN')">
+    <p>Welcome, Admin! Here are your tools:</p>
+    <ul>
+      <li><a th:href="@{/admin/users}">Manage Users</a></li>
+      <li><a th:href="@{/admin/shelters}">Review New Shelters</a></li>
+      <li><a th:href="@{/admin/pets}">Review New Pet Listings</a></li>
+      <li><a th:href="@{/admin/adoption-requests}">View Adoption Requests</a></li>
+    </ul>
+  </div>
+
 </div>
 </body>
 </html>
