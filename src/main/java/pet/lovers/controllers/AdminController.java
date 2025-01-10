@@ -4,12 +4,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import java.util.List;
 
 import pet.lovers.entities.Role;
 import pet.lovers.entities.User;
 import pet.lovers.entities.UserStatus;
 import pet.lovers.repositories.RoleRepository;
+import pet.lovers.service.AdoptionRequestService;
 import pet.lovers.service.PetService;
 import pet.lovers.service.ShelterService;
 import pet.lovers.service.UserService;
@@ -23,12 +23,14 @@ public class AdminController {
     RoleRepository roleRepository;
     ShelterService shelterService;
     PetService petService;
+    AdoptionRequestService adoptionRequestService;
 
-    public AdminController(UserService userService, RoleRepository roleRepository, ShelterService shelterService, PetService petService) {
+    public AdminController(UserService userService, RoleRepository roleRepository, ShelterService shelterService, PetService petService, AdoptionRequestService adoptionRequestService) {
         this.userService = userService;
         this.roleRepository = roleRepository;
         this.shelterService = shelterService;
         this.petService = petService;
+        this.adoptionRequestService = adoptionRequestService;
     }
 
     @GetMapping("/dashboard")
@@ -56,7 +58,7 @@ public class AdminController {
         the_user.setEmail(user.getEmail());
         the_user.setUsername(user.getUsername());
         userService.updateUser(the_user);
-        return "redirect:/admin/users";
+        return "/admin/users";
     }
 
     @GetMapping("/user/role/delete/{user_id}/{role_id}")
@@ -95,13 +97,13 @@ public class AdminController {
     @GetMapping("/shelters/approve/{id}")
     public String approveShelter(@PathVariable int id) {
         shelterService.approveShelter(id);
-        return "redirect:/admin/shelters";
+        return "/admin/shelters";
     }
 
     @GetMapping("/shelters/reject/{id}")
     public String rejectShelter(@PathVariable int id) {
         shelterService.rejectShelter(id);
-        return "redirect:/admin/shelters";
+        return "/admin/shelters";
     }
 
     //PET MANAGEMENT
@@ -114,13 +116,20 @@ public class AdminController {
     @GetMapping("/pets/approve/{id}")
     public String approvePet(@PathVariable int id) {
         petService.approvePet(id);
-        return "redirect:/admin/pets";
+        return "/admin/pets";
     }
 
     @GetMapping("/pets/reject/{id}")
     public String rejectPet(@PathVariable int id) {
         petService.rejectPet(id);
-        return "redirect:/admin/pets";
+        return "/admin/pets";
+    }
+
+    // VIEW ADOPTION REQUESTS
+    @GetMapping("/adoption-requests")
+    public String viewAdoptions(Model model) {
+        model.addAttribute("adoptions", adoptionRequestService.getAdoptionRequests());
+        return "admin/adoption-requests";
     }
 
 }

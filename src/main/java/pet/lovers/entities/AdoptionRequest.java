@@ -13,9 +13,8 @@ public class AdoptionRequest {    //TODO REQUESTED VISIT
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
-    @NotBlank
-    private Boolean Status;
+    @Enumerated(EnumType.STRING)
+    private UserStatus RequestStatus = UserStatus.PENDING; // Default status
 
     @Column
     @NotBlank
@@ -38,8 +37,7 @@ public class AdoptionRequest {    //TODO REQUESTED VISIT
     public AdoptionRequest() {
     }
 
-    public AdoptionRequest(Boolean status, LocalDateTime dateTime, Adopter adopter, Pet pet, Shelter shelter) {
-        Status = status;
+    public AdoptionRequest(LocalDateTime dateTime, Adopter adopter, Pet pet, Shelter shelter) {
         DateTime = dateTime;
         this.adopter = adopter;
         this.pet = pet;
@@ -51,12 +49,12 @@ public class AdoptionRequest {    //TODO REQUESTED VISIT
         return id;
     }
 
-    public Boolean getStatus() {
-        return Status;
+    public UserStatus getRequestStatus() {
+        return RequestStatus;
     }
 
-    public void setStatus(Boolean status) {
-        Status = status;
+    public void setRequestStatus(UserStatus requestStatus) {
+        RequestStatus = requestStatus;
     }
 
     public LocalDateTime getDateTime() {
@@ -95,7 +93,7 @@ public class AdoptionRequest {    //TODO REQUESTED VISIT
     public String toString() {
         return "AdoptionRequest{" +
                 "id=" + id +
-                ", Status=" + Status +
+                ", Status=" + RequestStatus +
                 ", DateTime=" + DateTime +
                 ", adopter=" + adopter +
                 ", pet=" + pet +
