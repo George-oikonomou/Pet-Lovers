@@ -1,5 +1,6 @@
 package pet.lovers.config;
 
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import pet.lovers.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,11 +22,13 @@ public class SecurityConfig {
     private UserDetailsService userDetailsService;
 
     private BCryptPasswordEncoder passwordEncoder;
+    private final RoleBasedSuccessHandler roleBasedSuccessHandler;
 
-    public SecurityConfig(UserService userService, UserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder) {
+    public SecurityConfig(UserService userService, UserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder, RoleBasedSuccessHandler roleBasedSuccessHandler) {
         this.userService = userService;
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.roleBasedSuccessHandler = roleBasedSuccessHandler;
     }
 
     @Bean
@@ -33,14 +36,14 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home","/register/vet","/saveAdopter","/register/shelter", "/register", "/saveUser", "/images/**", "/js/**", "/css/**").permitAll()
-                        .requestMatchers("/teacher/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/course", true)
+                        .successHandler(roleBasedSuccessHandler) // Use role-based handler
                         .permitAll())
-                .logout((logout) -> logout.permitAll());
+                .logout(LogoutConfigurer::permitAll);
         return http.build();
     }
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Pending Shelter Approvals</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+  <h1>Pending Pet Approvals</h1>
+  <div th:if="${#lists.isEmpty(pets)}">
+    <p>No pets are pending approval at the moment.</p>
+  </div>
+
+  <div th:if="${not #lists.isEmpty(pets)}">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Breed</th>
+        <th>Birth Year</th>
+        <th>Shelter</th>
+        <th>Health Status</th>
+        <th>Shelter Phone</th>
+        <th>Vet Phone</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="pet : ${pets}">
+        <td th:text="${pet.name}"></td>
+        <td th:text="${pet.type}"></td>
+        <td th:text="${pet.breed}"></td>
+        <td th:text="${pet.yearBirthed}"></td>
+        <td th:text="${pet.shelter.name}"></td>
+        <td th:text="${pet.healthStatus}"></td>
+        <td th:text="${pet.shelter.contactNumber}"></td>
+        <!-- Vet Phone (Check for null) -->
+        <td th:text="${pet.shelter != null && pet.shelter.vet != null ? pet.shelter.vet.contactNumber : 'N/A'}"></td>
+
+        <td>
+          <a class="btn btn-success"
+             th:href="@{/admin/pets/approve/{id}(id=${pet.id})}">Approve</a>
+          <a class="btn btn-danger"
+             th:href="@{/admin/pets/reject/{id}(id=${pet.id})}">Reject</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>
