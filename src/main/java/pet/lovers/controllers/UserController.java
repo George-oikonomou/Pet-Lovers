@@ -1,16 +1,12 @@
 package pet.lovers.controllers;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.validation.BindingResult;
 import pet.lovers.entities.*;
-import pet.lovers.repositories.RoleRepository;
 import pet.lovers.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -20,13 +16,10 @@ public class UserController {
     @Value("${google.api.key}")
     private String googleApiKey;
 
-    private UserService userService;
+    private final UserService userService;
 
-    private RoleRepository roleRepository;
-
-    public UserController(UserService userService, RoleRepository roleRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
     }
 
     @GetMapping("/register")
@@ -38,19 +31,24 @@ public class UserController {
     }
 
     @PostMapping("/saveAdopter")
-    public String saveAdopter(@ModelAttribute @Valid Adopter adopter, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            System.out.println("Validation errors: " + result.getAllErrors());
-            return "auth/register";
-        }
+    public String saveAdopter(@ModelAttribute Adopter adopter, Model model) {
         System.out.println("Adopter: " + adopter);
         Integer id = userService.saveUser(adopter);
-        String message = "User '" + id + "' saved successfully !";
+        String message = "Adopter '" + id + "' saved successfully !";
         model.addAttribute("msg", message);
         return "index";
     }
 
-    @PostMapping("/saveUser")
+    @PostMapping("/saveShelter")
+    public String saveShelter(@ModelAttribute Shelter shelter,  Model model) {
+        System.out.println("Shelter: " + shelter);
+        Integer id = userService.saveUser(shelter);
+        String message = "Shelter '" + id + "' saved successfully !";
+        model.addAttribute("msg", message);
+        return "index";
+    }
+
+    @PostMapping("/saveVet")
     public String saveUser(@ModelAttribute User user, Model model){
         System.out.println("Roles: "+user.getRoles());
         Integer id = userService.saveUser(user);
@@ -69,6 +67,7 @@ public class UserController {
     @GetMapping("/register/shelter")
     public String shelterRegister(Model model) {
         Shelter shelter = new Shelter();
+        model.addAttribute("googleApiKey", googleApiKey);
         model.addAttribute("shelter", shelter);
         return "auth/shelterRegister";
     }

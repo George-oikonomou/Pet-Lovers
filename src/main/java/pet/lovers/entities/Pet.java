@@ -22,6 +22,11 @@ public class Pet {
     private String name;
 
     @Column
+    @NotEmpty
+    @Pattern(regexp = "^(male|female)$", message = "Sex must be either 'male' or 'female'")
+    private String sex;
+
+    @Column
     @Min(2000)
     @Max(2025)
     private int yearBirthed;
@@ -58,8 +63,9 @@ public class Pet {
 
 
     //CONSTRUCTORS
-    public Pet(String name,Shelter shelter, int yearBirthed, String type, String breed, double weight) {
+    public Pet(String name, String sex,Shelter shelter, int yearBirthed, String type, String breed, double weight) {
         this.name = name;
+        this.sex = sex;
         this.shelter = shelter;
         this.yearBirthed = yearBirthed;
         this.type = type;
@@ -79,6 +85,13 @@ public class Pet {
     }
     public void setName (String name) {
         this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public Shelter getShelter() {
@@ -139,10 +152,6 @@ public class Pet {
         this.id = id;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public void setBreed(String breed) {
         this.breed = breed;
     }
@@ -161,6 +170,6 @@ public class Pet {
 
     @Override
     public String toString() {
-        return "PET\nname: " + name + "\nage: " + (Year.now().getValue() - yearBirthed) + "\ntype: " + type + "\nbreed: " + breed + "\nweight: " + weight;
+        return "PET\nname: " + name + "\nsex: " + sex + "\nage: " + (Year.now().getValue() - yearBirthed) + "\ntype: " + type + "\nbreed: " + breed + "\nweight: " + weight;
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import pet.lovers.repositories.UserRepository;
 import pet.lovers.service.PetService;
-import pet.lovers.service.UserService;
+import pet.lovers.service.UserService;;
 import java.time.LocalDate;
 
 @Controller
@@ -67,11 +67,11 @@ public class AuthController {
             userService.saveUser(shelter);
 
             if (!petRepository.existsByName("Rocky")) {
-                Pet rocky = new Pet("Rocky", shelter, 2018, "Dog", "Lab", 10.0);
+                Pet rocky = new Pet("Rocky", "male", shelter, 2018, "Dog", "Lab", 10.0);
                 petService.savePet(rocky);
             }
             if (!petRepository.existsByName("Meow")) {
-                Pet meow = new Pet("Meow", shelter, 2023, "Cat", "Unknown", 3.5);
+                Pet meow = new Pet("Meow", "female", shelter, 2023, "Cat", "Unknown", 3.5);
                 petService.savePet(meow);
             }
         }

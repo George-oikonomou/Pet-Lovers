@@ -11,7 +11,6 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(	name = "users",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
 public class User {

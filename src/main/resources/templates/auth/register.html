@@ -9,7 +9,7 @@
     </script>
     <script th:src="@{'https://maps.googleapis.com/maps/api/js?key=' + ${googleApiKey} + '&libraries=places'}"></script>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Registration</title>
     <style>
         /* Prevent browser autofill styles */
         input:-webkit-autofill {
@@ -25,9 +25,6 @@
     </div>
 
     <h3>Adopter Registration</h3>
-    <div style="display: none;" id="googleApiKeyDiv">
-        Google API Key: <span th:text="${googleApiKey}"></span>
-    </div>
 
     <form th:action="@{/saveAdopter}" method="post" th:object="${adopter}">
 
@@ -46,15 +43,13 @@
         </div>
 
         <div class="form-group row">
-            <!-- ID Card/Passport Number URL -->
             <div class="col-md-6">
-                <label for="identification_path">ID card/Passport Number URL</label>
+                <label for="identification.path">ID card/Passport URL</label>
                 <input type="url" class="form-control" th:field="*{identification.path}" id="identification.path" required
                        pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
                        title="Please enter a valid URL starting with 'http://' or 'https://'" />
                 <span th:if="${#fields.hasErrors('identification.path')}" th:errors="*{identification.path}"></span>
             </div>
-            <!-- Birthdate Field Bound to Adopter.birthDate -->
             <div class="col-md-6">
                 <label for="birthDate">Birthdate</label>
                 <input type="text" class="form-control" th:field="*{birthDate}" id="birthDate" required placeholder="Select your birthdate">
@@ -133,9 +128,8 @@
                 -moz-appearance: textfield;
             }
         </style>
-        <label><b>Location</b></label>
         <div class="form-group">
-            <label for="location-autocomplete">Search Address</label>
+            <label for="location-autocomplete">Location</label>
             <!-- Binding the input field to the 'location' attribute in the model -->
             <input type="text" class="form-control" th:field="*{location}" id="location-autocomplete" placeholder="Start typing your address..." required />
 
