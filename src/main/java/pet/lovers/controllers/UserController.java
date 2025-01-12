@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
 
-
     @Value("${google.api.key}")
     private String googleApiKey;
 
@@ -22,15 +21,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
+    @GetMapping("/register/adopter")
+    public String registerAdopter(Model model) {
         Adopter adopter = new Adopter();
         model.addAttribute("googleApiKey", googleApiKey);
         model.addAttribute("adopter", adopter);
-        return "auth/register";
+        return "auth/adopter-register";
     }
 
-    @PostMapping("/saveAdopter")
+    @PostMapping("/register/adopter")
     public String saveAdopter(@ModelAttribute Adopter adopter, Model model) {
         System.out.println("Adopter: " + adopter);
         Integer id = userService.saveUser(adopter);
@@ -39,7 +38,16 @@ public class UserController {
         return "index";
     }
 
-    @PostMapping("/saveShelter")
+
+    @GetMapping("/register/shelter")
+    public String registerShelter(Model model) {
+        Shelter shelter = new Shelter();
+        model.addAttribute("googleApiKey", googleApiKey);
+        model.addAttribute("shelter", shelter);
+        return "auth/shelter-register";
+    }
+
+    @PostMapping("/register/shelter")
     public String saveShelter(@ModelAttribute Shelter shelter,  Model model) {
         System.out.println("Shelter: " + shelter);
         Integer id = userService.saveUser(shelter);
@@ -48,27 +56,21 @@ public class UserController {
         return "index";
     }
 
-    @PostMapping("/saveVet")
-    public String saveUser(@ModelAttribute User user, Model model){
-        System.out.println("Roles: "+user.getRoles());
-        Integer id = userService.saveUser(user);
+
+    @GetMapping("/register/vet")
+    public String registerVet(Model model) {
+        Vet vet = new Vet();
+        model.addAttribute("googleApiKey", googleApiKey);
+        model.addAttribute("vet", vet);
+        return "auth/vet-register";
+    }
+
+    @PostMapping("/register/vet")
+    public String saveVet(@ModelAttribute Vet vet, Model model){
+        System.out.println("Roles: "+vet.getRoles());
+        Integer id = userService.saveUser(vet);
         String message = "User '"+id+"' saved successfully !";
         model.addAttribute("msg", message);
         return "index";
-    }
-
-    @GetMapping("/register/vet")
-    public String vetRegister(Model model) {
-        Vet vet = new Vet();
-        model.addAttribute("vet", vet);
-        return "auth/vetRegister";
-    }
-
-    @GetMapping("/register/shelter")
-    public String shelterRegister(Model model) {
-        Shelter shelter = new Shelter();
-        model.addAttribute("googleApiKey", googleApiKey);
-        model.addAttribute("shelter", shelter);
-        return "auth/shelterRegister";
     }
 }

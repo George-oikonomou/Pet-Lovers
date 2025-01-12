@@ -18,8 +18,15 @@ public class RoleBasedSuccessHandler extends SavedRequestAwareAuthenticationSucc
         // Redirect based on role
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             getRedirectStrategy().sendRedirect(request, response, "/admin/dashboard");
-        } else {
-            getRedirectStrategy().sendRedirect(request, response, "/"); //TODO: Redirect to pet listings page?
         }
+//        else if(authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SHELTER"))) {
+//            getRedirectStrategy().sendRedirect(request, response, "/shelter/dashboard");
+//        }else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_VET"))) {
+//            getRedirectStrategy().sendRedirect(request, response, "/vet/dashboard");
+//        }else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADOPTER"))) {
+//            getRedirectStrategy().sendRedirect(request, response, "/adopter/dashboard");
+//        }
+        else {
+            getRedirectStrategy().sendRedirect(request, response, "/");         }
     }
 }
