@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -24,7 +24,7 @@ public class Adopter extends User {
     @Column
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "identification", referencedColumnName = "id")
@@ -40,7 +40,7 @@ public class Adopter extends User {
     //CONSTRUCTORS
     public Adopter() {}
 
-    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDateTime birthDate, Document identification) {
+    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDate birthDate, Document identification) {
         super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.birthDate = birthDate;
@@ -57,11 +57,11 @@ public class Adopter extends User {
         this.fullName = fullName;
     }
 
-    public LocalDateTime getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDateTime birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -87,5 +87,21 @@ public class Adopter extends User {
 
     public void setVisits(List<Visit> visits) {
         this.visits = visits;
+    }
+
+    @Override
+    public String toString() {
+        return "Adopter{" +
+                "email='" + getEmail() + '\'' +
+                "username='" + getUsername() + '\'' +
+                "password='" + getPassword() + '\'' +
+                "contactNumber='" + getContactNumber() + '\'' +
+                "location=" + getLocation() +
+                "fullName='" + fullName + '\'' +
+                ", birthDate=" + birthDate +
+                ", identification=" + identification +
+                ", visits=" + visits +
+                ", adoptionRequests=" + adoptionRequests +
+                '}';
     }
 }

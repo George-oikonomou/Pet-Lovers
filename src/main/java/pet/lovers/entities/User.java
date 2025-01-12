@@ -11,7 +11,6 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(	name = "users",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
 public class User {
@@ -22,6 +21,7 @@ public class User {
     @NotBlank
     @Size(max = 20)
     private String username;
+
 
     @NotBlank
     @Size(max = 50)
@@ -36,8 +36,8 @@ public class User {
     @Pattern(regexp = "^\\d{10}$", message = "The number must be exactly 10 digits.")
     private String contactNumber;
 
+    @Column
     @NotBlank
-    @Size(max = 100)
     private String location;
 
     @Enumerated(EnumType.STRING)

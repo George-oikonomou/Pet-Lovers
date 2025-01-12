@@ -29,8 +29,8 @@
         <div class="form-group">
             <label for="specialization">Specialization</label>
             <input type="text" class="form-control" th:field="*{specialization}" id="specialization" required
-            pattern="^[A-Za-z]+(?: [A-Za-z]+)+$"
-            title="Specialization contains only alphabetic characters"/>
+                   pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
+                   title="Specialization contains only alphabetic characters"/>
             <span th:if="${#fields.hasErrors('specialization')}" th:errors="*{specialization}"></span>
         </div>
 
@@ -38,8 +38,8 @@
         <div class="form-group">
             <label for="documents">Documents URL</label>
             <input type="url" class="form-control" th:field="*{documents}" id="documents" required
-            pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
-            title="Please enter a valid URL starting with 'http://' or 'https://'"/>
+                   pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
+                   title="Please enter a valid URL starting with 'http://' or 'https://'"/>
             <span th:if="${#fields.hasErrors('documents')}" th:errors="*{documents}"></span>
         </div>
 

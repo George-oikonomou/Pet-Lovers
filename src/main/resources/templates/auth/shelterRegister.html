@@ -24,16 +24,16 @@
         <p>Invalid username or password.</p>
     </div>
 
-    <h3>Adopter Registration</h3>
+    <h3>Shelter Registration</h3>
 
-    <form th:action="@{/saveAdopter}" method="post" th:object="${adopter}">
+    <form th:action="@{/saveShelter}" method="post" th:object="${shelter}">
 
         <div class="form-group">
-            <label for="fullName">Full name</label>
-            <input type="text" class="form-control" th:field="*{fullName}" id="fullName" required
-                   pattern="[A-Za-z]+(?: [A-Za-z]+){1,2}"
-                   title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')"/>
-            <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+            <label for="name">Name</label>
+            <input type="text" class="form-control" th:field="*{name}" id="name" required
+                   pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
+                   title="Name must contain with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')"/>
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
         </div>
 
         <div class="form-group">
@@ -42,45 +42,13 @@
             <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
         </div>
 
-        <div class="form-group row">
-            <div class="col-md-6">
-                <label for="identification.path">ID card/Passport URL</label>
-                <input type="url" class="form-control" th:field="*{identification.path}" id="identification.path" required
-                       pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
-                       title="Please enter a valid URL starting with 'http://' or 'https://'" />
-                <span th:if="${#fields.hasErrors('identification.path')}" th:errors="*{identification.path}"></span>
-            </div>
-            <div class="col-md-6">
-                <label for="birthDate">Birthdate</label>
-                <input type="text" class="form-control" th:field="*{birthDate}" id="birthDate" required placeholder="Select your birthdate">
-                <span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" class="text-danger"></span>
-            </div>
-
-            <!-- Flatpickr CSS -->
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-            <!-- Custom CSS -->
-            <style>
-                .flatpickr-monthDropdown-months { min-width: 100px !important; z-index: 9999 !important; }
-                .flatpickr-current-month { font-size: 1rem !important; }
-                .flatpickr-prev-month, .flatpickr-next-month { transform: scale(0.8); }
-            </style>
-
-            <!-- Flatpickr JS Configuration -->
-            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-            <script>
-                flatpickr("#birthDate", {
-                    dateFormat: "Y-m-d",
-                    minDate: "1905-01-01",
-                    maxDate: "today",
-                    disableMobile: true,
-                    monthSelectorType: "dropdown"
-                });
-            </script>
-
-
+        <div class="form-group">
+            <label for="documents.path">Documents URL</label>
+            <input type="url" class="form-control" th:field="*{documents.path}" id="documents.path" required
+                   pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
+                   title="Please enter a valid URL starting with 'http://' or 'https://'"/>
+            <span th:if="${#fields.hasErrors('documents.path')}" th:errors="*{documents.path}"></span>
         </div>
-
 
         <div class="form-group">
             <label for="email">Email</label>
@@ -138,12 +106,11 @@
             <span th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="text-danger"></span>
         </div>
 
-
         <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Register</button>
 
         <div class="form-group">
-            <a th:href="@{/register/vet}"><u>Sign up as a Vet</u></a><br>
-            <a th:href="@{/register/shelter}"><u>Sign up as a Shelter</u></a>
+            <a th:href="@{/register}"><u>Sign up as a Adopter</u></a><br>
+            <a th:href="@{/register/vet}"><u>Sign up as a Vet</u></a>
         </div>
     </form>
 </div>
