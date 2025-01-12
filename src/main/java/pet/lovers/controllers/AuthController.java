@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import pet.lovers.repositories.UserRepository;
 import pet.lovers.service.PetService;
-import pet.lovers.service.UserService;;
+import pet.lovers.service.UserService;
 import java.time.LocalDate;
 
 @Controller
