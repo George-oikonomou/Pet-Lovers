@@ -26,7 +26,7 @@ public class UserController {
         Adopter adopter = new Adopter();
         model.addAttribute("googleApiKey", googleApiKey);
         model.addAttribute("adopter", adopter);
-        return "auth/adopter-register";
+        return "auth/register-adopter";
     }
 
     @PostMapping("/register/adopter")
@@ -44,7 +44,7 @@ public class UserController {
         Shelter shelter = new Shelter();
         model.addAttribute("googleApiKey", googleApiKey);
         model.addAttribute("shelter", shelter);
-        return "auth/shelter-register";
+        return "auth/register-shelter";
     }
 
     @PostMapping("/register/shelter")
@@ -62,7 +62,7 @@ public class UserController {
         Vet vet = new Vet();
         model.addAttribute("googleApiKey", googleApiKey);
         model.addAttribute("vet", vet);
-        return "auth/vet-register";
+        return "auth/register-vet";
     }
 
     @PostMapping("/register/vet")
