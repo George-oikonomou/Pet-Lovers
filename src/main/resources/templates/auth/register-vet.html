@@ -1,0 +1,132 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <script th:src="@{'https://maps.googleapis.com/maps/api/js?key=' + ${googleApiKey} + '&libraries=places'}"></script>
+    <meta charset="UTF-8">
+    <title>Vet Register</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+
+    <div th:if="${param.error}">
+        <p>Invalid username or password.</p>
+    </div>
+
+    <h3>Vet Registration</h3>
+
+    <form th:action="@{/register/vet}" method="post" th:object="${vet}">
+
+        <div class="form-group">
+            <label for="fullName">Full name</label>
+            <input type="text" class="form-control" th:field="*{fullName}" id="fullName" required
+                   pattern="[A-Za-z]+(?: [A-Za-z]+){1,2}"
+                   title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')"/>
+            <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" th:field="*{username}" id="username" required/>
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="documents.path">Documents URL</label>
+            <input type="url" class="form-control" th:field="*{documents.path}" id="documents.path" required
+                   pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
+                   title="Please enter a valid URL starting with 'http://' or 'https://'"/>
+            <span th:if="${#fields.hasErrors('documents.path')}" th:errors="*{documents.path}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" th:field="*{email}" id="email" required/>
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" th:field="*{password}" id="password" required/>
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="contact_number">Contact number</label>
+            <input type="text" class="form-control"
+                   th:field="*{contactNumber}"
+                   id="contact_number"
+                   required
+                   pattern="[0-9]{10}"
+                   title="Contact number must be exactly 10 digits"
+                   maxlength="10"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+            <span th:if="${#fields.hasErrors('contactNumber')}" th:errors="*{contactNumber}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="location-autocomplete">Location</label>
+            <!-- Binding the input field to the 'location' attribute in the model -->
+            <input type="text" class="form-control" th:field="*{location}" id="location-autocomplete" placeholder="Start typing your address..." required />
+
+            <!-- Display error message if validation fails -->
+            <small class="form-text text-muted">Use the autocomplete field to quickly find your address.</small>
+            <span th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Register</button>
+
+        <div class="form-group">
+            <a th:href="@{/register/adopter}"><u>Sign up as an Adopter</u></a><br>
+            <a th:href="@{/register/vet}"><u>Sign up as a Vet</u></a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+<style>
+    input:-webkit-autofill {
+        box-shadow: 0 0 0 1000px white inset;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
+<script>
+    window.addEventListener('load', initializeAutocomplete);
+
+    let selectedPlace = null;
+
+    function initializeAutocomplete() {
+
+        const contactNumberInput = document.getElementById('contact_number');
+        if (contactNumberInput.value === '0') {
+            contactNumberInput.value = '';
+        }
+        const input = document.getElementById('location-autocomplete');
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+            types: ['address'],
+            componentRestrictions: { country: 'gr' },
+        });
+
+        autocomplete.addListener('place_changed', () => {
+            selectedPlace = autocomplete.getPlace();
+            document.getElementById('submitBtn').disabled = false;
+        });
+
+        input.addEventListener('input', () => {
+            if (selectedPlace) {
+                document.getElementById('submitBtn').disabled = true;
+            }
+        });
+    }
+</script>
