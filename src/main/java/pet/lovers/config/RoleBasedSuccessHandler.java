@@ -27,6 +27,7 @@ public class RoleBasedSuccessHandler extends SavedRequestAwareAuthenticationSucc
 //            getRedirectStrategy().sendRedirect(request, response, "/adopter/dashboard");
 //        }
         else {
-            getRedirectStrategy().sendRedirect(request, response, "/");         }
+            getRedirectStrategy().sendRedirect(request, response, "/");
+        }
     }
 }
