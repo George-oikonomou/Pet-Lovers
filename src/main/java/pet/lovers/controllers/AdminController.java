@@ -8,11 +8,7 @@ import org.springframework.ui.Model;
 import pet.lovers.entities.Role;
 import pet.lovers.entities.User;
 import pet.lovers.entities.UserStatus;
-import pet.lovers.repositories.RoleRepository;
-import pet.lovers.service.AdoptionRequestService;
-import pet.lovers.service.PetService;
-import pet.lovers.service.ShelterService;
-import pet.lovers.service.UserService;
+import pet.lovers.service.*;
 
 
 @Controller
@@ -20,14 +16,14 @@ import pet.lovers.service.UserService;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
     UserService userService;
-    RoleRepository roleRepository;
+    RoleService roleService;
     ShelterService shelterService;
     PetService petService;
     AdoptionRequestService adoptionRequestService;
 
-    public AdminController(UserService userService, RoleRepository roleRepository, ShelterService shelterService, PetService petService, AdoptionRequestService adoptionRequestService) {
+    public AdminController(UserService userService, RoleService roleService, ShelterService shelterService, PetService petService, AdoptionRequestService adoptionRequestService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
         this.shelterService = shelterService;
         this.petService = petService;
         this.adoptionRequestService = adoptionRequestService;
@@ -42,7 +38,7 @@ public class AdminController {
     @GetMapping("/users")
     public String showUsers(Model model){
         model.addAttribute("users", userService.getUsers());
-        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("roles", roleService.findAll());
         return "admin/users";
     }
 
@@ -64,12 +60,12 @@ public class AdminController {
     @GetMapping("/user/role/delete/{user_id}/{role_id}")
     public String deleteRolefromUser(@PathVariable Long user_id, @PathVariable Integer role_id, Model model){
         User user = (User) userService.getUser(user_id);
-        Role role = roleRepository.findById(role_id).get();
+        Role role = roleService.findById(role_id).orElseThrow();
         user.getRoles().remove(role);
         System.out.println("Roles: "+user.getRoles());
         userService.updateUser(user);
         model.addAttribute("users", userService.getUsers());
-        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("roles", roleService.findAll());
         return "admin/users";
 
     }
@@ -77,12 +73,12 @@ public class AdminController {
     @GetMapping("/user/role/add/{user_id}/{role_id}")
     public String addRoletoUser(@PathVariable Long user_id, @PathVariable Integer role_id, Model model){
         User user = (User) userService.getUser(user_id);
-        Role role = roleRepository.findById(role_id).get();
+        Role role = roleService.findById(role_id).orElseThrow();
         user.getRoles().add(role);
         System.out.println("Roles: "+user.getRoles());
         userService.updateUser(user);
         model.addAttribute("users", userService.getUsers());
-        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("roles", roleService.findAll());
         return "admin/users";
 
     }

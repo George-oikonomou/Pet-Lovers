@@ -11,19 +11,37 @@
 </head>
 <body>
 <div layout:fragment="main-content">
-  <h1>This is Index Page!</h1>
+  <h1>Welcome to the Pet Adoption Platform!</h1>
 
   <!-- Content for Admin -->
   <div sec:authorize="hasRole('ROLE_ADMIN')">
+    <h2>Admin Dashboard</h2>
     <p>Welcome, Admin! Here are your tools:</p>
     <ul>
       <li><a th:href="@{/admin/users}">Manage Users</a></li>
       <li><a th:href="@{/admin/shelters}">Review New Shelters</a></li>
       <li><a th:href="@{/admin/pets}">Review New Pet Listings</a></li>
-      <li><a th:href="@{/admin/adoption-requests}">View Adoption Requests</a></li>
+      <li><a th:href="@{/admin/adoption-requests}">View All Adoption Requests</a></li>
     </ul>
   </div>
 
+  <!-- Content for Shelter -->
+  <div sec:authorize="hasRole('ROLE_SHELTER')">
+    <h2>Shelter Dashboard</h2>
+    <p>Welcome, Shelter! Manage your adoption requests:</p>
+    <ul>
+      <li><a th:href="@{/adoption-requests/shelter}">View Adoption Requests for Your Shelter</a></li>
+    </ul>
+  </div>
+
+  <!-- Content for Adopter -->
+  <div sec:authorize="hasRole('ROLE_ADOPTER')">
+    <h2>Adopter Dashboard</h2>
+    <p>Welcome, Adopter! View your adoption requests:</p>
+    <ul>
+      <li><a th:href="@{/adoption-requests/adopter}">View Your Adoption Requests</a></li>
+    </ul>
+  </div>
 </div>
 </body>
 </html>
