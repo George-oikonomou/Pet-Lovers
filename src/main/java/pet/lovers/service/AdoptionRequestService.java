@@ -21,5 +21,10 @@ public class AdoptionRequestService {
         return adoptionRequestRepository.findAll();
     }
 
+    @Transactional
+    public Integer updateAdoptionRequest(AdoptionRequest adoptionRequest){
+        adoptionRequestRepository.save(adoptionRequest);
+        return adoptionRequest.getId();
+    }
 
 }

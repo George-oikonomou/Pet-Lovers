@@ -89,7 +89,7 @@ public class UserService implements UserDetailsService {
 
     public User getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByUsername(authentication.getName()).orElseThrow();
+        return userRepository.findByEmail(authentication.getName()).orElseThrow();
     }
 
     @Transactional

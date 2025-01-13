@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Adoption Requests</title>
+    <script>
+        function filterSelection(status) {
+            var adoptionRequests = document.querySelectorAll('.adoption-request-row');
+            var searchQuery = document.getElementById('searchInput').value.toLowerCase();
+
+            adoptionRequests.forEach(function (request) {
+                var petName = request.dataset.petName.toLowerCase();
+                var petId = request.dataset.petId.toLowerCase();
+                var matchesSearch = searchQuery === "" || petName.includes(searchQuery) || petId.includes(searchQuery);
+                var matchesStatus = status === "ALL" || request.dataset.status === status;
+
+                if (matchesSearch && matchesStatus) {
+                    request.style.display = "table-row";
+                } else {
+                    request.style.display = "none";
+                }
+            });
+
+            // Show or hide the "No results" message
+            var visibleRows = Array.from(adoptionRequests).filter(row => row.style.display === "table-row");
+            document.getElementById("noResultsMessage").style.display = visibleRows.length ? "none" : "block";
+        }
+
+        function resetSearch() {
+            document.getElementById('searchInput').value = "";
+            filterSelection('ALL');
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>Adoption Requests</h1>
+
+    <!-- Search and Filter Section -->
+    <div>
+        <input type="text" id="searchInput" placeholder="Search by pet name or ID..." onkeyup="filterSelection('ALL')">
+        <button class="btn" onclick="resetSearch()">Reset</button>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div id="myBtnContainer">
+        <button class="btn active" onclick="filterSelection('ALL')">Show All</button>
+        <button class="btn" onclick="filterSelection('PENDING')">Pending</button>
+        <button class="btn" onclick="filterSelection('APPROVED')">Approved</button>
+        <button class="btn" onclick="filterSelection('REJECTED')">Rejected</button>
+    </div>
+
+    <!-- Message if no requests -->
+    <div id="noResultsMessage" th:if="${#lists.isEmpty(adoptionRequests)}" style="display: none;">
+        <p>No adoption requests found for the selected filter.</p>
+    </div>
+
+    <!-- Table displaying filtered adoption requests -->
+    <div th:if="${not #lists.isEmpty(adoptionRequests)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Adopter Name</th>
+                <th>Adopter Email</th>
+                <th>Pet Name</th>
+                <th>Pet ID</th>
+                <th>Shelter</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request : ${adoptionRequests}" class="adoption-request-row"
+                th:data-status="${request.requestStatus}"
+                th:data-pet-name="${request.pet.name}"
+                th:data-pet-id="${request.pet.id}">
+                <td th:text="${request.adopter.fullName}"></td>
+                <td th:text="${request.adopter.email}"></td>
+                <td th:text="${request.pet.name}"></td>
+                <td th:text="${request.pet.id}"></td>
+                <td th:text="${request.pet.shelter.name}"></td>
+                <td th:text="${request.requestStatus}"></td>
+                <td><a th:href="@{/adoption-requests/{id}(id=${request.id})}" th:text="View"></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>
