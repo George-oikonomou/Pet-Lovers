@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import pet.lovers.repositories.AdopterRepository;
 
 import java.util.List;
+import java.util.Optional;
+
 import pet.lovers.entities.Adopter;
 
 @Service
@@ -14,6 +16,10 @@ public class AdopterService {
 
     public AdopterService(AdopterRepository adopterRepository) {
         this.adopterRepository = adopterRepository;
+    }
+
+    public Optional<Adopter> findByUserId(Integer id) {
+        return adopterRepository.findById(id);
     }
 
     @Transactional
