@@ -66,6 +66,7 @@ public class AdoptionRequestController {
         return "shelter/adoption-request";
     }
 
+    @PreAuthorize("hasRole('ROLE_SHELTER')")
     @PostMapping("/{id}/approve")
     public String approveAdoptionRequest(@PathVariable Integer id) {
         AdoptionRequest request = adoptionRequestRepository.findById(id)
@@ -79,6 +80,7 @@ public class AdoptionRequestController {
         return "redirect:/shelter/adoption-requests";
     }
 
+    @PreAuthorize("hasRole('ROLE_SHELTER')")
     @PostMapping("/{id}/reject")
     public String rejectAdoptionRequest(@PathVariable Integer id) {
         AdoptionRequest request = adoptionRequestRepository.findById(id)
