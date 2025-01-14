@@ -62,7 +62,7 @@ public class AdoptionRequest {
     }
 
     public String getReadableDateTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
         return dateTime.format(formatter);
     }
 
