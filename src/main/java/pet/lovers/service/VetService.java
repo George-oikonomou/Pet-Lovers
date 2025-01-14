@@ -1,6 +1,7 @@
 package pet.lovers.service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pet.lovers.entities.Vet;
 import pet.lovers.repositories.VetRepository;
@@ -30,5 +31,14 @@ public class VetService {
     @Transactional
     public void deleteVet(Integer id) {
         vetRepository.deleteById(id);
+    }
+
+    @Autowired
+    public VetService(VetRepository vetRepository) {
+        this.vetRepository = vetRepository;
+    }
+
+    public Vet getLoggedInVet(String username) {
+        return vetRepository.findByUsername(username);
     }
 }
