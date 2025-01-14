@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register New Pet</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>New Pet</h1>
+
+    <form th:action="@{/shelter/new-pet}" method="post" th:object="${newPet}" oninput="validateForm()">
+
+        <div class="form-group row">
+            <div class="col-md-6">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" th:field="*{name}" id="name" required
+                       pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
+                       title="Name must contain at least two words with alphabetic characters"/>
+            </div>
+
+            <div class="col-md-6">
+                <label for="breed">Breed</label>
+                <input type="text" class="form-control" th:field="*{breed}" id="breed" required
+                       pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
+                       title="Breed must contain alphabetic characters"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6">
+                <label for="type">Type</label>
+                <select id="type" th:field="*{type}" name="type" class="form-control" er>
+                    <option value="dog">Dog</option>
+                    <option value="cat">Cat</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="sex">Sex:</label>
+                <select id="sex" th:field="*{sex}" name="sex" class="form-control">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6">
+                <label for="yearBirthed">Year Born</label>
+                <input type="text" th:field="*{yearBirthed}" id="yearBirthed" name="yearBirthed" class="form-control"
+                       maxlength="4" required pattern="^\d{4}$"
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 4); validateForm();"
+                        title="The year should be between 2000 and 2025"/>
+            </div>
+
+            <div class="col-md-6">
+                <label for="weightNumber">Weight (kg)</label>
+                <input type="number" th:field="*{weight}" id="weightNumber" name="weight"
+                       class="form-control" min="1" max="100" step="0.1" required
+                       pattern="^\d{1,3}$"/>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Add pet to Shelter</button>
+
+    </form>
+</div>
+</body>
+</html>
+
+<script>
+    window.onload = function () {
+        document.getElementById('weightNumber').value = ''; // Clear weight field on load
+        validateForm(); // Ensure the form is validated initially
+    };
+
+    function validateForm() {
+        const name = document.getElementById('name').value.trim();
+        const breed = document.getElementById('breed').value.trim();
+        const type = document.getElementById('type').value;
+        const sex = document.getElementById('sex').value;
+        const yearBirthed = document.getElementById('yearBirthed').value.trim();
+        const weightNumber = document.getElementById('weightNumber').value.trim();
+        const submitBtn = document.getElementById('submitBtn');
+        const isTypeValid = type !== "" && type !== "Select type";
+        const isSexValid = sex !== "" && sex !== "Select sex";
+        const allFieldsFilled = name && breed && isTypeValid && isSexValid && yearBirthed.length === 4 && weightNumber;
+        submitBtn.disabled = !allFieldsFilled;
+    }
+
+
+    addPlaceholderOption('type', 'Select type');
+    addPlaceholderOption('sex', 'Select sex');
+
+    function addPlaceholderOption(elementId, placeholderText) {
+        const selectElement = document.getElementById(elementId);
+        if (!selectElement) return;
+
+        // Prevent duplicates
+        if (!selectElement.querySelector('option[disabled]')) {
+        const placeholderOption = document.createElement('option');
+        placeholderOption.textContent = placeholderText;
+        placeholderOption.disabled = true;
+        placeholderOption.selected = true;
+        selectElement.insertBefore(placeholderOption, selectElement.firstChild);
+    }
+        selectElement.addEventListener('change', validateForm);
+    }
+</script>

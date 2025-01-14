@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All My Pets</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>All My Pets</h1>
+    <div th:if="${#lists.isEmpty(pets)}">
+        <p>No pets are on the shelter at the moment.</p>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(pets)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Sex</th>
+                <th>Type</th>
+                <th>Breed</th>
+                <th>Weight</th>
+                <th>Birth Year</th>
+                <th>Health Status</th>
+                <th>Adoption Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pet : ${pets}">
+                <td th:text="${pet.name}"></td>
+                <td th:text="${pet.sex}"></td>
+                <td th:text="${pet.type}"></td>
+                <td th:text="${pet.breed}"></td>
+                <td th:text="${pet.weight}"></td>
+                <td th:text="${pet.yearBirthed}"></td>
+                <td th:text="${pet.healthStatus}"></td>
+                <td th:text="${pet.petStatus}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>
