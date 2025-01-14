@@ -6,6 +6,7 @@ import pet.lovers.entities.UserStatus;
 import pet.lovers.repositories.ShelterRepository;
 import pet.lovers.entities.Shelter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShelterService {
@@ -23,6 +24,10 @@ public class ShelterService {
     @Transactional
     public List<Shelter> getSheltersByUserStatus(UserStatus status){
         return shelterRepository.findByUserStatus(status);
+    }
+
+    public Optional<Shelter> findByUserId(Integer id) {
+        return shelterRepository.findById(id);
     }
 
     @Transactional

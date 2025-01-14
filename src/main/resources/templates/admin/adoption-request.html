@@ -20,10 +20,11 @@
             <th>Shelter</th>
             <th>Request Status</th>
             <th>Request Date</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:object="${adoptionRequest}">
+        <tr th:object="${adoptionRequest}" th:data-id="${adoptionRequest.id}" class="adoption-request-row">
             <td th:text="*{adopter.fullName}"></td>
             <td th:text="*{adopter.email}"></td>
             <td th:text="*{pet.name}"></td>
@@ -31,15 +32,25 @@
             <td th:text="*{pet.shelter.name}"></td>
             <td th:text="*{requestStatus}"></td>
             <td th:text="*{getReadableDateTime()}"></td>
+            <td>
+                <form th:action="@{/admin/adoption-request/{id}/notify(id=${adoptionRequest.id})}" method="post">
+                    <button type="submit" class="btn btn-success" style="margin-bottom:5px;"
+                        onclick="disableButton(this)">Notify Shelter</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
 <!--   space under the table and between the button  -->
 
     <div>
-        <a href="javascript:history.back()" class="btn button btn-secondary" style="margin-top: 20px">Back to List</a>
+        <a href="/admin/pets/all" class="btn button btn-secondary" style="margin-top: 20px">Back to List</a>
     </div>
 </div>
 </body>
 </html>
 <link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/custom.js}"></script>
+<script>
+    window.onload = handleAdoptionRequestsOnLoad;
+</script>

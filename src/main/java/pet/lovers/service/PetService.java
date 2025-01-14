@@ -8,6 +8,7 @@ import pet.lovers.entities.UserStatus;
 import pet.lovers.repositories.PetRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PetService {
@@ -36,6 +37,11 @@ public class PetService {
 
     public List<Pet> findByShelter(Shelter shelter) {
         return petRepository.findByShelter(shelter);
+    }
+
+
+    public Optional<Pet> findById(Integer id) {
+        return petRepository.findById(id);
     }
 
     @Transactional

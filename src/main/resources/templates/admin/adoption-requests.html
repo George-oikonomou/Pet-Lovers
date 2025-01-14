@@ -49,11 +49,12 @@
         <th>Shelter</th>
         <th>Date</th>
         <th>Status</th>
+        <th>Action</th>
       </tr>
       </thead>
       <tbody>
       <tr th:each="request : ${adoptionRequests}" class="adoption-request-row"
-          th:data-status="${request.requestStatus}">
+          th:data-id="${request.id}" th:data-status="${request.requestStatus}">
         <td th:text="${request.adopter.fullName}"></td>
         <td th:text="${request.adopter.email}"></td>
         <td th:text="${request.pet.name}"></td>
@@ -61,6 +62,12 @@
         <td th:text="${request.pet.shelter.name}"></td>
         <td th:text="${request.getReadableDateTime()}"></td>
         <td th:text="${request.requestStatus}"></td>
+        <td>
+          <form th:action="@{/admin/adoption-request/{id}/notify(id=${request.id})}" method="post">
+            <button type="submit" class="btn btn-success" style="margin-bottom:5px;"
+                    onclick="disableButton(this)">Notify Shelter</button>
+          </form>
+        </td>
       </tr>
       </tbody>
     </table>
@@ -73,3 +80,7 @@
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
 <script th:src="@{/js/datatables.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script>
+  window.onload = handleAdoptionRequestsOnLoad;
+</script>
