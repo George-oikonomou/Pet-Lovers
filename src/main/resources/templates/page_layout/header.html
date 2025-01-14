@@ -13,6 +13,8 @@
         <h3 class="masthead-brand">Pet Lovers</h3>
         <nav class="nav nav-masthead justify-content-center">
             <a class="nav-link" href="/" data-path="/" >Home</a>
+
+            <!-- Admin Links -->
             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/users">Users</a>
             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/shelters">Shelters</a>
             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/pets/all">All Pets</a>
@@ -20,6 +22,11 @@
             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/adoption-requests">Adoption Requests</a>
             <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/adoption-requests/shelter">Adoption Requests</a>
             <a sec:authorize="hasRole('ROLE_ADOPTER')" class="nav-link" href="/adoption-requests/adopter">Adoption Requests</a>
+            <!-- Shelter Links -->
+            <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/pets">My Pets</a>
+            <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/new-pet">Register New Pet</a>
+
+            <!-- Authentication Links -->
             <a sec:authorize="!isAuthenticated()"  class="nav-link">
                 <a  class="nav-link" href="/login">Login</a>
                 <a  class="nav-link" href="/register/adopter">Register</a>

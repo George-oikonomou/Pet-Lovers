@@ -3,6 +3,7 @@ package pet.lovers.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 
@@ -22,26 +23,27 @@ public class Pet {
     private String name;
 
     @Column
-    @NotEmpty
+    @NotBlank(message = "Sex is required")
     @Pattern(regexp = "^(male|female)$", message = "Sex must be either 'male' or 'female'")
     private String sex;
 
     @Column
-    @Min(2000)
-    @Max(2025)
-    private int yearBirthed;
+    @Min(value = 2000, message = "Year must be after 2000")
+    @Max(value = 2025, message = "Year must be before 2025")
+    private Integer yearBirthed;
 
     @Column
-    @NotBlank
-    private String type; //cat, dog, etc
+    @NotBlank(message = "Type is required")
+    private String type;
 
     @Column
     @NotBlank
     private String breed;
 
     @Column
-    @DecimalMin(value = "0.0", inclusive = false, message = "Weight must be greater than 0")
-    @DecimalMax(value = "100.0", message = "Weight must be less than or equal to 100")
+    @NotNull(message = "Weight is required.")
+    @DecimalMin(value = "1.0", message = "Weight must be at least 1 kg.")
+    @DecimalMax(value = "100.0", message = "Weight must be less than 100 kg.")
     private Double weight;
 
     @Enumerated(EnumType.STRING)
@@ -101,10 +103,10 @@ public class Pet {
         this.shelter = shelter;
     }
 
-    public int getYearBirthed() {
+    public Integer getYearBirthed() {
         return yearBirthed;
     }
-    public void setYearBirthed(int yearBirthed) {
+    public void setYearBirthed(Integer yearBirthed) {
         this.yearBirthed = yearBirthed;
     }
 
@@ -118,9 +120,12 @@ public class Pet {
     public String getBreed() {
         return breed;
     }
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
 
-    public double getWeight() {
-        return weight;
+    public Double getWeight() {
+        return weight != null ? weight : 0.0;
     }
     public void setWeight(Double weight) {
         this.weight = weight;
@@ -143,33 +148,19 @@ public class Pet {
     public List<AdoptionRequest> getAdoptionRequests() {
         return adoptionRequests;
     }
-
     public void setAdoptionRequests(List<AdoptionRequest> adoptionRequests) {
         this.adoptionRequests = adoptionRequests;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setBreed(String breed) {
-        this.breed = breed;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
     }
 
     public UserStatus getUserStatus() {
         return userStatus;
     }
-
     public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
     }
 
     @Override
     public String toString() {
-        return "PET\nname: " + name + "\nsex: " + sex + "\nage: " + (Year.now().getValue() - yearBirthed) + "\ntype: " + type + "\nbreed: " + breed + "\nweight: " + weight;
+        return "PET\nname: " + name + "\nsex: " + sex + "\nage: " + (Year.now().getValue() - yearBirthed) + "\ntype: " + type + "\nbreed: " + breed + "\nweight: " + weight + "shelter: " + shelter;
     }
 }

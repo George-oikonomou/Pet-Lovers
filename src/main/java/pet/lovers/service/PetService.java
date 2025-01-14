@@ -3,6 +3,7 @@ package pet.lovers.service;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import pet.lovers.entities.Pet;
+import pet.lovers.entities.Shelter;
 import pet.lovers.entities.UserStatus;
 import pet.lovers.repositories.PetRepository;
 
@@ -33,6 +34,10 @@ public class PetService {
         petRepository.save(pet);
     }
 
+    public List<Pet> findByShelter(Shelter shelter) {
+        return petRepository.findByShelter(shelter);
+    }
+
     @Transactional
     public void rejectPet(Integer petId){
         Pet pet = petRepository.findById(petId).orElseThrow();
@@ -41,8 +46,9 @@ public class PetService {
     }
 
     @Transactional
-    public void savePet(Pet pet){
+    public Integer savePet(Pet pet){
         petRepository.save(pet);
+        return pet.getId();
     }
 
     @Transactional
