@@ -18,18 +18,20 @@
         <p><strong>Pet ID:</strong> <span th:text="${adoptionRequest.pet.id}"></span></p>
         <p><strong>Shelter:</strong> <span th:text="${adoptionRequest.pet.shelter.name}"></span></p>
         <p><strong>Request Status:</strong> <span th:text="${adoptionRequest.requestStatus}"></span></p>
-        <p><strong>Request Date:</strong> <span th:text="${adoptionRequest.getDateTime()}"></span></p>
+        <p><strong>Request Date:</strong> <span th:text="${adoptionRequest.getReadableDateTime()}"></span></p>
     </div>
 
-    <!-- Approval and Rejection Buttons -->
-    <div th:if="${adoptionRequest.requestStatus == T(pet.lovers.entities.UserStatus).PENDING}">
-        <form th:action="@{/adoption-requests/{id}/approve(id=${adoptionRequest.id})}" method="post">
-            <button type="submit" class="btn btn-success">Approve</button>
-        </form>
-        <form th:action="@{/adoption-requests/{id}/reject(id=${adoptionRequest.id})}" method="post">
-            <button type="submit" class="btn btn-danger">Reject</button>
-        </form>
-    </div>
+<!-- TODO: make it work    -->
+
+<!--    &lt;!&ndash; Approval and Rejection Buttons &ndash;&gt;-->
+<!--    <div th:if="${adoptionRequest.requestStatus == T(pet.lovers.entities.UserStatus).PENDING}">-->
+<!--        <form th:action="@{/adoption-requests/{id}/approve(id=${adoptionRequest.id})}" method="post">-->
+<!--            <button type="submit" class="btn btn-success">Approve</button>-->
+<!--        </form>-->
+<!--        <form th:action="@{/adoption-requests/{id}/reject(id=${adoptionRequest.id})}" method="post">-->
+<!--            <button type="submit" class="btn btn-danger">Reject</button>-->
+<!--        </form>-->
+<!--    </div>-->
 
     <!-- Back to List -->
     <div>

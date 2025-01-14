@@ -9,16 +9,12 @@
     <title>Adoption Requests</title>
     <script>
         function filterSelection(status) {
-            var adoptionRequests = document.querySelectorAll('.adoption-request-row');
-            var searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const adoptionRequests = document.querySelectorAll('.adoption-request-row');
 
             adoptionRequests.forEach(function (request) {
-                var petName = request.dataset.petName.toLowerCase();
-                var petId = request.dataset.petId.toLowerCase();
-                var matchesSearch = searchQuery === "" || petName.includes(searchQuery) || petId.includes(searchQuery);
-                var matchesStatus = status === "ALL" || request.dataset.status === status;
+                const matchesStatus = status === "ALL" || request.dataset.status === status;
 
-                if (matchesSearch && matchesStatus) {
+                if (matchesStatus) {
                     request.style.display = "table-row";
                 } else {
                     request.style.display = "none";
@@ -26,26 +22,14 @@
             });
 
             // Show or hide the "No results" message
-            var visibleRows = Array.from(adoptionRequests).filter(row => row.style.display === "table-row");
+            const visibleRows = Array.from(adoptionRequests).filter(row => row.style.display === "table-row");
             document.getElementById("noResultsMessage").style.display = visibleRows.length ? "none" : "block";
-        }
-
-        function resetSearch() {
-            document.getElementById('searchInput').value = "";
-            filterSelection('ALL');
         }
     </script>
 </head>
 <body>
 <div layout:fragment="main-content">
     <h1>Adoption Requests</h1>
-
-    <!-- Search and Filter Section -->
-    <div>
-        <input type="text" id="searchInput" placeholder="Search by pet name or ID..." onkeyup="filterSelection('ALL')">
-        <button class="btn" onclick="resetSearch()">Reset</button>
-    </div>
-
     <!-- Filter Buttons -->
     <div id="myBtnContainer">
         <button class="btn active" onclick="filterSelection('ALL')">Show All</button>
@@ -60,8 +44,8 @@
     </div>
 
     <!-- Table displaying filtered adoption requests -->
-    <div th:if="${not #lists.isEmpty(adoptionRequests)}">
-        <table class="table">
+    <div id="tableContainer" th:if="${not #lists.isEmpty(adoptionRequests)}">
+        <table class="datatable">
             <thead>
             <tr>
                 <th>Adopter Name</th>
@@ -84,7 +68,7 @@
                 <td th:text="${request.pet.id}"></td>
                 <td th:text="${request.pet.shelter.name}"></td>
                 <td th:text="${request.requestStatus}"></td>
-                <td><a th:href="@{/adoption-requests/{id}(id=${request.id})}" th:text="View"></a></td>
+                <td><a th:href="@{/adoption-requests/{id}(id=${request.id})}" class="btn btn-info" th:text="View"></a></td>
             </tr>
             </tbody>
         </table>
@@ -93,3 +77,7 @@
 </div>
 </body>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>

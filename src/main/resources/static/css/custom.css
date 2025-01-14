@@ -1,0 +1,22 @@
+.cover-container {
+    max-width: 75em;
+}
+
+.masthead-brand{
+   float: inherit;
+}
+
+.nav-masthead {
+    float: inherit;
+}
+.btn-info {
+    background-color: #17a2b8;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+}

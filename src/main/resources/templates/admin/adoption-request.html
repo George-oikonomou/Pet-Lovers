@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Adoption Request Details</title>
+</head>
+<body>
+<div id="tableContainer" layout:fragment="main-content" class="container">
+    <h1>Adoption Request Details</h1>
+    <table class="datatable">
+        <thead>
+        <tr>
+            <th>Adopter Name</th>
+            <th>Adopter Email</th>
+            <th>Pet Name</th>
+            <th>Pet ID</th>
+            <th>Shelter</th>
+            <th>Request Status</th>
+            <th>Request Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${adoptionRequest}">
+            <td th:text="*{adopter.fullName}"></td>
+            <td th:text="*{adopter.email}"></td>
+            <td th:text="*{pet.name}"></td>
+            <td th:text="*{pet.id}"></td>
+            <td th:text="*{pet.shelter.name}"></td>
+            <td th:text="*{requestStatus}"></td>
+            <td th:text="*{getReadableDateTime()}"></td>
+        </tr>
+        </tbody>
+    </table>
+<!--   space under the table and between the button  -->
+
+    <div>
+        <a href="javascript:history.back()" class="btn button btn-secondary" style="margin-top: 20px">Back to List</a>
+    </div>
+</div>
+</body>
+</html>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">

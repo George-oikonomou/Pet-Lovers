@@ -16,8 +16,8 @@
         <p>No shelters are pending approval at the moment.</p>
     </div>
 
-    <div th:if="${not #lists.isEmpty(shelters)}">
-        <table class="table">
+    <div id="tableContainer" th:if="${not #lists.isEmpty(shelters)}">
+        <table class="datatable">
             <thead>
             <tr>
                 <th>Name</th>
@@ -34,7 +34,15 @@
                 <td th:text="${shelter.location}"></td>
                 <td th:text="${shelter.email}"></td>
                 <td th:text="${shelter.contactNumber}"></td>
-                <td th:text="${shelter.documents}"></td>
+                <td>
+                    <a th:href="|${shelter.documents.path}|"
+                       target="_blank">
+                        <img th:src="|${shelter.documents.path}|"
+                             th:alt="|${shelter.documents.path}|"
+                        />
+                    </a>
+                </td>
+
                 <td>
                     <a class="btn btn-success"
                        th:href="@{/admin/shelters/approve/{id}(id=${shelter.id})}">Approve</a>
@@ -48,3 +56,34 @@
 </div>
 </body>
 </html>
+<style>
+    td img {
+        width: 50%;
+        height: 20%;
+        object-fit: contain;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        transform: perspective(500px) rotateX(5deg);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    td img:hover {
+        transform: perspective(500px) rotateX(0deg) scale(1.05);
+    }
+
+    table {
+        width: auto;
+        border-collapse: collapse;
+        margin-top: 20px;
+        height: auto;
+    }
+
+    th, td {
+        max-height: 5vw;
+        max-width: 10vw;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>

@@ -2,8 +2,7 @@ package pet.lovers.service;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import pet.lovers.entities.Role;
-import pet.lovers.entities.User;
+import pet.lovers.entities.*;
 import pet.lovers.repositories.RoleRepository;
 import pet.lovers.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -38,19 +37,17 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public Integer saveUser(User user) {
-        String passwd= user.getPassword();
-        String encodedPassword = passwordEncoder.encode(passwd);
-        user.setPassword(encodedPassword);
+         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        Set<Role> existingRoles = user.getRoles() != null ? user.getRoles() : new HashSet<>();
+         String roleName = user instanceof Vet     ? Role.VET     :
+                           user instanceof Shelter ? Role.SHELTER : Role.ADOPTER;
 
-        Role role = roleRepository.findByName("ROLE_USER")
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        existingRoles.add(role);
+        roleRepository.findByName(roleName).ifPresent(role -> {
+            if (user.getRoles().isEmpty())
+                user.getRoles().add(role);
+        });
 
-        user.setRoles(existingRoles);
-        user = userRepository.save(user);
-        return user.getId();
+        return userRepository.save(user).getId();
     }
 
     @Transactional
@@ -90,10 +87,5 @@ public class UserService implements UserDetailsService {
     public User getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findByEmail(authentication.getName()).orElseThrow();
-    }
-
-    @Transactional
-    public void updateOrInsertRole(Role role) {
-        roleRepository.updateOrInsert(role);
     }
 }

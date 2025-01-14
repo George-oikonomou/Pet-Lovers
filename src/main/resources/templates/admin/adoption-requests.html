@@ -9,7 +9,7 @@
   <title>Adoption Requests</title>
   <script>
     function filterSelection(status) {
-      var adoptionRequests = document.querySelectorAll('.adoption-request-row');
+      const adoptionRequests = document.querySelectorAll('.adoption-request-row');
       adoptionRequests.forEach(function(request) {
         if (status === "ALL" || request.dataset.status === status) {
           request.style.display = "table-row";
@@ -38,8 +38,8 @@
   </div>
 
   <!-- Table displaying filtered adoption requests -->
-  <div th:if="${not #lists.isEmpty(adoptionRequests)}">
-    <table class="table">
+  <div id="tableContainer" th:if="${not #lists.isEmpty(adoptionRequests)}">
+    <table class="datatable">
       <thead>
       <tr>
         <th>Adopter Name</th>
@@ -47,6 +47,7 @@
         <th>Pet Name</th>
         <th>Pet ID</th>
         <th>Shelter</th>
+        <th>Date</th>
         <th>Status</th>
       </tr>
       </thead>
@@ -58,15 +59,8 @@
         <td th:text="${request.pet.name}"></td>
         <td th:text="${request.pet.id}"></td>
         <td th:text="${request.pet.shelter.name}"></td>
+        <td th:text="${request.getReadableDateTime()}"></td>
         <td th:text="${request.requestStatus}"></td>
-        <td>
-          <a class="btn btn-success"
-             th:href="@{/admin/adoptions/approve/{id}(id=${request.id})}"
-             th:if="${request.requestStatus == 'PENDING'}">Approve</a>
-          <a class="btn btn-danger"
-             th:href="@{/admin/adoptions/reject/{id}(id=${request.id})}"
-             th:if="${request.requestStatus == 'PENDING'}">Reject</a>
-        </td>
       </tr>
       </tbody>
     </table>
@@ -75,3 +69,7 @@
 </div>
 </body>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>

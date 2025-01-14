@@ -2,6 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{page_layout/layout}">
 
 <head>
@@ -26,6 +27,32 @@
       <label for="lastName">Email</label>
       <input type="text" id="lastName" class="form-control" th:field="*{email}">
     </div>
+
+    <div class="form-group">
+      <label for="contactNumber">contactNumber</label>
+      <input type="text" class="form-control"
+             th:field="*{contactNumber}"
+             id="contactNumber"
+             required
+             pattern="[0-9]{10}"
+             title="Contact number must be exactly 10 digits"
+             maxlength="10"
+             oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+      />
+    </div>
+
+    <div th:if="${user != null}">
+      <div th:if="${user.getClass().name == 'pet.lovers.entities.Shelter'}">
+        <label for="name">Shelter Name</label>
+        <input type="text" id="name" class="form-control" th:field="*{name}">
+      </div>
+
+      <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Adopter'}">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" class="form-control" th:field="*{fullName}">
+      </div>
+    </div>
+
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
