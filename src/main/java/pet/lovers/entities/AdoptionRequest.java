@@ -1,10 +1,10 @@
 package pet.lovers.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class AdoptionRequest {
@@ -59,6 +59,11 @@ public class AdoptionRequest {
 
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public String getReadableDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
+        return dateTime.format(formatter);
     }
 
     public void setDateTime(LocalDateTime dateTime) {

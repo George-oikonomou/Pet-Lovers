@@ -38,11 +38,10 @@ public class AuthController {
         Document documentOfShelter = new Document("path3",true);
 
         // Save roles to ensure they are managed by the persistence context
-        roleRepository.updateOrInsert(new Role("ROLE_USER"));
-        Role roleAdopter = roleRepository.updateOrInsert(new Role("ROLE_ADOPTER"));
-        Role roleAdmin = roleRepository.updateOrInsert(new Role("ROLE_ADMIN"));
-        Role roleVet = roleRepository.updateOrInsert(new Role("ROLE_VET"));
-        Role roleShelter = roleRepository.updateOrInsert(new Role("ROLE_SHELTER"));
+        roleRepository.updateOrInsert(new Role(Role.ADOPTER));
+        Role roleAdmin = roleRepository.updateOrInsert(new Role(Role.ADMIN));
+        roleRepository.updateOrInsert(new Role(Role.VET));
+        roleRepository.updateOrInsert(new Role(Role.SHELTER));
 
         // Create users
         if (!userRepository.existsByUsername("admin")) {
@@ -56,14 +55,11 @@ public class AuthController {
 
         if (!userRepository.existsByUsername("vet")) {
             Vet vet = new Vet("vet", "vet@gmail.com", "vet", "1234567890", "location", "full name",  documentOfVet);
-            vet.getRoles().add(roleVet);
             userService.saveUser(vet);
         }
 
         if (!userRepository.existsByUsername("shelter")) {
             shelter = new Shelter("shelter", "shelter@gmail.com", "shelter", "1345678902", "location", "shelter name", documentOfShelter);
-
-            shelter.getRoles().add(roleShelter);
             userService.saveUser(shelter);
 
             if (!petRepository.existsByName("Rocky")) {
@@ -78,8 +74,7 @@ public class AuthController {
 
         if (!userRepository.existsByUsername("adopter")) {
              adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "location", "full name", LocalDate.now().minusYears(21), document);
-            adopter.getRoles().add(roleAdopter);
-            userService.saveUser(adopter);
+             userService.saveUser(adopter);
         }
 
     }

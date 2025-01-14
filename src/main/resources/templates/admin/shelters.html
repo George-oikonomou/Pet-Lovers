@@ -16,8 +16,8 @@
         <p>No shelters are pending approval at the moment.</p>
     </div>
 
-    <div th:if="${not #lists.isEmpty(shelters)}">
-        <table class="table">
+    <div id="tableContainer" th:if="${not #lists.isEmpty(shelters)}">
+        <table class="datatable">
             <thead>
             <tr>
                 <th>Name</th>
@@ -34,7 +34,14 @@
                 <td th:text="${shelter.location}"></td>
                 <td th:text="${shelter.email}"></td>
                 <td th:text="${shelter.contactNumber}"></td>
-                <td th:text="${shelter.documents}"></td>
+                <td>
+                    <a th:href="|${shelter.documents.path}|"
+                       target="_blank">
+                        <img th:src="|${shelter.documents.path}|"
+                             alt="link" />
+                    </a>
+                </td>
+
                 <td>
                     <a class="btn btn-success"
                        th:href="@{/admin/shelters/approve/{id}(id=${shelter.id})}">Approve</a>
@@ -48,3 +55,51 @@
 </div>
 </body>
 </html>
+<style>
+    td img {
+        width: 50%;
+        height: 20%;
+        object-fit: contain;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        color: black;
+        transform: perspective(500px) rotateX(5deg);
+        transition: transform 0.3s, box-shadow 0.3s;
+        word-break: break-word;
+    }
+
+    td img:hover {
+        transform: perspective(500px) rotateX(0deg) scale(1.05);
+    }
+
+    table {
+        width: auto;
+        border-collapse: collapse;
+        margin-top: 20px;
+        height: auto;
+    }
+
+    td, th {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        max-width: 10vw;
+        padding: 8px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    table {
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        max-height: 5vw;
+        max-width: 10vw;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>

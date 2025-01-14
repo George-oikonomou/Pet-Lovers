@@ -2,8 +2,7 @@ package pet.lovers.service;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import pet.lovers.entities.Role;
-import pet.lovers.entities.User;
+import pet.lovers.entities.*;
 import pet.lovers.repositories.RoleRepository;
 import pet.lovers.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -13,11 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,19 +33,17 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public Integer saveUser(User user) {
-        String passwd= user.getPassword();
-        String encodedPassword = passwordEncoder.encode(passwd);
-        user.setPassword(encodedPassword);
+         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        Set<Role> existingRoles = user.getRoles() != null ? user.getRoles() : new HashSet<>();
+         String roleName = user instanceof Vet     ? Role.VET     :
+                           user instanceof Shelter ? Role.SHELTER : Role.ADOPTER;
 
-        Role role = roleRepository.findByName("ROLE_USER")
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        existingRoles.add(role);
+        roleRepository.findByName(roleName).ifPresent(role -> {
+            if (user.getRoles().isEmpty())
+                user.getRoles().add(role);
+        });
 
-        user.setRoles(existingRoles);
-        user = userRepository.save(user);
-        return user.getId();
+        return userRepository.save(user).getId();
     }
 
     @Transactional
@@ -79,10 +72,31 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Object getUsers() {
-        return userRepository.findAll();
+    public void updateUserDetails(User user, String email, String username, String fullName, String contactNumber) {
+        user.setEmail(email);
+        user.setUsername(username);
+
+        if (user instanceof Adopter adopter) {
+            adopter.setFullName(fullName);
+            adopter.setContactNumber(contactNumber);
+        } else if (user instanceof Shelter shelter) {
+            shelter.setName(fullName);
+            shelter.setContactNumber(contactNumber);
+        } else if (user instanceof Vet vet) {
+            vet.setFullName(fullName);
+            vet.setContactNumber(contactNumber);
+        }
+
+        this.updateUser(user);
     }
 
+    @Transactional
+    public Object getUsers() {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getRoles().stream()
+                        .noneMatch(role -> role.toString().equals(Role.ADMIN)))
+                .collect(Collectors.toList());
+    }
     public Object getUser(Long userId) {
         return userRepository.findById(userId).get();
     }
@@ -90,10 +104,5 @@ public class UserService implements UserDetailsService {
     public User getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findByEmail(authentication.getName()).orElseThrow();
-    }
-
-    @Transactional
-    public void updateOrInsertRole(Role role) {
-        roleRepository.updateOrInsert(role);
     }
 }

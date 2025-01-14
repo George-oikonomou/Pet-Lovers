@@ -10,16 +10,18 @@
 
 <header class="masthead mb-auto" th:fragment="header">
     <div class="inner">
-        <h3 class="masthead-brand">Cover</h3>
+        <h3 class="masthead-brand">Pet Lovers</h3>
         <nav class="nav nav-masthead justify-content-center">
             <a class="nav-link" href="/" data-path="/" >Home</a>
 
             <!-- Admin Links -->
             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/users">Users</a>
             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/shelters">Shelters</a>
-            <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/pets">Pets</a>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/pets/all">All Pets</a>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/pets">Pet Submissions</a>
             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/adoption-requests">Adoption Requests</a>
-
+            <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/adoption-requests/shelter">Adoption Requests</a>
+            <a sec:authorize="hasRole('ROLE_ADOPTER')" class="nav-link" href="/adoption-requests/adopter">Adoption Requests</a>
             <!-- Shelter Links -->
             <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/pets">My Pets</a>
             <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/new-pet">Register New Pet</a>

@@ -22,7 +22,7 @@
         <div class="form-group">
             <label for="fullName">Full name</label>
             <input type="text" class="form-control" th:field="*{fullName}" id="fullName" required
-                   pattern="[A-Za-z]+(?: [A-Za-z]+){1,2}"
+                   pattern="[A-Za-z]+(?: [A-Za-z]+){1,4}"
                    title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')"/>
             <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
         </div>
@@ -80,7 +80,7 @@
 
         <div class="form-group">
             <a th:href="@{/register/adopter}"><u>Sign up as an Adopter</u></a><br>
-            <a th:href="@{/register/vet}"><u>Sign up as a Vet</u></a>
+            <a th:href="@{/register/shelter}"><u>Sign up as a Shelter</u></a>
         </div>
     </form>
 </div>

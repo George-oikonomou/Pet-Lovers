@@ -4,10 +4,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-
-import pet.lovers.entities.Role;
-import pet.lovers.entities.User;
-import pet.lovers.entities.UserStatus;
+import pet.lovers.entities.*;
 import pet.lovers.service.*;
 
 
@@ -44,43 +41,39 @@ public class AdminController {
 
     @GetMapping("/user/{user_id}")
     public String showUser(@PathVariable Long user_id, Model model){
-        model.addAttribute("user", userService.getUser(user_id));
+        User user = (User) userService.getUser(user_id);
+        model.addAttribute("user", user);
+
+        String redirectUrl = switch (user) {
+            case Adopter adopter-> "/admin/adopter/" + user_id;
+            case Shelter shelter-> "/admin/shelter/" + user_id;
+            case Vet vet-> "/admin/vet/" + user_id;
+            default -> "#";
+        };
+
+        model.addAttribute("redirectUrl", redirectUrl);
         return "admin/user";
     }
 
-    @PostMapping("/user/{user_id}")
-    public String editUser(@PathVariable Long user_id, @ModelAttribute("user") User user) {
-        User the_user = (User) userService.getUser(user_id);
-        the_user.setEmail(user.getEmail());
-        the_user.setUsername(user.getUsername());
-        userService.updateUser(the_user);
-        return "/admin/users";
+    @PostMapping("/adopter/{user_id}")
+    public String editAdopter(@PathVariable Long user_id, @ModelAttribute("user") Adopter adopter) {
+        Adopter theAdopter = (Adopter) userService.getUser(user_id);
+        userService.updateUserDetails(theAdopter, adopter.getEmail(), adopter.getUsername(), adopter.getFullName(), adopter.getContactNumber());
+        return "redirect:/admin/users";
     }
 
-    @GetMapping("/user/role/delete/{user_id}/{role_id}")
-    public String deleteRolefromUser(@PathVariable Long user_id, @PathVariable Integer role_id, Model model){
-        User user = (User) userService.getUser(user_id);
-        Role role = roleService.findById(role_id).orElseThrow();
-        user.getRoles().remove(role);
-        System.out.println("Roles: "+user.getRoles());
-        userService.updateUser(user);
-        model.addAttribute("users", userService.getUsers());
-        model.addAttribute("roles", roleService.findAll());
-        return "admin/users";
-
+    @PostMapping("/shelter/{user_id}")
+    public String editShelter(@PathVariable Long user_id, @ModelAttribute("user") Shelter shelter) {
+        Shelter theShelter = (Shelter) userService.getUser(user_id);
+        userService.updateUserDetails(theShelter, shelter.getEmail(), shelter.getUsername(), shelter.getName(), shelter.getContactNumber());
+        return "redirect:/admin/users";
     }
 
-    @GetMapping("/user/role/add/{user_id}/{role_id}")
-    public String addRoletoUser(@PathVariable Long user_id, @PathVariable Integer role_id, Model model){
-        User user = (User) userService.getUser(user_id);
-        Role role = roleService.findById(role_id).orElseThrow();
-        user.getRoles().add(role);
-        System.out.println("Roles: "+user.getRoles());
-        userService.updateUser(user);
-        model.addAttribute("users", userService.getUsers());
-        model.addAttribute("roles", roleService.findAll());
-        return "admin/users";
-
+    @PostMapping("/vet/{user_id}")
+    public String editVet(@PathVariable Long user_id, @ModelAttribute("user") Vet vet) {
+        Vet theVet = (Vet) userService.getUser(user_id);
+        userService.updateUserDetails(theVet, vet.getEmail(), vet.getUsername(), vet.getFullName(), vet.getContactNumber());
+        return "redirect:/admin/users";
     }
 
     //SHELTER MANAGEMENT
@@ -121,6 +114,12 @@ public class AdminController {
         return "redirect:/admin/pets";
     }
 
+    @GetMapping("/pets/all")
+    public String viewAllPets(Model model) {
+        model.addAttribute("pets", petService.getPets());
+        return "admin/all-pets";
+    }
+
     // VIEW ADOPTION REQUESTS
     @GetMapping("/adoption-requests")
     public String viewAdoptions(Model model) {
@@ -128,5 +127,13 @@ public class AdminController {
         return "admin/adoption-requests";
     }
 
+    @GetMapping("/adoption-request/{id}")
+    public String viewAdoptionRequest(@PathVariable int id, Model model) {
+        AdoptionRequest request = adoptionRequestService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Adoption request not found"));
+
+        model.addAttribute("adoptionRequest", request);
+        return "admin/adoption-request";
+    }
 
 }
