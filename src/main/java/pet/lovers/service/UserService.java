@@ -12,11 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,10 +72,31 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Object getUsers() {
-        return userRepository.findAll();
+    public void updateUserDetails(User user, String email, String username, String fullName, String contactNumber) {
+        user.setEmail(email);
+        user.setUsername(username);
+
+        if (user instanceof Adopter adopter) {
+            adopter.setFullName(fullName);
+            adopter.setContactNumber(contactNumber);
+        } else if (user instanceof Shelter shelter) {
+            shelter.setName(fullName);
+            shelter.setContactNumber(contactNumber);
+        } else if (user instanceof Vet vet) {
+            vet.setFullName(fullName);
+            vet.setContactNumber(contactNumber);
+        }
+
+        this.updateUser(user);
     }
 
+    @Transactional
+    public Object getUsers() {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getRoles().stream()
+                        .noneMatch(role -> role.toString().equals(Role.ADMIN)))
+                .collect(Collectors.toList());
+    }
     public Object getUser(Long userId) {
         return userRepository.findById(userId).get();
     }

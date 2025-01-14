@@ -38,8 +38,7 @@
                     <a th:href="|${shelter.documents.path}|"
                        target="_blank">
                         <img th:src="|${shelter.documents.path}|"
-                             th:alt="|${shelter.documents.path}|"
-                        />
+                             alt="link" />
                     </a>
                 </td>
 
@@ -63,8 +62,10 @@
         object-fit: contain;
         box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
         border-radius: 8px;
+        color: black;
         transform: perspective(500px) rotateX(5deg);
         transition: transform 0.3s, box-shadow 0.3s;
+        word-break: break-word;
     }
 
     td img:hover {
@@ -76,6 +77,21 @@
         border-collapse: collapse;
         margin-top: 20px;
         height: auto;
+    }
+
+    td, th {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        max-width: 10vw;
+        padding: 8px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    table {
+        table-layout: fixed;
+        border-collapse: collapse;
     }
 
     th, td {

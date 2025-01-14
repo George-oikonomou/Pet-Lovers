@@ -43,7 +43,10 @@
                 <td th:text="${pet.breed}"></td>
                 <td th:text="${pet.yearBirthed}"></td>
                 <td>
-                    <a th:href="@{admin/user/{user_id}(id=${pet.shelter.id})}" th:text="${pet.shelter.name}" style="color: black; text-decoration: underline"></a>
+                    <a th:href="@{/admin/user/{user_id}(user_id=${pet.shelter.id})}"
+                       th:text="${pet.shelter.name}"
+                       style="color: black; text-decoration: underline">
+                    </a>
                 </td>
                 <td th:text="${pet.healthStatus}"></td>
                 <td th:text="${pet.userStatus}"></td>

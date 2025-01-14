@@ -36,7 +36,7 @@ public class Role {
     }
 
     public String getName() {
-        return name;
+        return name.substring(5, 6).toUpperCase() + name.substring(6).toLowerCase();
     }
 
     public void setName(String name) {

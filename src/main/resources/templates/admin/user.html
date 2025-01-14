@@ -2,17 +2,15 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{page_layout/layout}">
 
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <title>Edit User</title>
 </head>
 <body>
 <div layout:fragment="main-content">
-  <form action="#" th:action="@{/admin/user/{id}(id=${user.id})}" th:object="${user}"
-        method="post">
+  <form th:action="@{${redirectUrl}}" th:object="${user}" method="post">
 
     <div class="form-group">
       <input type="hidden" id="id" class="form-control" th:field="*{id}">
@@ -49,7 +47,9 @@
 
       <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Adopter'}">
         <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" class="form-control" th:field="*{fullName}">
+        <input type="text" id="fullName" class="form-control" th:field="*{fullName}"
+               pattern="[A-Za-z]+(?: [A-Za-z]+){1,4}"
+               title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')"/>
       </div>
     </div>
 

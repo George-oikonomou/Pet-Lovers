@@ -4,9 +4,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import pet.lovers.entities.AdoptionRequest;
-import pet.lovers.entities.User;
-import pet.lovers.entities.UserStatus;
+import pet.lovers.entities.*;
 import pet.lovers.service.*;
 
 
@@ -43,16 +41,38 @@ public class AdminController {
 
     @GetMapping("/user/{user_id}")
     public String showUser(@PathVariable Long user_id, Model model){
-        model.addAttribute("user", userService.getUser(user_id));
+        User user = (User) userService.getUser(user_id);
+        model.addAttribute("user", user);
+
+        String redirectUrl = switch (user) {
+            case Adopter adopter-> "/admin/adopter/" + user_id;
+            case Shelter shelter-> "/admin/shelter/" + user_id;
+            case Vet vet-> "/admin/vet/" + user_id;
+            default -> "#";
+        };
+
+        model.addAttribute("redirectUrl", redirectUrl);
         return "admin/user";
     }
 
-    @PostMapping("/user/{user_id}")
-    public String editUser(@PathVariable Long user_id, @ModelAttribute("user") User user) {
-        User the_user = (User) userService.getUser(user_id);
-        the_user.setEmail(user.getEmail());
-        the_user.setUsername(user.getUsername());
-        userService.updateUser(the_user);
+    @PostMapping("/adopter/{user_id}")
+    public String editAdopter(@PathVariable Long user_id, @ModelAttribute("user") Adopter adopter) {
+        Adopter theAdopter = (Adopter) userService.getUser(user_id);
+        userService.updateUserDetails(theAdopter, adopter.getEmail(), adopter.getUsername(), adopter.getFullName(), adopter.getContactNumber());
+        return "redirect:/admin/users";
+    }
+
+    @PostMapping("/shelter/{user_id}")
+    public String editShelter(@PathVariable Long user_id, @ModelAttribute("user") Shelter shelter) {
+        Shelter theShelter = (Shelter) userService.getUser(user_id);
+        userService.updateUserDetails(theShelter, shelter.getEmail(), shelter.getUsername(), shelter.getName(), shelter.getContactNumber());
+        return "redirect:/admin/users";
+    }
+
+    @PostMapping("/vet/{user_id}")
+    public String editVet(@PathVariable Long user_id, @ModelAttribute("user") Vet vet) {
+        Vet theVet = (Vet) userService.getUser(user_id);
+        userService.updateUserDetails(theVet, vet.getEmail(), vet.getUsername(), vet.getFullName(), vet.getContactNumber());
         return "redirect:/admin/users";
     }
 
