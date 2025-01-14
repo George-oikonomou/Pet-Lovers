@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pet.lovers.entities.Pet;
 import pet.lovers.entities.Shelter;
-import pet.lovers.repositories.RoleRepository;
 import pet.lovers.service.*;
 
 @Controller
@@ -18,14 +17,12 @@ import pet.lovers.service.*;
 public class ShelterController {
     private final ShelterService shelterService;
     UserService userService;
-    RoleRepository roleRepository;
     PetService petService;
     VetService vetService;
     AdoptionRequestService adoptionRequestService;
 
-    public ShelterController(UserService userService, RoleRepository roleRepository, PetService petService, VetService vetService, AdoptionRequestService adoptionRequestService, ShelterService shelterService) {
+    public ShelterController(UserService userService, PetService petService, VetService vetService, AdoptionRequestService adoptionRequestService, ShelterService shelterService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
         this.petService = petService;
         this.vetService = vetService;
         this.adoptionRequestService = adoptionRequestService;
@@ -42,13 +39,6 @@ public class ShelterController {
     public String showPets(Model model) {
         model.addAttribute("pets", petService.getPets());
         return "shelter/pets";
-    }
-
-    //View Adoption Requests
-    @GetMapping("/adoption-requests")
-    public String viewAdoptions(Model model) {
-        model.addAttribute("adoptionRequests", adoptionRequestService.getAdoptionRequests());
-        return "shelter/adoption-requests";
     }
 
     //Register New Pet
