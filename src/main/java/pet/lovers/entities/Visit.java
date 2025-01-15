@@ -90,4 +90,9 @@ public class Visit {
     public void setPet(Pet pet) {
         this.pet = pet;
     }
+
+public String getReadableDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
+        return dateTime.format(formatter);
+    }
 }
