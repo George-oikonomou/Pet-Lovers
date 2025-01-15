@@ -29,9 +29,20 @@
   <!-- Content for Shelter -->
   <div sec:authorize="hasRole('ROLE_SHELTER')">
     <h2>Shelter Dashboard</h2>
-    <p>Welcome, Shelter! Manage your adoption requests:</p>
+    <p>Welcome, Shelter! Manage your adoption requests, view your pets and add new ones:</p>
     <ul>
       <li><a th:href="@{/adoption-requests/shelter}">View Adoption Requests for Your Shelter</a></li>
+      <li><a th:href="@{/shelter/pets}">View All the Pets for Your Shelter</a></li>
+      <li><a th:href="@{/shelter/new-pet}">Add New Pets to Your Shelter</a></li>
+    </ul>
+  </div>
+
+  <!-- Content for Vet -->
+  <div sec:authorize="hasRole('ROLE_VET')">
+    <h2>Vet Dashboard</h2>
+    <p>Welcome, Vet! You can manage the health status of the pets you've examined:</p>
+    <ul>
+      <li><a th:href="@{/vet/health-status}">View Adoption Requests for Your Shelter</a></li>
     </ul>
   </div>
 

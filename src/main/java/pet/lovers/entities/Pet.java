@@ -47,6 +47,7 @@ public class Pet {
     private Double weight;
 
     @Enumerated(EnumType.STRING)
+    @Column
     private HealthStatus healthStatus = HealthStatus.UNKNOWN; // Default health status
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
@@ -57,9 +58,11 @@ public class Pet {
     private Shelter shelter;
 
     @Enumerated(EnumType.STRING)
+    @Column
     private PetStatus petStatus = PetStatus.AVAILABLE; // Default status
 
     @Enumerated(EnumType.STRING)
+    @Column
     private UserStatus userStatus = UserStatus.PENDING; // Default status
     //END TABLE COLUMNS
 
