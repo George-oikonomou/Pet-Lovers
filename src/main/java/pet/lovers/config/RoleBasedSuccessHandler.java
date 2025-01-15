@@ -19,11 +19,12 @@ public class RoleBasedSuccessHandler extends SavedRequestAwareAuthenticationSucc
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN))) {
             getRedirectStrategy().sendRedirect(request, response, "/admin/dashboard");
         }
-//        else if(authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.SHELTER))) {
-//            getRedirectStrategy().sendRedirect(request, response, "/shelter/dashboard");
-//        }else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.VET))) {
-//            getRedirectStrategy().sendRedirect(request, response, "/vet/dashboard");
-//        }else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.ADOPTER))) {
+        else if(authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.SHELTER))) {
+            getRedirectStrategy().sendRedirect(request, response, "/shelter/dashboard");
+        }else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.VET))) {
+            getRedirectStrategy().sendRedirect(request, response, "/vet/dashboard");
+        }
+//        else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.ADOPTER))) {
 //            getRedirectStrategy().sendRedirect(request, response, "/adopter/dashboard");
 //        }
         else {

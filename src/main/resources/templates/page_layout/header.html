@@ -26,6 +26,9 @@
             <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/pets">My Pets</a>
             <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/new-pet">Register New Pet</a>
 
+            <!-- Vet Links -->
+            <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/health-status">Pet's Health Status</a>
+
             <!-- Authentication Links -->
             <a sec:authorize="!isAuthenticated()"  class="nav-link">
                 <a  class="nav-link" href="/login">Login</a>

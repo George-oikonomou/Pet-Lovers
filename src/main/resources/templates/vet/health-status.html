@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Health Status Management</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>Health Status Management</h1>
+
+    <div th:if="${#lists.isEmpty(pets)}">
+        <p>No pets are currently available for health check.</p>
+    </div>
+    <form th:action="@{/vet/health-status}" method="post">
+        <div id="tableContainer" th:if="${not #lists.isEmpty(pets)}">
+            <table class="datatable">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Sex</th>
+                    <th>Type</th>
+                    <th>Breed</th>
+                    <th>Weight (kg)</th>
+                    <th>Birth Year</th>
+                    <th>Shelter</th>
+                    <th>Health Status</th>
+                    <th>Action</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="pet : ${pets}">
+                    <td th:text="${pet.name}"></td>
+                    <td th:text="${pet.sex}"></td>
+                    <td th:text="${pet.type}"></td>
+                    <td th:text="${pet.breed}"></td>
+                    <td th:text="${pet.weight}"></td>
+                    <td th:text="${pet.yearBirthed}"></td>
+                    <td th:text="${pet.shelter.name}"></td>
+
+                    <!-- Form for updating health status -->
+                    <td>
+                        <input type="hidden" th:name="petId" th:value="${pet.id}" />
+
+                        <select th:name="healthStatus" class="form-control">
+                            <option th:each="status : ${healthStatuses}"
+                                    th:value="${status}"
+                                    th:text="${status}"
+                                    th:selected="${pet.healthStatus == status}">
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success mt-2">Update</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>
