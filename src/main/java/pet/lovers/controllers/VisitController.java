@@ -13,18 +13,12 @@ import pet.lovers.service.VisitService;
 @Controller
 public class VisitController {
 
-    private final AdoptionRequestRepository adoptionRequestRepository;
     private VisitService visitService;
     private UserService userService;
-    private AdopterRepository adopterRepository;
-    private PetRepository petRepository;
 
-    public VisitController(VisitService visitService, UserService userService, AdopterRepository adopterRepository, PetRepository petRepository, AdoptionRequestRepository adoptionRequestRepository) {
+    public VisitController(VisitService visitService, UserService userService) {
         this.visitService = visitService;
         this.userService = userService;
-        this.adopterRepository = adopterRepository;
-        this.petRepository = petRepository;
-        this.adoptionRequestRepository = adoptionRequestRepository;
     }
 
     @PreAuthorize("hasRole('ROLE_SHELTER')")
