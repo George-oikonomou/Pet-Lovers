@@ -37,7 +37,6 @@ public class AdoptionRequest extends Visit {
     public UserStatus getRequestStatus() {
         return requestStatus;
     }
-
     public void setRequestStatus(UserStatus requestStatus) {
         this.requestStatus = requestStatus;
     }
