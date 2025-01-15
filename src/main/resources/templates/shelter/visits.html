@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Visit List</title>
+</head>
+
+<body>
+<div layout:fragment="main-content">
+    <h1>Visit List</h1>
+
+    <!-- Time Filter Buttons (JavaScript-based) -->
+    <div id="timeFilterContainer">
+        <button class="btn" onclick="filterVisitTime('ALL')">All Visits</button>
+        <button class="btn" onclick="filterVisitTime('PAST')">Past Visits</button>
+        <button class="btn" onclick="filterVisitTime('TODAY')">Today's Visits</button>
+        <button class="btn" onclick="filterVisitTime('FUTURE')">Future Visits</button>
+    </div>
+
+    <!-- Message if no visits found (handled by JS later) -->
+    <p id="noVisitsMessage" style="display:none;">No visits found for the selected filter.</p>
+    <div  id="tableContainer" th:if="${not #lists.isEmpty(visits)}">
+        <!-- Visit Table -->
+        <table class="datatable">
+            <thead>
+            <tr>
+                <th>Adopter Name</th>
+                <th>Pet Name</th>
+                <th>Date</th>
+                <th>Contact Number</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Each visit will have a data attribute for easy JS filtering -->
+            <tr th:each="visit : ${visits}"
+                class="visit-row"
+                th:data-datetime="${visit.dateTime}">
+                <td th:text="${visit.adopter.fullName}"></td>
+                <td th:text="${visit.pet?.name ?: 'N/A'}"></td>
+                <td th:text="${#temporals.format(visit.dateTime, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${visit.contactNumber}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    function filterVisitTime(timeFilter) {
+        const now = new Date();
+        document.querySelectorAll('.visit-row').forEach(function(row) {
+            const visitDate = new Date(row.dataset.datetime); // Fetching date from data attribute
+            row.style.display = "none"; // Default hide all rows
+
+            if (timeFilter === "ALL" || (
+                    timeFilter === "PAST" && visitDate < now) ||
+                (timeFilter === "TODAY" && visitDate.toDateString() === now.toDateString()) ||
+                (timeFilter === "FUTURE" && new Date(visitDate) > new Date().setHours(23, 59, 59, 999))
+            ) {
+                row.style.display = "table-row";
+            }
+        });
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>

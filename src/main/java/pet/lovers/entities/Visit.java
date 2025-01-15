@@ -6,9 +6,11 @@ import jakarta.validation.constraints.Pattern;
 import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Visit {
 
     @Id
@@ -18,16 +20,12 @@ public class Visit {
     @Column
     @NotNull
     @DateTimeFormat(pattern = " D:yyyy-MM-dd' T:'HH:mm:ss")
-    private LocalDateTime DateTime;
+    private LocalDateTime dateTime;
 
     @Column
     @NotBlank
     @Pattern(regexp = "^\\d{10}$", message = "The number must be exactly 10 digits.")
-    private String contact_number;
-
-    @Column
-    @NotNull
-    private boolean confirmedAdoption;
+    private String contactNumber;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "shelter_id")
@@ -43,47 +41,39 @@ public class Visit {
     @JoinColumn(name = "pet_id")
     private Pet pet; //TODO maybe instead of pet, use adoption request?
 
-    public Visit(LocalDateTime dateTime, String contact_number, boolean confirmedAdoption, Shelter shelter, Adopter adopter, Pet pet) {
-        DateTime = dateTime;
-        this.contact_number = contact_number;
-        this.confirmedAdoption = confirmedAdoption;
+    public Visit(LocalDateTime dateTime, Shelter shelter, Adopter adopter, Pet pet, String contactNumber) {
+        this.dateTime = dateTime;
         this.shelter = shelter;
         this.adopter = adopter;
         this.pet = pet;
+        this.contactNumber = contactNumber;
     }
 
-    public Visit() {
+    public Visit() {}
 
+    // GETTERS AND SETTERS
+
+    public int getId() {
+        return id;
     }
 
     public LocalDateTime getDateTime() {
-        return DateTime;
+        return dateTime;
     }
-
     public void setDateTime(LocalDateTime dateTime) {
-        DateTime = dateTime;
+        dateTime = dateTime;
     }
 
-    public String getContact_number() {
-        return contact_number;
+    public String getContactNumber() {
+        return contactNumber;
     }
-
-    public void setContact_number(String contact_number) {
-        this.contact_number = contact_number;
-    }
-
-    public boolean getConfirmedAdoption() {
-        return confirmedAdoption;
-    }
-
-    public void setConfirmedAdoption() {
-        this.confirmedAdoption = !this.confirmedAdoption;
+    public void setContactNumber (String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
     public Shelter getShelter() {
         return shelter;
     }
-
     public void setShelter(Shelter shelter) {
         this.shelter = shelter;
     }
@@ -91,7 +81,6 @@ public class Visit {
     public Adopter getAdopter() {
         return adopter;
     }
-
     public void setAdopter(Adopter adopter) {
         this.adopter = adopter;
     }
@@ -99,8 +88,12 @@ public class Visit {
     public Pet getPet() {
         return pet;
     }
-
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+public String getReadableDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
+        return dateTime.format(formatter);
     }
 }
