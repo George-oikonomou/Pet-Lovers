@@ -18,6 +18,10 @@ public class VetService {
         return vetRepository.save(vet);
     }
 
+    public VetService(VetRepository vetRepository) {
+        this.vetRepository = vetRepository;
+    }
+
     @Transactional
     public List<Vet> getAllVets() {
         return vetRepository.findAll();
@@ -33,10 +37,6 @@ public class VetService {
         vetRepository.deleteById(id);
     }
 
-    @Autowired
-    public VetService(VetRepository vetRepository) {
-        this.vetRepository = vetRepository;
-    }
 
     public Vet getLoggedInVet(String username) {
         return vetRepository.findByUsername(username);

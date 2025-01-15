@@ -20,15 +20,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/vet")
 @PreAuthorize("hasRole('ROLE_VET')")
 public class VetController {
-    private final VetService vetService;
     ShelterService shelterService;
     UserService userService;
     PetService petService;
     AdoptionRequestService adoptionRequestService;
     private final ShelterRepository shelterRepository;
 
-    public VetController(VetService vetService, UserService userService, PetService petService, AdoptionRequestService adoptionRequestService, ShelterService shelterService, ShelterRepository shelterRepository) {
-        this.vetService = vetService;
+    public VetController(UserService userService, PetService petService, AdoptionRequestService adoptionRequestService, ShelterService shelterService, ShelterRepository shelterRepository) {
         this.userService = userService;
         this.petService = petService;
         this.adoptionRequestService = adoptionRequestService;
