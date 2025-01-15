@@ -88,7 +88,7 @@ public class UserController {
 
     @PostMapping("/forgot-password")
     public String sendResetPasswordEmail(@RequestParam("email") String email, Model model) {
-        //CHECK IF THERE IS A USER WITH SAID EMAIL OR USERNAME
+    
         if (!userService.existsByEmail(email) ) {
             model.addAttribute("error", "No user found with the given email!");
             return "auth/forgot-password";
@@ -96,10 +96,10 @@ public class UserController {
         String username = userService.getUserByEmail(email).getUsername();
         String password = userService.getUsersGeneratedPassword(email);
 
-        // Call the service to send the reset password email
+
         emailService.sendResetPasswordMessage(email,username,password);
         model.addAttribute("msg", "Password reset email sent successfully!");
-        return "index"; // Or return the appropriate view after success
+        return "index"; 
     }
 
 }
