@@ -12,7 +12,7 @@ public interface RoleRepository extends JpaRepository<Role, Integer> {
     Optional<Role> findByName(String roleName);
 
     default Role updateOrInsert(Role role) {
-       Role existing_role = findByName(role.getName()).orElse(null);
+       Role existing_role = findByName(role.toString()).orElse(null);
        if (existing_role != null) {
            return existing_role;
        }

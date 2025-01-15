@@ -1,11 +1,14 @@
 package pet.lovers.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import pet.lovers.entities.*;
 import pet.lovers.service.*;
+
+import java.util.Optional;
 
 
 @Controller
@@ -17,13 +20,16 @@ public class AdminController {
     ShelterService shelterService;
     PetService petService;
     AdoptionRequestService adoptionRequestService;
+    EmailService emailService;
 
-    public AdminController(UserService userService, RoleService roleService, ShelterService shelterService, PetService petService, AdoptionRequestService adoptionRequestService) {
+
+    public AdminController(UserService userService, RoleService roleService, ShelterService shelterService, PetService petService, AdoptionRequestService adoptionRequestService, EmailService emailService) {
         this.userService = userService;
         this.roleService = roleService;
         this.shelterService = shelterService;
         this.petService = petService;
         this.adoptionRequestService = adoptionRequestService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/dashboard")
@@ -85,13 +91,21 @@ public class AdminController {
 
     @GetMapping("/shelters/approve/{id}")
     public String approveShelter(@PathVariable int id) {
-        shelterService.approveShelter(id);
+        shelterService.findByUserId(id).ifPresent(shelter -> {
+            shelterService.approveShelter(id);
+            emailService.sendAcceptShelterMessage(shelter);
+        });
+
         return "redirect:/admin/shelters";
     }
 
     @GetMapping("/shelters/reject/{id}")
     public String rejectShelter(@PathVariable int id) {
-        shelterService.rejectShelter(id);
+        shelterService.findByUserId(id).ifPresent(shelter -> {
+            shelterService.rejectShelter(id);
+            emailService.sendRejectShelterMessage(shelter);
+        });
+
         return "redirect:/admin/shelters";
     }
 
@@ -104,13 +118,21 @@ public class AdminController {
 
     @GetMapping("/pets/approve/{id}")
     public String approvePet(@PathVariable int id) {
-        petService.approvePet(id);
+        petService.findById(id).ifPresent(pet -> {
+            petService.approvePet(id);
+            emailService.sendApprovePetMessage(pet);
+        });
+
         return "redirect:/admin/pets";
     }
 
     @GetMapping("/pets/reject/{id}")
     public String rejectPet(@PathVariable int id) {
-        petService.rejectPet(id);
+        petService.findById(id).ifPresent(pet -> {
+            petService.rejectPet(id);
+            emailService.sendRejectPetMessage(pet);
+        });
+
         return "redirect:/admin/pets";
     }
 
@@ -136,4 +158,21 @@ public class AdminController {
         return "admin/adoption-request";
     }
 
+    @PostMapping("/adoption-request/{id}/notify")
+    public String notifyShelter(@PathVariable int id, HttpServletRequest request) {
+        adoptionRequestService.findById(id)
+                .ifPresent(adoptionRequest -> emailService.sendReminderToShelter(adoptionRequest));
+
+        String referer = request.getHeader("Referer");
+
+        if (referer != null) {
+            if (referer.contains("/adoption-requests")) {
+                return "redirect:/admin/adoption-requests";
+            } else if (referer.contains("/adoption-request")) {
+                return "redirect:/admin/adoption-request/" + id;
+            }
+        }
+
+        return "redirect:/admin/adoption-requests";
+    }
 }

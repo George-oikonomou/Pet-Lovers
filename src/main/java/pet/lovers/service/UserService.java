@@ -1,5 +1,6 @@
 package pet.lovers.service;
 
+import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import pet.lovers.entities.*;
@@ -104,5 +105,33 @@ public class UserService implements UserDetailsService {
     public User getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findByEmail(authentication.getName()).orElseThrow();
+    }
+
+
+    public String getUsersGeneratedPassword(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        String generatedPassword = generateRandomPassword();
+        String encodedPassword = passwordEncoder.encode(generatedPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        return generatedPassword;
+    }
+
+    private String generateRandomPassword() {
+        RandomStringGenerator generator = new RandomStringGenerator.Builder()
+                .withinRange('0', 'z')
+                .filteredBy(Character::isLetterOrDigit, Character::isAlphabetic, Character::isDigit)
+                .build();
+
+        return generator.generate(10);
+    }
+
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow();
     }
 }
