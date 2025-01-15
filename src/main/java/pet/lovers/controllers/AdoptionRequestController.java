@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import pet.lovers.entities.*;
 import pet.lovers.service.AdopterService;
 import pet.lovers.service.AdoptionRequestService;
-import pet.lovers.service.ShelterService;
 import pet.lovers.service.UserService;
 
 import java.util.List;
@@ -89,4 +88,3 @@ public class AdoptionRequestController {
     }
 
 }
-

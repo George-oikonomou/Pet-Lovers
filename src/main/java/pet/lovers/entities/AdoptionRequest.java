@@ -2,51 +2,36 @@ package pet.lovers.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
-public class AdoptionRequest {
+public class AdoptionRequest extends Visit {
 
     // TABLE COLUMNS
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Enumerated(EnumType.STRING)
-    private UserStatus requestStatus = UserStatus.PENDING; // Default status
-
     @Column
     @NotNull
-    private LocalDateTime dateTime;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "adopter_id")
-    private Adopter adopter;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "pet_id", referencedColumnName = "id")
-    private Pet pet;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "shelter_id")
-    private Shelter shelter;
-
+    @PrimaryKeyJoinColumn(name = "visit_id")
+    private boolean confirmedAdoption;
     // CONSTRUCTORS
     public AdoptionRequest() {
     }
 
-    public AdoptionRequest(LocalDateTime dateTime, Adopter adopter, Pet pet, Shelter shelter) {
-        this.dateTime = dateTime;
-        this.adopter = adopter;
-        this.pet = pet;
-        this.shelter = shelter;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus requestStatus = UserStatus.PENDING; // Default status
+
+    public AdoptionRequest(LocalDateTime dateTime, Shelter shelter, Adopter adopter, Pet pet, String contactNumber, boolean confirmedAdoption) {
+        super(dateTime, shelter, adopter, pet, contactNumber);
+        this.confirmedAdoption = confirmedAdoption;
     }
 
     // GETTERS AND SETTERS
-    public int getId() {
-        return id;
+
+    public boolean isConfirmedAdoption() {
+        return confirmedAdoption;
+    }
+    public void setConfirmedAdoption(boolean confirmedAdoption) {
+        this.confirmedAdoption = confirmedAdoption;
     }
 
     public UserStatus getRequestStatus() {
@@ -55,54 +40,5 @@ public class AdoptionRequest {
 
     public void setRequestStatus(UserStatus requestStatus) {
         this.requestStatus = requestStatus;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public String getReadableDateTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
-        return dateTime.format(formatter);
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public Adopter getAdopter() {
-        return adopter;
-    }
-
-    public void setAdopter(Adopter adopter) {
-        this.adopter = adopter;
-    }
-
-    public Pet getPet() {
-        return pet;
-    }
-
-    public void setPet(Pet pet) {
-        this.pet = pet;
-    }
-
-    public Shelter getShelter() {
-        return shelter;
-    }
-
-    public void setShelter(Shelter shelter) {
-        this.shelter = shelter;
-    }
-
-    @Override
-    public String toString() {
-        return "AdoptionRequest{" +
-                "id=" + id +
-                ", requestStatus=" + requestStatus +
-                ", dateTime=" + dateTime +
-                ", adopter=" + adopter +
-                ", pet=" + pet +
-                ", shelter=" + shelter +
-                '}';
     }
 }
