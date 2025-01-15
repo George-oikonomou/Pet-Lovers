@@ -143,18 +143,35 @@ public class EmailService {
     public void sendResetPasswordMessage(String email,String username, String password) {
         String subject = "Password Reset Request";
         String text = """
-            Dear User,
+            Dear %s,
             
             You have requested a password reset.
             
-            Your username is: %s
-            Your new password is: %s
+            Your Temporary verification code is: %s
+            
+            If you did not request this, please contact us immediately.
+            
+            Dont share this code with anyone.
+            
+            Best regards,
+            The Pet Lovers Team
+            """.formatted(username,password);
+
+        sendSimpleMessage(email, subject, text);
+    }
+
+    public void sendSuccessResetPasswordMessage(String email,String username) {
+        String subject = "Password Reset Successful";
+        String text = """
+            Dear %s,
+            
+            Your password has been successfully reset.
             
             If you did not request this change, please contact us immediately.
             
             Best regards,
             The Pet Lovers Team
-            """.formatted(username,password);
+            """.formatted(username);
 
         sendSimpleMessage(email, subject, text);
     }
