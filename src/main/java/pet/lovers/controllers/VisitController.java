@@ -5,9 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import pet.lovers.entities.Shelter;
-import pet.lovers.repositories.AdopterRepository;
-import pet.lovers.repositories.AdoptionRequestRepository;
-import pet.lovers.repositories.PetRepository;
 import pet.lovers.service.UserService;
 import pet.lovers.service.VisitService;
 @Controller
