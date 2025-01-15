@@ -10,6 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface VetRepository extends JpaRepository<Vet, Integer> {
-    List<Vet> findByUserStatus(UserStatus status);
     Vet findByUsername(String username);
 }
