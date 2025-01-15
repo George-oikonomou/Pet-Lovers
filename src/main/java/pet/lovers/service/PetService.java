@@ -24,11 +24,6 @@ public class PetService {
     }
 
     @Transactional
-    public List<Pet> getPetsByShelter(Shelter shelter){
-        return petRepository.findByShelter(shelter);
-    }
-
-    @Transactional
     public List<Pet> getPetsByUserStatus(UserStatus status){
         return petRepository.findByUserStatus(status);
     }
