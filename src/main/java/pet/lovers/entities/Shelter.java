@@ -17,8 +17,7 @@ public class Shelter extends User{
     @Column
     @NotBlank
     @Size(min = 2, max = 50)
-    private String name;
-
+    private String fullName;
 
     @OneToMany(mappedBy = "shelter", cascade= CascadeType.ALL)
     private List<AdoptionRequest> adoptionRequests;
@@ -36,27 +35,25 @@ public class Shelter extends User{
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "documents", referencedColumnName = "id")
     private Document documents;
-// END TABLE COLUMNS
-
-
-
+    // END TABLE COLUMNS
 
 
     //CONSTRUCTORS
     public Shelter(String username, String email, String password, String contactNumber, String location, String name,Document documents) {
         super(username, email, password, contactNumber, location);
-        this.name = name;
+        this.fullName = name;
         this.documents = documents;
     }
 
     public Shelter() {};
 
     //GETTERS AND SETTERS
-    public  String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
-    public void setName(String name) {
-        this.name = name;
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public List<AdoptionRequest> getAdoptionRequests() {

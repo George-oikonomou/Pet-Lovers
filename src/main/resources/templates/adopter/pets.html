@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Details</title>
+    <script>
+        function filterSelection(status) {
+            const pets = document.querySelectorAll('.pet-row');
+            pets.forEach(function(pet) {
+                if (status === "ALL" || pet.dataset.type === status) {
+                    pet.style.display = "table-row";
+                } else {
+                    pet.style.display = "none";
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>Pet Details</h1>
+
+    <!-- Filter Buttons -->
+    <div id="myBtnContainer">
+        <button class="btn active" onclick="filterSelection('ALL')"> Show All</button>
+        <button class="btn" onclick="filterSelection('DOG')"> Dogs</button>
+        <button class="btn" onclick="filterSelection('CAT')"> Cats</button>
+    </div>
+
+    <!-- Message if no pets -->
+    <div th:if="${#lists.isEmpty(pets)}">
+        <p>No pets found for the selected filter.</p>
+    </div>
+
+    <!-- Table displaying filtered pets -->
+    <div id="tableContainer" th:if="${not #lists.isEmpty(pets)}">
+        <table class="datatable">
+            <thead>
+            <tr>
+                <th>Pet Name</th>
+                <th>Breed</th>
+                <th>Type</th>
+                <th>Sex</th>
+                <th>Year Born</th>
+                <th>Weight</th>
+                <th>Shelter</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pet : ${pets}" class="pet-row" th:data-type="${pet.type}">
+                <td th:text="${pet.name}"></td>
+                <td th:text="${pet.breed}"></td>
+                <td th:text="${pet.type}"></td>
+                <td th:text="${pet.sex}"></td>
+                <td th:text="${pet.yearBirthed}"></td>
+                <td th:text="${pet.weight} + ' kg'"></td>
+                <td th:text="${pet.shelter.fullName}"></td>
+                <td th:text="${pet.shelter.location}"></td>
+                <td th:text="${pet.petStatus}"></td>
+                <td>
+                    <a th:href="@{/adopter/pets/{id}(id=${pet.id})}" class="btn btn-primary">View Details</a>
+                    <a th:href="@{/adopter/pets/{id}/request-adoption(id=${pet.id})}" class="btn btn-success">Request Adoption</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>

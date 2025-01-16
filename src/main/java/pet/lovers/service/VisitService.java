@@ -19,4 +19,8 @@ public class VisitService {
     public List<Visit> getVisitsByShelterId(Integer id) {
         return visitRepository.findVisitsByShelterId(id);
     }
+
+    public void save(Visit visit) {
+        visitRepository.save(visit);
+    }
 }

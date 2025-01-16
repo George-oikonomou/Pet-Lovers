@@ -20,9 +20,8 @@ public class AdoptionRequest extends Visit {
     @Enumerated(EnumType.STRING)
     private UserStatus requestStatus = UserStatus.PENDING; // Default status
 
-    public AdoptionRequest(LocalDateTime dateTime, Shelter shelter, Adopter adopter, Pet pet, String contactNumber, boolean confirmedAdoption) {
-        super(dateTime, shelter, adopter, pet, contactNumber);
-        this.confirmedAdoption = confirmedAdoption;
+    public AdoptionRequest(LocalDateTime dateTime, Shelter shelter, Adopter adopter, Pet pet) {
+        super(dateTime, shelter, adopter, pet);
     }
 
     // GETTERS AND SETTERS

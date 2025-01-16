@@ -42,14 +42,14 @@
     <div th:if="${user != null}">
       <div th:if="${user.getClass().name == 'pet.lovers.entities.Shelter'}">
         <label for="name">Shelter Name</label>
-        <input type="text" id="name" class="form-control" th:field="*{name}">
+        <input type="text" id="name" class="form-control" th:field="*{fullName}" required>
       </div>
 
       <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Adopter'}">
         <label for="fullName">Full Name</label>
         <input type="text" id="fullName" class="form-control" th:field="*{fullName}"
                pattern="[A-Za-z]+(?: [A-Za-z]+){1,4}"
-               title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')"/>
+               title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')" required>
       </div>
     </div>
 

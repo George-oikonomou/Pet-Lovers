@@ -152,4 +152,8 @@ public class User {
     public String toString() {
         return username;
     }
+
+    public void setFullName(String fullName) {
+        //default implementation (handled in runtime polymorphism)
+    }
 }

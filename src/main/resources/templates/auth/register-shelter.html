@@ -21,10 +21,10 @@
 
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" th:field="*{name}" id="name" required
+            <input type="text" class="form-control" th:field="*{fullName}" id="name" required
                    pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
                    title="Name must contain with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')"/>
-            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{fullName}"></span>
         </div>
 
         <div class="form-group">

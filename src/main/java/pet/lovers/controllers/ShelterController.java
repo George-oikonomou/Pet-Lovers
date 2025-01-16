@@ -15,18 +15,12 @@ import pet.lovers.service.*;
 @RequestMapping("/shelter")
 @PreAuthorize("hasRole('ROLE_SHELTER')")
 public class ShelterController {
-    private final ShelterService shelterService;
-    UserService userService;
-    PetService petService;
-    VetService vetService;
-    AdoptionRequestService adoptionRequestService;
+    private final UserService userService;
+    private final PetService petService;
 
-    public ShelterController(UserService userService, PetService petService, VetService vetService, AdoptionRequestService adoptionRequestService, ShelterService shelterService) {
+    public ShelterController(UserService userService, PetService petService) {
         this.userService = userService;
         this.petService = petService;
-        this.vetService = vetService;
-        this.adoptionRequestService = adoptionRequestService;
-        this.shelterService = shelterService;
     }
 
     @GetMapping("/dashboard")

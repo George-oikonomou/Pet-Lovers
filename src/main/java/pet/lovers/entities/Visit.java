@@ -19,7 +19,7 @@ public class Visit {
 
     @Column
     @NotNull
-    @DateTimeFormat(pattern = " D:yyyy-MM-dd' T:'HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateTime;
 
     @Column
@@ -39,14 +39,14 @@ public class Visit {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "pet_id")
-    private Pet pet; //TODO maybe instead of pet, use adoption request?
+    private Pet pet;
 
-    public Visit(LocalDateTime dateTime, Shelter shelter, Adopter adopter, Pet pet, String contactNumber) {
+    public Visit(LocalDateTime dateTime, Shelter shelter, Adopter adopter, Pet pet) {
         this.dateTime = dateTime;
         this.shelter = shelter;
         this.adopter = adopter;
         this.pet = pet;
-        this.contactNumber = contactNumber;
+        this.contactNumber = adopter.getContactNumber();
     }
 
     public Visit() {}
@@ -60,8 +60,9 @@ public class Visit {
     public LocalDateTime getDateTime() {
         return dateTime;
     }
+
     public void setDateTime(LocalDateTime dateTime) {
-        dateTime = dateTime;
+        this.dateTime = dateTime;
     }
 
     public String getContactNumber() {
@@ -92,7 +93,7 @@ public class Visit {
         this.pet = pet;
     }
 
-public String getReadableDateTime() {
+    public String getReadableDateTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
         return dateTime.format(formatter);
     }

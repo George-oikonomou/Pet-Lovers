@@ -78,17 +78,8 @@ public class UserService implements UserDetailsService {
     public void updateUserDetails(User user, String email, String username, String fullName, String contactNumber) {
         user.setEmail(email);
         user.setUsername(username);
-
-        if (user instanceof Adopter adopter) {
-            adopter.setFullName(fullName);
-            adopter.setContactNumber(contactNumber);
-        } else if (user instanceof Shelter shelter) {
-            shelter.setName(fullName);
-            shelter.setContactNumber(contactNumber);
-        } else if (user instanceof Vet vet) {
-            vet.setFullName(fullName);
-            vet.setContactNumber(contactNumber);
-        }
+        user.setFullName(fullName);
+        user.setContactNumber(contactNumber);
 
         this.updateUser(user);
     }
@@ -160,6 +151,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email).orElseThrow();
     }
 
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
     @Scheduled(cron = "0 */5 * * * *")
     public void removeExpiredVerificationCodes() {
         userRepository.findAll().forEach(user -> {
