@@ -59,7 +59,7 @@
         <td th:text="${request.pet.shelter.fullName}"></td>
         <td th:text="${request.pet.shelter.location}"></td>
         <td th:text="${request.pet.shelter.contactNumber}"></td>
-        <td th:text="${request.dateTime}"></td>
+        <td th:text="${request.getReadableDateTime()}"></td>
         <td th:text="${request.requestStatus}"></td>
       </tr>
       </tbody>

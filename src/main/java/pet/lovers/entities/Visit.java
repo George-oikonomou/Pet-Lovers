@@ -93,7 +93,7 @@ public class Visit {
         this.pet = pet;
     }
 
-public String getReadableDateTime() {
+    public String getReadableDateTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
         return dateTime.format(formatter);
     }
