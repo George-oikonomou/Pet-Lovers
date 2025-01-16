@@ -10,8 +10,8 @@ import pet.lovers.service.VisitService;
 @Controller
 public class VisitController {
 
-    private VisitService visitService;
-    private UserService userService;
+    private final VisitService visitService;
+    private final UserService userService;
 
     public VisitController(VisitService visitService, UserService userService) {
         this.visitService = visitService;

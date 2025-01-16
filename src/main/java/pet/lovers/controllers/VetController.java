@@ -11,7 +11,6 @@ import pet.lovers.entities.HealthStatus;
 import pet.lovers.entities.Pet;
 import pet.lovers.entities.UserStatus;
 import pet.lovers.entities.Vet;
-import pet.lovers.repositories.ShelterRepository;
 import pet.lovers.service.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,18 +19,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/vet")
 @PreAuthorize("hasRole('ROLE_VET')")
 public class VetController {
-    ShelterService shelterService;
-    UserService userService;
-    PetService petService;
-    AdoptionRequestService adoptionRequestService;
-    private final ShelterRepository shelterRepository;
+    private final UserService userService;
+    private final PetService petService;
+    private final ShelterService shelterService;
 
-    public VetController(UserService userService, PetService petService, AdoptionRequestService adoptionRequestService, ShelterService shelterService, ShelterRepository shelterRepository) {
+    public VetController(UserService userService, PetService petService, ShelterService shelterService) {
         this.userService = userService;
         this.petService = petService;
-        this.adoptionRequestService = adoptionRequestService;
         this.shelterService = shelterService;
-        this.shelterRepository = shelterRepository;
     }
 
     @GetMapping("/dashboard")
@@ -41,7 +36,7 @@ public class VetController {
     public String showPetStatus(Model model) {
         Vet vet = (Vet) userService.getCurrentUser();
 
-        List<Pet> pets = shelterRepository.findByVet(vet)
+        List<Pet> pets = shelterService.findByVet(vet)
                 .stream()
                 .flatMap(shelter -> shelter.getPets().stream())
                 .filter(pet -> pet.getUserStatus() == UserStatus.APPROVED)

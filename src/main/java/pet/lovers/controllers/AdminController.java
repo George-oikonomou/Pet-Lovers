@@ -8,19 +8,17 @@ import org.springframework.ui.Model;
 import pet.lovers.entities.*;
 import pet.lovers.service.*;
 
-import java.util.Optional;
-
 
 @Controller
 @RequestMapping("/admin")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
-    UserService userService;
-    RoleService roleService;
-    ShelterService shelterService;
-    PetService petService;
-    AdoptionRequestService adoptionRequestService;
-    EmailService emailService;
+    private final UserService userService;
+    private final RoleService roleService;
+    private final ShelterService shelterService;
+    private final PetService petService;
+    private final AdoptionRequestService adoptionRequestService;
+    private final EmailService emailService;
 
 
     public AdminController(UserService userService, RoleService roleService, ShelterService shelterService, PetService petService, AdoptionRequestService adoptionRequestService, EmailService emailService) {

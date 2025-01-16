@@ -15,9 +15,9 @@ import java.util.List;
 @RequestMapping("/adoption-requests")
 public class AdoptionRequestController {
 
-    private AdoptionRequestService adoptionRequestService;
-    private UserService userService;
-    private AdopterService adopterService;
+    private final AdoptionRequestService adoptionRequestService;
+    private final UserService userService;
+    private final AdopterService adopterService;
 
 
     public AdoptionRequestController( AdoptionRequestService adoptionRequestService , UserService userService, AdopterService adopterService) {

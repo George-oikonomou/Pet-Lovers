@@ -70,4 +70,8 @@ public class PetService {
     public List<Pet> getPetsByPetStatus(PetStatus petStatus){
         return petRepository.findByPetStatus(petStatus);
     }
+
+    public boolean existsByName(String name) {
+        return petRepository.existsByName(name);
+    }
 }
