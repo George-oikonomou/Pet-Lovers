@@ -1,6 +1,7 @@
 package pet.lovers.service;
 
 import org.apache.commons.text.RandomStringGenerator;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import pet.lovers.entities.*;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -84,11 +86,19 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public Object getUsers() {
-        return userRepository.findAll().stream()
-                .filter(user -> user.getRoles().stream()
-                        .noneMatch(role -> role.toString().equals(Role.ADMIN)))
-                .collect(Collectors.toList());
+        return userRepository.findAll()
+                             .stream()
+                             .filter(user -> user.getRoles()
+                                 .stream()
+                                 .noneMatch(role -> role.toString().equals(Role.ADMIN))
+                             )
+                             .toList();
     }
+
+    public User getUserByVerificationCode(String verificationCode) {
+        return userRepository.findByVerificationCode(verificationCode).orElseThrow();
+    }
+
     public Object getUser(Long userId) {
         return userRepository.findById(userId).get();
     }
@@ -98,12 +108,27 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(authentication.getName()).orElseThrow();
     }
 
+    @Transactional
+    public String resetUserPassword(User user, String password, String confirmPassword) {
+        if (user.getVerificationCodeExpiration() != null && user.getVerificationCodeExpiration().isBefore(LocalDateTime.now())) {
+            return "Expired verification code!";
+        }else if (!password.equals(confirmPassword)) {
+            return "Passwords do not match!";
+        }
 
-    public String getUsersGeneratedPassword(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPassword(password);
+        user.setVerificationCode(null);
+        user.setVerificationCodeExpiration(null);
+        saveUser(user);
+
+        return null;
+    }
+
+
+    public String getUsersTmpGeneratedVerificationCode(User user) {
         String generatedPassword = generateRandomPassword();
-        String encodedPassword = passwordEncoder.encode(generatedPassword);
-        user.setPassword(encodedPassword);
+        user.setVerificationCode(generatedPassword);
+        user.setVerificationCodeExpiration(LocalDateTime.now().plusMinutes(25));
         userRepository.save(user);
 
         return generatedPassword;
@@ -126,7 +151,18 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email).orElseThrow();
     }
 
+
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
+    }
+    @Scheduled(cron = "0 */5 * * * *")
+    public void removeExpiredVerificationCodes() {
+        userRepository.findAll().forEach(user -> {
+            if (user.getVerificationCodeExpiration() != null && user.getVerificationCodeExpiration().isBefore(LocalDateTime.now())) {
+                user.setVerificationCode(null);
+                user.setVerificationCodeExpiration(null);
+                userRepository.save(user);
+            }
+        });
     }
 }

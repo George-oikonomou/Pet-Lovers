@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 @Controller
 public class UserController {
@@ -88,18 +90,40 @@ public class UserController {
 
     @PostMapping("/forgot-password")
     public String sendResetPasswordEmail(@RequestParam("email") String email, Model model) {
-    
         if (!userService.existsByEmail(email) ) {
             model.addAttribute("error", "No user found with the given email!");
             return "auth/forgot-password";
         }
-        String username = userService.getUserByEmail(email).getUsername();
-        String password = userService.getUsersGeneratedPassword(email);
 
+        User user = userService.getUserByEmail(email);
+        String tmpPassword = userService.getUsersTmpGeneratedVerificationCode(user);
 
-        emailService.sendResetPasswordMessage(email,username,password);
-        model.addAttribute("msg", "Password reset email sent successfully!");
-        return "index"; 
+        emailService.sendResetPasswordMessage(email,user.getUsername(),tmpPassword);
+        model.addAttribute("msg", "Password reset email sent successfully!<br>Please check your email.<br>Verification code is valid for 5 minutes.");
+        return "auth/reset-password";
     }
 
+    @PostMapping("/reset-password")
+    public String sendSuccessResetPasswordsEmail(@RequestParam("verification_Code") String verificationCode, @RequestParam("password") String password,@RequestParam("confirm_password") String confirmPassword, Model model) {
+        try {
+            User user = userService.getUserByVerificationCode(verificationCode);
+
+            String error = userService.resetUserPassword(user, password, confirmPassword);
+            if (error != null) {
+                model.addAttribute("error", error);
+                return "auth/reset-password";
+            }
+
+            emailService.sendSuccessResetPasswordMessage(user.getEmail(), user.getUsername());
+
+            model.addAttribute("msg", "Password reset was successful!");
+            return "auth/login";
+        } catch (NoSuchElementException e) {
+            model.addAttribute("error", "Invalid verification code!");
+            return "auth/reset-password";
+        } catch (Exception e) {
+            model.addAttribute("error", "An unexpected error occurred. Please try again.");
+            return "auth/reset-password";
+        }
+    }
 }

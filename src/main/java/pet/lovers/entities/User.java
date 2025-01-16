@@ -2,7 +2,7 @@ package pet.lovers.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,6 +50,12 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @Column(name = "verification_code")
+    private String verificationCode;
+
+    @Column(name = "verification_code_expiration")
+    private LocalDateTime verificationCodeExpiration;
 
     public User() {
     }
@@ -124,6 +130,22 @@ public class User {
 
     public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public LocalDateTime getVerificationCodeExpiration() {
+        return verificationCodeExpiration;
+    }
+
+    public void setVerificationCodeExpiration(LocalDateTime VerificationCodeExpiration) {
+        this.verificationCodeExpiration = VerificationCodeExpiration;
     }
 
     @Override
