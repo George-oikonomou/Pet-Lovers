@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface ShelterRepository extends JpaRepository<Shelter, Integer> {
     List<Shelter> findByUserStatus(UserStatus status);
-    Shelter findByUsername(String username);
+    Shelter findById(int id);
     List<Shelter> findByVet(Vet vet);
 }

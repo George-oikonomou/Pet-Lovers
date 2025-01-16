@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pet.lovers.entities.HealthStatus;
-import pet.lovers.entities.Pet;
-import pet.lovers.entities.UserStatus;
-import pet.lovers.entities.Vet;
+import pet.lovers.entities.*;
 import pet.lovers.repositories.ShelterRepository;
+import pet.lovers.repositories.ShelterRequestRepository;
+import pet.lovers.repositories.VetRepository;
 import pet.lovers.service.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,14 +22,18 @@ public class VetController {
     ShelterService shelterService;
     UserService userService;
     PetService petService;
+    VetRepository vetRepository;
+    ShelterRequestRepository shelterRequestRepository;
     AdoptionRequestService adoptionRequestService;
     private final ShelterRepository shelterRepository;
 
-    public VetController(UserService userService, PetService petService, AdoptionRequestService adoptionRequestService, ShelterService shelterService, ShelterRepository shelterRepository) {
+    public VetController(ShelterService shelterService, UserService userService, PetService petService, VetRepository vetRepository, ShelterRequestRepository shelterRequestRepository, AdoptionRequestService adoptionRequestService, ShelterRepository shelterRepository) {
+        this.shelterService = shelterService;
         this.userService = userService;
         this.petService = petService;
+        this.vetRepository = vetRepository;
+        this.shelterRequestRepository = shelterRequestRepository;
         this.adoptionRequestService = adoptionRequestService;
-        this.shelterService = shelterService;
         this.shelterRepository = shelterRepository;
     }
 
@@ -59,5 +62,35 @@ public class VetController {
         petService.updateHealthStatus(petId, healthStatus);
         return "redirect:/vet/health-status";
     }
+
+    @GetMapping("/shelter-request-submission")
+    public String showShelterRequestSubmission(Model model) {
+        model.addAttribute("shelters", shelterService.getShelters());
+        return "vet/shelter-request-submission";
+    }
+
+    @PostMapping("/shelter-request-submission")
+    public String submitShelterRequest(@RequestParam("shelterId") int shelterId) {
+        Vet vet = (Vet) userService.getCurrentUser();
+
+        // Fetch the shelter
+        Shelter shelter = shelterRepository.findById(shelterId);
+
+        // Check if the vet has already requested this shelter
+        if (shelterRequestRepository.existsByVetAndShelter(vet, shelter)) {
+            return "redirect:/vet/shelter-request-submission?error=alreadyRequested";
+        }
+
+        // Create a new ShelterRequest and set the status to PENDING
+        ShelterRequest shelterRequest = new ShelterRequest();
+        shelterRequest.setVet(vet);
+        shelterRequest.setShelter(shelter);
+        // Save the ShelterRequest
+        shelterRequestRepository.save(shelterRequest);
+
+        // Redirect back with success message
+        return "redirect:/vet/shelter-request-submission?success=true";
+    }
+
 
 }
