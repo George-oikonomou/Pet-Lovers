@@ -14,5 +14,5 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
     List<Pet> findByUserStatus(UserStatus status);
     Boolean existsByName(String name);
     List<Pet> findByShelter(Shelter shelter);
-    List<Pet> findByPetStatus(PetStatus petStatus);
+    List<Pet> findByPetStatusIn(List<PetStatus> statuses);
 }

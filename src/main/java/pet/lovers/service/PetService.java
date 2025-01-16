@@ -67,11 +67,17 @@ public class PetService {
     }
 
     @Transactional
-    public List<Pet> getPetsByPetStatus(PetStatus petStatus){
-        return petRepository.findByPetStatus(petStatus);
+    public List<Pet> getPetsByPetStatus(List<PetStatus> statuses) {
+        return petRepository.findByPetStatusIn(statuses);
     }
 
     public boolean existsByName(String name) {
         return petRepository.existsByName(name);
+    }
+
+    @Transactional
+    public void updatePetStatus(Pet pet, PetStatus petStatus) {
+        pet.setPetStatus(petStatus);
+        petRepository.save(pet);
     }
 }

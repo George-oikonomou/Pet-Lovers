@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pet.lovers.entities.*;
 import pet.lovers.service.*;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -27,7 +28,8 @@ public class AdopterController {
 
     @GetMapping("/pets")
     public String listAvailablePets(Model model) {
-        List<Pet> pets = petService.getPetsByPetStatus(PetStatus.AVAILABLE);
+        List<PetStatus> criteria = Arrays.asList(PetStatus.AVAILABLE, PetStatus.PENDING_ADOPTION);
+        List<Pet> pets = petService.getPetsByPetStatus(criteria);
         model.addAttribute("pets", pets);
         return "adopter/pets";
     }
@@ -65,9 +67,10 @@ public class AdopterController {
 
         AdoptionRequest adoptionRequest = new AdoptionRequest(visit.getDateTime(), visit.getShelter(), adopter, visit.getPet());
         Visit visitRequest = new Visit(visit.getDateTime(), pet.getShelter(), adopter, pet);
-        visitService.save(visitRequest);
 
-        // Save the adoption request
+        petService.updatePetStatus(pet, PetStatus.PENDING_ADOPTION);
+
+        visitService.save(visitRequest);
         adoptionRequestService.save(adoptionRequest);
 
         return "redirect:/adoption-requests/adopter";
