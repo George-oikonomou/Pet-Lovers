@@ -40,4 +40,8 @@ public class AdoptionRequestService {
     public List<AdoptionRequest> findByShelter(Shelter shelter) {
         return adoptionRequestRepository.findByShelter(shelter);
     }
+
+    public void save(AdoptionRequest adoptionRequest) {
+        adoptionRequestRepository.save(adoptionRequest);
+    }
 }

@@ -39,14 +39,14 @@ public class Visit {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "pet_id")
-    private Pet pet; //TODO maybe instead of pet, use adoption request?
+    private Pet pet;
 
-    public Visit(LocalDateTime dateTime, Shelter shelter, Adopter adopter, Pet pet, String contactNumber) {
+    public Visit(LocalDateTime dateTime, Shelter shelter, Adopter adopter, Pet pet) {
         this.dateTime = dateTime;
         this.shelter = shelter;
         this.adopter = adopter;
         this.pet = pet;
-        this.contactNumber = contactNumber;
+        this.contactNumber = adopter.getContactNumber();
     }
 
     public Visit() {}

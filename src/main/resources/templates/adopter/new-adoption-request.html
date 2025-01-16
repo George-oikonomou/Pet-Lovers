@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Request Adoption</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>Request Adoption</h1>
+
+    <form th:action="@{/adopter/pets/{id}/request-adoption(id=${adoptionRequest.pet.id})}" method="post" th:object="${adoptionRequest}">
+
+        <!-- Display adopter's name -->
+        <div class="form-group">
+            <label for="adopterName">Adopter Name</label>
+            <input type="text" class="form-control" id="adopterName" th:value="${adoptionRequest.adopter.fullName}" readonly>
+        </div>
+
+        <!-- Display pet's name -->
+        <div class="form-group">
+            <label for="petName">Pet Name</label>
+            <input type="text" class="form-control" id="petName" th:value="${adoptionRequest.pet.name}" readonly>
+        </div>
+
+        <!-- Display Shelter -->
+        <div class="form-group">
+            <label for="shelter">Shelter</label>
+            <input type="text" class="form-control" id="shelter" th:value="${adoptionRequest.shelter}" readonly>
+        </div>
+
+        <!-- Display Location -->
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" th:value="${adoptionRequest.shelter.location}" readonly>
+        </div>
+
+        <!-- Display Number -->
+        <div class="form-group">
+            <label for="number">Contact Number</label>
+            <input type="text" class="form-control" id="number" th:value="${adoptionRequest.contactNumber}" readonly>
+        </div>
+
+        <!-- Input for desired visit time -->
+        <div class="form-group">
+            <label for="visitTime">Time of Visit</label>
+            <input type="datetime-local" class="form-control" id="visitTime" th:field="*{dateTime}" required>
+        </div>
+
+        <!-- Submit and cancel buttons -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit Request</button>
+            <a href="/adopter/pets" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

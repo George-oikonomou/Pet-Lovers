@@ -2,10 +2,7 @@ package pet.lovers.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import pet.lovers.entities.HealthStatus;
-import pet.lovers.entities.Pet;
-import pet.lovers.entities.Shelter;
-import pet.lovers.entities.UserStatus;
+import pet.lovers.entities.*;
 import pet.lovers.repositories.PetRepository;
 
 import java.util.List;
@@ -67,5 +64,10 @@ public class PetService {
         Pet pet = petRepository.findById(petId).orElseThrow();
         pet.setHealthStatus(HealthStatus.valueOf(healthStatus));
         petRepository.save(pet);
+    }
+
+    @Transactional
+    public List<Pet> getPetsByPetStatus(PetStatus petStatus){
+        return petRepository.findByPetStatus(petStatus);
     }
 }

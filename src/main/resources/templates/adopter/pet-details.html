@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Details</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>Pet Details</h1>
+
+    <div>
+        <p><strong>Name:</strong> <span th:text="${pet.name}"></span></p>
+        <p><strong>Breed:</strong> <span th:text="${pet.breed}"></span></p>
+        <p><strong>Type:</strong> <span th:text="${pet.type}"></span></p>
+        <p><strong>Sex:</strong> <span th:text="${pet.sex}"></span></p>
+        <p><strong>Year Born:</strong> <span th:text="${pet.yearBirthed}"></span></p>
+        <p><strong>Weight:</strong> <span th:text="${pet.weight}"></span> kg</p>
+    </div>
+
+    <div>
+        <a th:href="@{/adopter/pets/{id}/request-adoption(id=${pet.id})}" class="btn btn-success">Request Adoption</a>
+        <a href="/adopter/pets" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+</body>
+</html>
