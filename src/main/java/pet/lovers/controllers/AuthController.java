@@ -22,6 +22,7 @@ public class AuthController {
     PetService petService;
     AdoptionRequestRepository adoptionRequestRepository;
 
+    //TODO: REMOVE REPOSITORY DEPENDENCY
     public AuthController(RoleRepository roleRepository, UserRepository userRepository, UserService userService, PetRepository petRepository, PetService petService, AdoptionRequestRepository adoptionRequestRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;

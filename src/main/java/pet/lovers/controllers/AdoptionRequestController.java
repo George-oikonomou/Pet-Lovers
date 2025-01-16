@@ -50,7 +50,7 @@ public class AdoptionRequestController {
     }
 
     @PreAuthorize("hasRole('ROLE_SHELTER')")
-    @GetMapping("/{id}")
+    @GetMapping("/shelter/{id}")
     public String viewAdoptionRequest(@PathVariable Integer id, Model model) {
         AdoptionRequest request = adoptionRequestService.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Adoption request not found"));
@@ -60,7 +60,7 @@ public class AdoptionRequestController {
     }
 
     @PreAuthorize("hasRole('ROLE_SHELTER')")
-    @PostMapping("/{id}/approve")
+    @PostMapping("/shelter/{id}/approve")
     public String approveAdoptionRequest(@PathVariable Integer id) {
         AdoptionRequest request = adoptionRequestService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Adoption request not found"));
@@ -74,7 +74,7 @@ public class AdoptionRequestController {
     }
 
     @PreAuthorize("hasRole('ROLE_SHELTER')")
-    @PostMapping("/{id}/reject")
+    @PostMapping("/shelter/{id}/reject")
     public String rejectAdoptionRequest(@PathVariable Integer id) {
         AdoptionRequest request = adoptionRequestService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Adoption request not found"));

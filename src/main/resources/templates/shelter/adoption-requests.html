@@ -68,7 +68,7 @@
                 <td th:text="${request.pet.id}"></td>
                 <td th:text="${request.pet.shelter.name}"></td>
                 <td th:text="${request.requestStatus}"></td>
-                <td><a th:href="@{/adoption-requests/{id}(id=${request.id})}" class="btn btn-info" th:text="View"></a></td>
+                <td><a th:href="@{/adoption-requests/shelter/{id}(id=${request.id})}" class="btn btn-info" th:text="View"></a></td>
             </tr>
             </tbody>
         </table>
