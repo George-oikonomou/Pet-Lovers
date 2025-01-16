@@ -66,13 +66,9 @@ public class AdopterController {
                 .orElseThrow(() -> new IllegalArgumentException("Pet not found"));
 
         AdoptionRequest adoptionRequest = new AdoptionRequest(visit.getDateTime(), visit.getShelter(), adopter, visit.getPet());
-        Visit visitRequest = new Visit(visit.getDateTime(), pet.getShelter(), adopter, pet);
-
-        petService.updatePetStatus(pet, PetStatus.PENDING_ADOPTION);
-
-        visitService.save(visitRequest);
         adoptionRequestService.save(adoptionRequest);
 
+        petService.updatePetStatus(pet, PetStatus.PENDING_ADOPTION);
         return "redirect:/adoption-requests/adopter";
     }
 }
