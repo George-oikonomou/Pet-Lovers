@@ -29,7 +29,7 @@
         <!-- Display Shelter -->
         <div class="form-group">
             <label for="shelterLoc">Shelter</label>
-            <input type="text" class="form-control" id="shelterLoc" th:value="${adoptionRequest.shelter}" readonly>
+            <input type="text" class="form-control" id="shelterLoc" th:value="${adoptionRequest.shelter.fullName}" readonly>
         </div>
 
         <!-- Display Location -->

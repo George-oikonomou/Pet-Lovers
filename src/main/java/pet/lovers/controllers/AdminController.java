@@ -69,7 +69,7 @@ public class AdminController {
     @PostMapping("/shelter/{user_id}")
     public String editShelter(@PathVariable Long user_id, @ModelAttribute("user") Shelter shelter) {
         Shelter theShelter = (Shelter) userService.getUser(user_id);
-        userService.updateUserDetails(theShelter, shelter.getEmail(), shelter.getUsername(), shelter.getName(), shelter.getContactNumber());
+        userService.updateUserDetails(theShelter, shelter.getEmail(), shelter.getUsername(), shelter.getFullName(), shelter.getContactNumber());
         return "redirect:/admin/users";
     }
 

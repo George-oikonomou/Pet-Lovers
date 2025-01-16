@@ -40,7 +40,7 @@
         <td th:text="${pet.yearBirthed}"></td>
         <td>
           <a th:href="@{/admin/user/{user_id}(user_id=${pet.shelter.id})}"
-             th:text="${pet.shelter.name}"
+             th:text="${pet.shelter.fullName}"
              style="color: black; text-decoration: underline">
           </a>
         </td>

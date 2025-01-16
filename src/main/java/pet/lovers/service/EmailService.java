@@ -35,7 +35,7 @@ public class EmailService {
             
             Warm regards,
             The Pet Lovers Team
-            """.formatted(shelter.getName());
+            """.formatted(shelter.getFullName());
 
         sendSimpleMessage(shelter.getEmail(), subject, text);
     }
@@ -55,7 +55,7 @@ public class EmailService {
             
             Best regards,
             The Pet Lovers Team
-            """.formatted(shelter.getName());
+            """.formatted(shelter.getFullName());
 
         sendSimpleMessage(shelter.getEmail(), subject, text);
     }
@@ -74,7 +74,7 @@ public class EmailService {
             
             Warm regards,
             The Pet Lovers Team
-            """.formatted(pet.getShelter().getName(), pet.getName(), pet.getName());
+            """.formatted(pet.getShelter().getFullName(), pet.getName(), pet.getName());
 
         sendSimpleMessage(pet.getShelter().getEmail(), subject, text);
     }
@@ -94,7 +94,7 @@ public class EmailService {
             
             Best regards,
             The Pet Lovers Team
-            """.formatted(pet.getShelter().getName(), pet.getName());
+            """.formatted(pet.getShelter().getFullName(), pet.getName());
 
         sendSimpleMessage(pet.getShelter().getEmail(), subject, text);
     }
@@ -114,7 +114,7 @@ public class EmailService {
             
             Best regards,
             The Pet Lovers Team
-            """.formatted(adoptionRequest.getShelter().getName(),
+            """.formatted(adoptionRequest.getShelter().getFullName(),
                 adoptionRequest.getPet().getName(),
                 adoptionRequest.getAdopter().getFullName());
 

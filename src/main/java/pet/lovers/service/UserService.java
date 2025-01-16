@@ -76,17 +76,8 @@ public class UserService implements UserDetailsService {
     public void updateUserDetails(User user, String email, String username, String fullName, String contactNumber) {
         user.setEmail(email);
         user.setUsername(username);
-
-        if (user instanceof Adopter adopter) { //todo: change vet name to FullName??
-            adopter.setFullName(fullName);
-            adopter.setContactNumber(contactNumber);
-        } else if (user instanceof Shelter shelter) {
-            shelter.setName(fullName);
-            shelter.setContactNumber(contactNumber);
-        } else if (user instanceof Vet vet) {
-            vet.setFullName(fullName);
-            vet.setContactNumber(contactNumber);
-        }
+        user.setFullName(fullName);
+        user.setContactNumber(contactNumber);
 
         this.updateUser(user);
     }

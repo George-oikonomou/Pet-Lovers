@@ -42,7 +42,7 @@
     <div th:if="${user != null}">
       <div th:if="${user.getClass().name == 'pet.lovers.entities.Shelter'}">
         <label for="name">Shelter Name</label>
-        <input type="text" id="name" class="form-control" th:field="*{name}">
+        <input type="text" id="name" class="form-control" th:field="*{fullName}">
       </div>
 
       <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Adopter'}">

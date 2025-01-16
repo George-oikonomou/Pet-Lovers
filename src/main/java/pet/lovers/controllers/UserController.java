@@ -57,7 +57,7 @@ public class UserController {
         System.out.println("Shelter: " + shelter);
         Integer id = userService.saveUser(shelter);
         String message = "Shelter '" + id + "' saved successfully !";
-        emailService.sendRegistrationMessageToUser(shelter.getEmail(),shelter.getName());
+        emailService.sendRegistrationMessageToUser(shelter.getEmail(),shelter.getFullName());
         model.addAttribute("msg", message);
         return "index";
     }

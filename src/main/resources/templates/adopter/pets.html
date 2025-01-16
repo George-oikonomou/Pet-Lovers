@@ -60,7 +60,7 @@
                 <td th:text="${pet.sex}"></td>
                 <td th:text="${pet.yearBirthed}"></td>
                 <td th:text="${pet.weight} + ' kg'"></td>
-                <td th:text="${pet.shelter.name}"></td>
+                <td th:text="${pet.shelter.fullName}"></td>
                 <td th:text="${pet.shelter.location}"></td>
                 <td>
                     <a th:href="@{/adopter/pets/{id}(id=${pet.id})}" class="btn btn-primary">View Details</a>

@@ -26,17 +26,7 @@ public class AdoptionRequestController {
         this.adopterService = adopterService;
     }
 
-    @PreAuthorize("hasRole('ROLE_SHELTER')")
-    @GetMapping("/shelter")
-    public String viewShelterAdoptionRequests(Model model) {
-        User currentUser = userService.getCurrentUser();
-
-        List<AdoptionRequest> requests = adoptionRequestService.findByShelter((Shelter) currentUser);
-
-        model.addAttribute("adoptionRequests", requests);
-        return "shelter/adoption-requests";
-    }
-
+    //ADOPTER
     @PreAuthorize("hasRole('ROLE_ADOPTER')")
     @GetMapping("/adopter")
     public String viewAdopterAdoptionRequests(Model model) {
@@ -47,6 +37,18 @@ public class AdoptionRequestController {
 
         model.addAttribute("adoptionRequests", requests);
         return "adopter/adoption-requests";
+    }
+
+    //SHELTER
+    @PreAuthorize("hasRole('ROLE_SHELTER')")
+    @GetMapping("/shelter")
+    public String viewShelterAdoptionRequests(Model model) {
+        User currentUser = userService.getCurrentUser();
+
+        List<AdoptionRequest> requests = adoptionRequestService.findByShelter((Shelter) currentUser);
+
+        model.addAttribute("adoptionRequests", requests);
+        return "shelter/adoption-requests";
     }
 
     @PreAuthorize("hasRole('ROLE_SHELTER')")

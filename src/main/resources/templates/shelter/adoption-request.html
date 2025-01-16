@@ -16,7 +16,7 @@
         <p><strong>Adopter Email:</strong> <span th:text="${adoptionRequest.adopter.email}"></span></p>
         <p><strong>Pet Name:</strong> <span th:text="${adoptionRequest.pet.name}"></span></p>
         <p><strong>Pet ID:</strong> <span th:text="${adoptionRequest.pet.id}"></span></p>
-        <p><strong>Shelter:</strong> <span th:text="${adoptionRequest.pet.shelter.name}"></span></p>
+        <p><strong>Shelter:</strong> <span th:text="${adoptionRequest.pet.shelter.fullName}"></span></p>
         <p><strong>Request Status:</strong> <span th:text="${adoptionRequest.requestStatus}"></span></p>
         <p><strong>Request Date:</strong> <span th:text="${adoptionRequest.getReadableDateTime()}"></span></p>
     </div>
