@@ -28,8 +28,8 @@
 
         <!-- Display Shelter -->
         <div class="form-group">
-            <label for="shelter">Shelter</label>
-            <input type="text" class="form-control" id="shelter" th:value="${adoptionRequest.shelter}" readonly>
+            <label for="shelterLoc">Shelter</label>
+            <input type="text" class="form-control" id="shelterLoc" th:value="${adoptionRequest.shelter}" readonly>
         </div>
 
         <!-- Display Location -->
@@ -40,14 +40,14 @@
 
         <!-- Display Number -->
         <div class="form-group">
-            <label for="number">Contact Number</label>
-            <input type="text" class="form-control" id="number" th:value="${adoptionRequest.contactNumber}" readonly>
+            <label for="contactNumber">Contact Number</label>
+            <input type="text" class="form-control" id="contactNumber" th:field="${adoptionRequest.contactNumber}" readonly>
         </div>
 
         <!-- Input for desired visit time -->
         <div class="form-group">
-            <label for="visitTime">Time of Visit</label>
-            <input type="datetime-local" class="form-control" id="visitTime" th:field="*{dateTime}" required>
+            <label for="dateTime">Time of Visit</label>
+            <input type="datetime-local" class="form-control" id="dateTime" th:field="*{dateTime}" required>
         </div>
 
         <!-- Submit and cancel buttons -->
@@ -55,6 +55,12 @@
             <button type="submit" class="btn btn-primary">Submit Request</button>
             <a href="/adopter/pets" class="btn btn-secondary">Cancel</a>
         </div>
+
+
+        <!-- Hidden fields-->
+        <input type="hidden" id="adopter" th:field="*{adopter}">
+        <input type="hidden" id="pet" th:field="*{pet}">
+        <input type="hidden" id="shelter" th:field="*{shelter}">
     </form>
 </div>
 </body>

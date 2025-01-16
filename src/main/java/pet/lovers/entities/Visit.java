@@ -19,7 +19,7 @@ public class Visit {
 
     @Column
     @NotNull
-    @DateTimeFormat(pattern = " D:yyyy-MM-dd' T:'HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateTime;
 
     @Column
@@ -60,8 +60,9 @@ public class Visit {
     public LocalDateTime getDateTime() {
         return dateTime;
     }
+
     public void setDateTime(LocalDateTime dateTime) {
-        dateTime = dateTime;
+        this.dateTime = dateTime;
     }
 
     public String getContactNumber() {

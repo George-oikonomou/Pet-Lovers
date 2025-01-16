@@ -14,13 +14,10 @@ import java.util.List;
 @RequestMapping("/adopter")
 public class AdopterController {
 
-    private PetService petService;
-    private AdoptionRequestService adoptionRequestService;
-    private AdopterService adopterService;
-
-    private VisitService visitService;
-
-
+    PetService petService;
+    AdoptionRequestService adoptionRequestService;
+    AdopterService adopterService;
+    VisitService visitService;
 
     public AdopterController(VisitService visitService, PetService petService, AdoptionRequestService adoptionRequestService, AdopterService adopterService) {
         this.visitService = visitService;
@@ -60,7 +57,7 @@ public class AdopterController {
 
     @PreAuthorize("hasRole('ROLE_ADOPTER')")
     @PostMapping("/pets/{id}/request-adoption")
-    public String saveAdoptionRequest(@PathVariable Integer id, @ModelAttribute Visit visit, Model model) {
+    public String saveAdoptionRequest(@PathVariable int id, @ModelAttribute("adoptionRequest") Visit visit) {
 
         Adopter adopter = adopterService.getCurrentUser();
 
@@ -68,22 +65,13 @@ public class AdopterController {
                 .orElseThrow(() -> new IllegalArgumentException("Pet not found"));
 
         AdoptionRequest adoptionRequest = new AdoptionRequest(visit.getDateTime(), visit.getShelter(), adopter, visit.getPet());
-
-        // Set necessary fields for the adoption request
-        adoptionRequest.setPet(pet);
-        adoptionRequest.setAdopter(adopter);
-        adoptionRequest.setDateTime(adoptionRequest.getDateTime());
         Visit visitRequest = new Visit(visit.getDateTime(), pet.getShelter(), adopter, pet);
         visitService.save(visitRequest);
 
         // Save the adoption request
         adoptionRequestService.save(adoptionRequest);
 
-        // Add success message to the model
-        String message = "Adoption request for '" + pet.getName() + "' submitted successfully!";
-        model.addAttribute("msg", message);
-
-        return "redirect:/adopter";
+        return "redirect:/adoption-requests/adopter";
     }
 }
 
