@@ -10,6 +10,8 @@
 </head>
 <body>
 <div layout:fragment="main-content">
+    <div th:if="${msg}" class="alert alert-success"> <p th:text="${msg}"></div>
+
     <div th:if="${param.error}">
         Invalid username and password.
     </div>
