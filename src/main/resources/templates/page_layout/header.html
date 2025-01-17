@@ -25,8 +25,11 @@
             <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/adoption-requests/shelter">Adoption Requests</a>
             <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/new-pet">Register New Pet</a>
             <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/visits">Visits</a>
+            <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/vet-review">Vet Request</a>
             <!-- Vet Links -->
             <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/health-status">Pet's Health Status</a>
+            <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/shelter-request">Request Shelter Submission</a>
+            <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/shelters">My Shelters</a>
             <!-- Adopter Links -->
             <a sec:authorize="hasRole('ROLE_ADOPTER')" class="nav-link" href="/adoption-requests/adopter">My Adoption Requests</a>
             <a sec:authorize="hasRole('ROLE_ADOPTER')" class="nav-link" href="/adopter/pets">Pets</a>

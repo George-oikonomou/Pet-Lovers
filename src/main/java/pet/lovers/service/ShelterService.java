@@ -48,17 +48,13 @@ public class ShelterService {
         shelterRepository.save(shelter);
     }
 
-    @Transactional
-    public void saveShelter(Shelter shelter){
-        shelterRepository.save(shelter);
-    }
-
-    @Transactional
-    public void deleteShelter(Integer shelterId) {
-        shelterRepository.deleteById(shelterId);
-    }
-
     public List<Shelter> findByVet(Vet vet) {
         return shelterRepository.findByVet(vet);
+    }
+
+    public Shelter getShelterById(int shelterId) { return shelterRepository.findById(shelterId).orElseThrow(); }
+
+    public void updateShelter(Shelter shelter) {
+        shelterRepository.save(shelter);
     }
 }
