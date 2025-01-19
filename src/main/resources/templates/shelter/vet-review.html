@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Vet Selection</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>Vet Selection</h1>
+
+    <!-- Display Success Message -->
+    <div th:if="${param.success}">
+        <p class="alert alert-success">Vet successfully selected!</p>
+    </div>
+
+    <!-- Check if there are no pending vets -->
+    <div th:if="${#lists.isEmpty(pendingVets)}">
+        <p>No pending vet requests at the moment.</p>
+    </div>
+
+    <!-- Vet Selection Table -->
+    <div id="tableContainer" th:if="${not #lists.isEmpty(pendingVets)}">
+        <table class="datatable">
+            <thead>
+            <tr>
+                <th>Vet Name</th>
+                <th>Email</th>
+                <th>Location</th>
+                <th>Contact Number</th>
+                <th>Documents</th>
+                <th>Select</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="vetRequest : ${pendingVets}">
+                <td th:text="${vetRequest.vet.fullName}"></td>
+                <td th:text="${vetRequest.vet.email}"></td>
+                <td th:text="${vetRequest.vet.location}"></td>
+                <td th:text="${vetRequest.vet.contactNumber}"></td>
+                <td>
+                    <a th:href="|${vetRequest.vet.documents.path}|"
+                       target="_blank">
+                        <img th:src="|${vetRequest.vet.documents.path}|"
+                             alt="link" />
+                    </a>
+                </td>
+                <td>
+                    <form th:action="@{/shelter/vet-review}" method="post">
+                        <input type="hidden" name="vetRequestId" th:value="${vetRequest.vet.id}"/>
+                        <button class="btn btn-primary" type="submit">Select Vet</button>
+                    </form>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+
+<style>
+    td img {
+        width: 50%;
+        height: 20%;
+        object-fit: contain;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        color: black;
+        transform: perspective(500px) rotateX(5deg);
+        transition: transform 0.3s, box-shadow 0.3s;
+        word-break: break-word;
+    }
+
+    td img:hover {
+        transform: perspective(500px) rotateX(0deg) scale(1.05);
+    }
+
+    table {
+        width: auto;
+        border-collapse: collapse;
+        margin-top: 20px;
+        height: auto;
+    }
+
+    td, th {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        max-width: 10vw;
+        padding: 8px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    table {
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        max-height: 5vw;
+        max-width: 10vw;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>

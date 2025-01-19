@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Shelters</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>My Shelters</h1>
+
+    <div th:if="${#lists.isEmpty(shelters)}">
+        <p>No shelters available at the moment.</p>
+    </div>
+
+    <div id="tableContainer" th:if="${not #lists.isEmpty(shelters)}">
+        <table class="datatable">
+            <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Contact Number</th>
+                <th>Location</th>
+                <th>Vet Assigned</th>
+                <th>Number of Pets</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="shelter : ${shelters}">
+                <td th:text="${shelter.fullName}"></td>
+                <td th:text="${shelter.contactNumber}"></td>
+                <td th:text="${shelter.location}"></td>
+                <td th:text="${shelter.vet != null ? shelter.vet.fullName : 'No Vet Assigned'}"></td>
+                <td th:text="${#lists.size(shelter.pets)}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>
