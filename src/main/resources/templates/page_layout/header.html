@@ -5,14 +5,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+
 </head>
 <body>
 
 <header class="masthead mb-auto" th:fragment="header">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <div class="inner">
         <h3 class="masthead-brand">Pet Lovers</h3>
         <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link" href="/" data-path="/" >Home</a>
+            <!--  Dashboard   -->
+            <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/dashboard">home</a>
+            <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/dashboard">home</a>
+            <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/dashboard">home</a>
+            <a sec:authorize="hasRole('ROLE_ADOPTER')" class="nav-link" href="/adopter/dashboard">home</a>
+
+            <a sec:authorize="!isAuthenticated() or hasRole('ROLE_ADOPTER')" class="nav-link" href="/adopter/pets">Pets</a>
+
 
             <!-- Admin Links -->
             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin/users">Users</a>
@@ -28,12 +38,14 @@
             <a sec:authorize="hasRole('ROLE_SHELTER')" class="nav-link" href="/shelter/vet-review">Vet Request</a>
             <!-- Vet Links -->
             <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/health-status">Pet's Health Status</a>
-            <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/shelter-request">Request Shelter Submission</a>
+            <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/employment-request">Request Shelter Submission</a>
             <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/shelters">My Shelters</a>
             <!-- Adopter Links -->
             <a sec:authorize="hasRole('ROLE_ADOPTER')" class="nav-link" href="/adoption-requests/adopter">My Adoption Requests</a>
-            <a sec:authorize="hasRole('ROLE_ADOPTER')" class="nav-link" href="/adopter/pets">Pets</a>
 
+            <a sec:authorize="isAuthenticated() and !hasRole('ROLE_ADMIN')" class="nav-link" href="/profile">
+                <i class="fa-regular fa-user"></i>My Profile
+            </a>
             <!-- Authentication Links -->
             <a sec:authorize="!isAuthenticated()"  class="nav-link">
                 <a  class="nav-link" href="/login">Login</a>

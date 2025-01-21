@@ -45,8 +45,8 @@ public class EmailService {
         String text = """
             Dear %s,
             
-            Thank you for submitting your shelter to our platform.
-            After careful review, we regret to inform you that your submission has not been approved at this time.
+            Thank you for submitting a shelter registration to our platform.
+            After careful review, we regret to inform you that your submission has not been approved at this time and your account has been deleted.
             
             We value your interest and encourage you to reach out if you would like further details or guidance
             on how to meet the necessary criteria in the future.
@@ -174,6 +174,25 @@ public class EmailService {
             """.formatted(username);
 
         sendSimpleMessage(email, subject, text);
+    }
+
+    //account of user deleted by admin rule breaking
+    public void sendDeleteUserMessage(String email,String username) {
+        String subject = "Account Deletion";
+        String text = """
+            Dear %s,
+            
+            We regret to inform you that your account has been deleted due to a violation of our rules.
+            This action was taken by the admin team as part of our policy enforcement.
+
+            If you believe this is a mistake or if you have any questions, please contact us immediately at petloversplatform@gmail.com .
+
+            Best regards,
+            The Pet Lovers Team
+            """.formatted(username);
+
+        sendSimpleMessage(email, subject, text);
+
     }
 
 

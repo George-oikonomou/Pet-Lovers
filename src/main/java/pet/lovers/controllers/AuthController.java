@@ -36,7 +36,7 @@ public class AuthController {
         roleRepository.updateOrInsert(new Role(Role.SHELTER));
 
         // Create users
-        if (!userService.existsByUsername("admin")) {
+        if (!userService.existsByEmail("admin@gmail.com")) {
             User admin = new User("admin", "admin@gmail.com", "admin", "0123456789", "location");
             admin.getRoles().add(roleAdmin);
             userService.saveUser(admin);
@@ -45,12 +45,12 @@ public class AuthController {
         Adopter adopter;
         Shelter shelter;
 
-        if (!userService.existsByUsername("vet")) {
+        if (!userService.existsByEmail("vet@gmail.com")) {
             Vet vet = new Vet("vet", "vet@gmail.com", "vet", "1234567890", "location", "full name",  documentOfVet);
             userService.saveUser(vet);
         }
 
-        if (!userService.existsByUsername("shelter")) {
+        if (!userService.existsByEmail("shelter@gmail.com")) {
             shelter = new Shelter("shelter", "shelter@gmail.com", "shelter", "1345678902", "location", "shelter name", documentOfShelter);
             userService.saveUser(shelter);
 
@@ -64,7 +64,7 @@ public class AuthController {
             }
         }
 
-        if (!userService.existsByUsername("adopter")) {
+        if (!userService.existsByEmail("adopter@gmail.com")) {
              adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "location", "full name", LocalDate.now().minusYears(21), document);
              userService.saveUser(adopter);
         }

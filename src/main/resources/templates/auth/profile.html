@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>My Profile</h1>
+
+         <div th:if="${msg}" class="alert alert-success">
+            <p th:text="${msg}"></p>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger">
+            <p th:text="${error}"></p>
+        </div>
+
+    <form th:action="@{${redirectUrl}}" th:object="${user}" method="post">
+
+        <div class="form-group">
+            <input type="hidden" id="id" class="form-control" th:field="*{id}">
+        </div>
+
+        <div class="form-group">
+            <label for="firstName">Username</label>
+            <input type="text" id="firstName" class="form-control" th:field="*{username}">
+        </div>
+
+        <div class="form-group">
+            <label for="contactNumber">contactNumber</label>
+            <input type="text" class="form-control"
+                   th:field="*{contactNumber}"
+                   id="contactNumber"
+                   required
+                   pattern="[0-9]{10}"
+                   title="Contact number must be exactly 10 digits"
+                   maxlength="10"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            />
+        </div>
+
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Shelter'}">
+            <label for="name">Shelter Name</label>
+            <input type="text" id="name" class="form-control" th:field="*{fullName}" required>
+        </div>
+
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Adopter'}">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" class="form-control" th:field="*{fullName}"
+                   pattern="[A-Za-z]+(?: [A-Za-z]+){1,4}"
+                   title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')" required>
+        </div>
+
+
+
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Adopter'}" id="identification">
+            <label for="identification">Identification</label>
+            <div class="div-img">
+                <a th:href="|${user.getIdentification.path}|" target="_blank">
+                    <img class="document-img"  th:src="|${user.getIdentification.path}|" alt="link" />
+                </a>
+            </div>
+        </div>
+
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Shelter'}" id="Document">
+            <label for="Document">Document</label><br>
+            <div class="div-img">
+                <a th:href="|${user.getDocuments().path}|" target="_blank">
+                    <img class="document-img" th:src="|${user.getDocuments().path}|" alt="link"/>
+                </a>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" id="status" class="form-control" th:field="*{userStatus}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</body>
+</html>
+<style>
+    div.div-img {
+        display: inline-block;
+        padding: 0;
+        margin: 20px;
+        background: white;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+    }
+
+    img.document-img {
+        color: black;
+        max-width: 150px;
+        max-height: 150px;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+        transform: perspective(500px) rotateX(5deg);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    img.document-img:hover {
+        transform: perspective(500px) rotateX(0deg) scale(1.05);
+    }
+</style>

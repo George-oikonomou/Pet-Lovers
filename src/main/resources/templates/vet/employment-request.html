@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Shelter Request Submission</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>Request to Work with a Shelter</h1>
+
+    <!-- Display Success or Error Message -->
+    <div th:if="${param.success}">
+        <p class="alert alert-success">Your request has been submitted successfully!</p>
+    </div>
+
+    <div th:if="${param.error}">
+        <p class="alert alert-danger">You have already submitted a request for this shelter.</p>
+    </div>
+
+    <div th:if="${#lists.isEmpty(shelters)}">
+        <p>No shelters available at the moment.</p>
+    </div>
+
+    <div id="tableContainer" th:if="${not #lists.isEmpty(shelters)}">
+        <table class="datatable">
+            <thead>
+            <tr>
+                <th>Shelter Name</th>
+                <th>Location</th>
+                <th>Contact Number</th>
+                <th>Vet Assigned</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="shelter : ${shelters}">
+                <td th:text="${shelter.fullName}"></td>
+                <td th:text="${shelter.location}"></td>
+                <td th:text="${shelter.contactNumber}"></td>
+                <td th:if="${shelter.vet == null}">No Vet Assigned</td>
+                <td th:if="${shelter.vet != null}" th:text="${shelter.vet.fullName}"></td>
+
+                <td>
+                    <form th:action="@{/vet/employment-request}" method="post">
+                        <input type="hidden" name="shelterId" th:value="${shelter.id}" />
+                        <button type="submit" class="btn btn-primary">
+                            Request to Work Here
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>

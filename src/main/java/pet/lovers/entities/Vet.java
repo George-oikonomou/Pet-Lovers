@@ -24,6 +24,9 @@ public class Vet extends User {
 
     @OneToMany(mappedBy = "vet", cascade= CascadeType.ALL)
     private List<Shelter> shelters;
+
+    @OneToMany(mappedBy = "vet", cascade= CascadeType.ALL)
+    private List<EmploymentRequest> employmentRequests;
     // END TABLE COLUMNS
 
     public Vet() {}
@@ -32,6 +35,7 @@ public class Vet extends User {
         super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.documents = documents;
+        super.setUserStatus(UserStatus.APPROVED);
     }
 
     // GETTERS AND SETTERS
@@ -54,5 +58,12 @@ public class Vet extends User {
     }
     public void setShelters(List<Shelter> shelters) {
         this.shelters = shelters;
+    }
+
+    public List<EmploymentRequest> getEmploymentRequests() {
+        return employmentRequests;
+    }
+    public void setEmploymentRequests(List<EmploymentRequest> employmentRequests) {
+        this.employmentRequests = employmentRequests;
     }
 }

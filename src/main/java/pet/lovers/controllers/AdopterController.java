@@ -18,12 +18,19 @@ public class AdopterController {
     AdoptionRequestService adoptionRequestService;
     AdopterService adopterService;
     VisitService visitService;
+    ShelterService shelterService;
 
-    public AdopterController(VisitService visitService, PetService petService, AdoptionRequestService adoptionRequestService, AdopterService adopterService) {
+    public AdopterController(VisitService visitService, PetService petService, AdoptionRequestService adoptionRequestService, AdopterService adopterService,ShelterService shelterService) {
         this.visitService = visitService;
         this.petService = petService;
         this.adoptionRequestService = adoptionRequestService;
         this.adopterService = adopterService;
+        this.shelterService = shelterService;
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "index";
     }
 
     @GetMapping("/pets")
@@ -71,5 +78,37 @@ public class AdopterController {
         petService.updatePetStatus(pet, PetStatus.PENDING_ADOPTION);
         return "redirect:/adoption-requests/adopter";
     }
+
+    @GetMapping("/view-shelter/{shelter_id}")
+    public String viewShelter(Model model, @PathVariable int shelter_id){
+        Shelter shelter = shelterService.getShelterById(shelter_id);
+        model.addAttribute("shelter", shelter);
+        return "shelter/shelter-view";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADOPTER')")
+    @GetMapping("/shelter/{shelter_id}/request-visit")
+    public String visitShelter(@PathVariable Integer shelter_id, Model model) {
+        Shelter shelter = shelterService.findByUserId(shelter_id)
+                .orElseThrow(() -> new IllegalArgumentException("Pet not found"));
+
+        Adopter adopter = adopterService.getCurrentUser();
+
+        Visit visit = new Visit(LocalDateTime.now(), shelter, adopter);
+
+        model.addAttribute("visit",visit);
+        return "adopter/new-visit";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADOPTER')")
+    @PostMapping("/shelter/{shelter_id}/request-visit")
+    public String visitShelter(@PathVariable int shelter_id, Model model){
+        Shelter shelter = shelterService.getShelterById(shelter_id);
+        Adopter adopter = adopterService.getCurrentUser();
+        Visit visit = new Visit(LocalDateTime.now(),shelter,adopter);
+        visitService.save(visit);
+        return "redirect:/adopter/dashboard";
+    }
+
 }
 

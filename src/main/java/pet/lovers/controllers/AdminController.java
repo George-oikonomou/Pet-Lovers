@@ -44,39 +44,59 @@ public class AdminController {
     }
 
     @GetMapping("/user/{user_id}")
-    public String showUser(@PathVariable Long user_id, Model model){
+    public String showUser(@PathVariable Long user_id, Model model) {
         User user = (User) userService.getUser(user_id);
-        model.addAttribute("user", user);
 
         String redirectUrl = switch (user) {
-            case Adopter adopter-> "/admin/adopter/" + user_id;
-            case Shelter shelter-> "/admin/shelter/" + user_id;
-            case Vet vet-> "/admin/vet/" + user_id;
+            case Adopter adopter -> {
+                model.addAttribute("user", adopter);
+                yield "/admin/adopter/" + user_id;
+            }
+            case Shelter shelter -> {
+                model.addAttribute("user", shelter);
+                yield "/admin/shelter/" + user_id;
+            }
+            case Vet vet -> {
+                model.addAttribute("user", vet);
+                yield "/admin/vet/" + user_id;
+            }
             default -> "#";
         };
 
+        model.addAttribute("userStatuses", UserStatus.values());
         model.addAttribute("redirectUrl", redirectUrl);
         return "admin/user";
     }
 
+    @GetMapping("/users/{user_id}/delete")
+    public String deleteUser(@PathVariable Long user_id) {
+        User user = (User) userService.getUser(user_id);
+        String email = user.getEmail();
+        String username = user.getUsername();
+        userService.deleteUser(user_id);
+        emailService.sendDeleteUserMessage(email, username);
+        return "redirect:/admin/users";
+    }
+
+
     @PostMapping("/adopter/{user_id}")
     public String editAdopter(@PathVariable Long user_id, @ModelAttribute("user") Adopter adopter) {
         Adopter theAdopter = (Adopter) userService.getUser(user_id);
-        userService.updateUserDetails(theAdopter, adopter.getEmail(), adopter.getUsername(), adopter.getFullName(), adopter.getContactNumber());
+        userService.updateUserDetails(theAdopter, adopter.getEmail(), adopter.getUsername(), adopter.getFullName(), adopter.getContactNumber(), adopter.getUserStatus());
         return "redirect:/admin/users";
     }
 
     @PostMapping("/shelter/{user_id}")
     public String editShelter(@PathVariable Long user_id, @ModelAttribute("user") Shelter shelter) {
         Shelter theShelter = (Shelter) userService.getUser(user_id);
-        userService.updateUserDetails(theShelter, shelter.getEmail(), shelter.getUsername(), shelter.getFullName(), shelter.getContactNumber());
+        userService.updateUserDetails(theShelter, shelter.getEmail(), shelter.getUsername(), shelter.getFullName(), shelter.getContactNumber(),shelter.getUserStatus());
         return "redirect:/admin/users";
     }
 
     @PostMapping("/vet/{user_id}")
     public String editVet(@PathVariable Long user_id, @ModelAttribute("user") Vet vet) {
         Vet theVet = (Vet) userService.getUser(user_id);
-        userService.updateUserDetails(theVet, vet.getEmail(), vet.getUsername(), vet.getFullName(), vet.getContactNumber());
+        userService.updateUserDetails(theVet, vet.getEmail(), vet.getUsername(), vet.getFullName(), vet.getContactNumber(), vet.getUserStatus());
         return "redirect:/admin/users";
     }
 
@@ -159,7 +179,7 @@ public class AdminController {
     @PostMapping("/adoption-request/{id}/notify")
     public String notifyShelter(@PathVariable int id, HttpServletRequest request) {
         adoptionRequestService.findById(id)
-                .ifPresent(adoptionRequest -> emailService.sendReminderToShelter(adoptionRequest));
+                              .ifPresent(emailService::sendReminderToShelter);
 
         String referer = request.getHeader("Referer");
 

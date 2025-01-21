@@ -22,6 +22,10 @@ public class ShelterService {
 
     @Transactional
     public List<Shelter> getShelters(){
+        return shelterRepository.findByUserStatus(UserStatus.APPROVED);
+    }
+
+    public List<Shelter> getAllShelters(){
         return shelterRepository.findAll();
     }
 
@@ -44,8 +48,7 @@ public class ShelterService {
     @Transactional
     public void rejectShelter(Integer shelterId){
         Shelter shelter = shelterRepository.findById(shelterId).orElseThrow();
-        shelter.setUserStatus(UserStatus.REJECTED);
-        shelterRepository.save(shelter);
+        shelterRepository.delete(shelter);
     }
 
     public List<Shelter> findByVet(Vet vet) {

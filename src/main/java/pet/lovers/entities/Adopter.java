@@ -27,7 +27,7 @@ public class Adopter extends User {
     private LocalDate birthDate;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "identification", referencedColumnName = "id")
+    @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document identification;
 
     @OneToMany(mappedBy = "adopter", cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
@@ -45,7 +45,7 @@ public class Adopter extends User {
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.identification = identification;
-        super.setUserStatus(UserStatus.APPROVED); //adopter is automatically approved
+        super.setUserStatus(UserStatus.APPROVED);
     }
 
     //GETTERS AND SETTERS

@@ -50,10 +50,10 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Integer updateUser(User user) {
+    public void updateUser(User user) {
         user = userRepository.save(user);
-        return user.getId();
     }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -75,11 +75,12 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void updateUserDetails(User user, String email, String username, String fullName, String contactNumber) {
+    public void updateUserDetails(User user, String email, String username, String fullName, String contactNumber, UserStatus userStatus) {
         user.setEmail(email);
         user.setUsername(username);
         user.setFullName(fullName);
         user.setContactNumber(contactNumber);
+        user.setUserStatus(userStatus);
 
         this.updateUser(user);
     }
@@ -164,5 +165,9 @@ public class UserService implements UserDetailsService {
                 userRepository.save(user);
             }
         });
+    }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
     }
 }

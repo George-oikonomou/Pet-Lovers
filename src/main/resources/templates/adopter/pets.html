@@ -27,8 +27,8 @@
     <!-- Filter Buttons -->
     <div id="myBtnContainer">
         <button class="btn active" onclick="filterSelection('ALL')"> Show All</button>
-        <button class="btn" onclick="filterSelection('DOG')"> Dogs</button>
-        <button class="btn" onclick="filterSelection('CAT')"> Cats</button>
+        <button class="btn" onclick="filterSelection('Dog')"> Dogs</button>
+        <button class="btn" onclick="filterSelection('Cat')"> Cats</button>
     </div>
 
     <!-- Message if no pets -->
@@ -61,7 +61,12 @@
                 <td th:text="${pet.sex}"></td>
                 <td th:text="${pet.yearBirthed}"></td>
                 <td th:text="${pet.weight} + ' kg'"></td>
-                <td th:text="${pet.shelter.fullName}"></td>
+                <td>
+                    <a th:href="@{/adopter/view-shelter/{shelter_id}(shelter_id=${pet.shelter.id})}"
+                       th:text="${pet.shelter.fullName}"
+                       style="color: black; text-decoration: underline">
+                    </a>
+                </td>
                 <td th:text="${pet.shelter.location}"></td>
                 <td th:text="${pet.petStatus}"></td>
                 <td>

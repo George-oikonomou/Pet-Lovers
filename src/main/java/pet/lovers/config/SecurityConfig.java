@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configurers.LogoutConf
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import pet.lovers.repositories.UserRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -15,25 +17,28 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final RoleBasedSuccessHandler roleBasedSuccessHandler;
+    private final UserRepository userRepository;
 
-    public SecurityConfig(RoleBasedSuccessHandler roleBasedSuccessHandler) {
+    public SecurityConfig(RoleBasedSuccessHandler roleBasedSuccessHandler, UserRepository userRepository) {
         this.roleBasedSuccessHandler = roleBasedSuccessHandler;
+        this.userRepository = userRepository;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/home","/forgot-password","/reset-password", "/register/**", "/images/**", "/js/**", "/css/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/", "/home", "/images/**", "/js/**", "/css/**", "/adopter/pets/**","/adopter/view-shelter/**").permitAll()
+                        .requestMatchers("/adopter/**", "/adoption-requests/adopter/**","/adopter/pets/**","/adopter/view-shelter/**").hasRole("ADOPTER")
                         .requestMatchers("/shelter/**" , "/adoption-requests/shelter/**" ).hasRole("SHELTER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/vet/**").hasRole("VET")
-                        .requestMatchers("/adopter/**", "adoption-requests/adopter/**").hasRole("ADOPTER")
+                        .requestMatchers("/forgot-password","/reset-password", "/register/**","/login").anonymous()
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .successHandler(roleBasedSuccessHandler) // Use role-based handler
-                        .permitAll())
+                .addFilterBefore(new UserStatusAuthorizationFilter(userRepository), UsernamePasswordAuthenticationFilter.class)
+                .formLogin(form -> form.loginPage("/login")
+                                       .successHandler(roleBasedSuccessHandler)
+                                       .permitAll())
                 .logout(LogoutConfigurer::permitAll);
 
         return http.build();

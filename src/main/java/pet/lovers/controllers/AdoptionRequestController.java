@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pet.lovers.entities.*;
 import pet.lovers.service.AdopterService;
 import pet.lovers.service.AdoptionRequestService;
+import pet.lovers.service.ShelterService;
 import pet.lovers.service.UserService;
 
 import java.util.List;
@@ -18,12 +19,14 @@ public class AdoptionRequestController {
     private final AdoptionRequestService adoptionRequestService;
     private final UserService userService;
     private final AdopterService adopterService;
+    private final ShelterService shelterService;
 
 
-    public AdoptionRequestController( AdoptionRequestService adoptionRequestService , UserService userService, AdopterService adopterService) {
+    public AdoptionRequestController( AdoptionRequestService adoptionRequestService , UserService userService, AdopterService adopterService, ShelterService shelterService) {
         this.userService = userService;
         this.adoptionRequestService = adoptionRequestService;
         this.adopterService = adopterService;
+        this.shelterService = shelterService;
     }
 
     //ADOPTER

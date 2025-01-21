@@ -25,6 +25,8 @@ public class Shelter extends User{
     @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pet> pets;
 
+    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EmploymentRequest> employmentRequests;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
@@ -33,7 +35,7 @@ public class Shelter extends User{
 
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "documents", referencedColumnName = "id")
+    @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document documents;
     // END TABLE COLUMNS
 
@@ -82,5 +84,12 @@ public class Shelter extends User{
     }
     public void setDocuments(Document documents) {
         this.documents = documents;
+    }
+
+    public List<EmploymentRequest> getEmploymentRequests() {
+        return employmentRequests;
+    }
+    public void setEmploymentRequests(List<EmploymentRequest> employmentRequests) {
+        this.employmentRequests = employmentRequests;
     }
 }

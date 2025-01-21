@@ -2,6 +2,7 @@ package pet.lovers.controllers;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pet.lovers.entities.*;
 import pet.lovers.service.EmailService;
 import pet.lovers.service.UserService;
@@ -10,16 +11,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Controller
 public class UserController {
 
-    private final EmailService emailService;
     @Value("${google.api.key}")
     private String googleApiKey;
 
+    private final EmailService emailService;
     private final UserService userService;
 
     public UserController(UserService userService, EmailService emailService) {
@@ -125,5 +125,68 @@ public class UserController {
             model.addAttribute("error", "An unexpected error occurred. Please try again.");
             return "auth/reset-password";
         }
+    }
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        User user = userService.getCurrentUser();
+
+        String redirectUrl = switch (user) {
+            case Adopter adopter -> {
+                model.addAttribute("user", adopter);
+                yield "/profile/adopter/submit";
+            }
+            case Shelter shelter -> {
+                model.addAttribute("user", shelter);
+                yield "/profile/shelter/submit";
+            }
+            case Vet vet -> {
+                model.addAttribute("user", vet);
+                yield "/profile/vet/submit";
+            }
+            default -> "#";
+        };
+        model.addAttribute("msg", model.asMap().get("msg"));
+        model.addAttribute("error", model.asMap().get("error"));
+        model.addAttribute("redirectUrl", redirectUrl);
+        return "auth/profile";
+    }
+
+    @PostMapping("/profile/adopter/submit")
+    public String updateProfileAdopter(@ModelAttribute Adopter user,RedirectAttributes redirectAttributes) {
+         try {
+            Adopter theUser = (Adopter) userService.getCurrentUser();
+            userService.updateUserDetails(theUser, theUser.getEmail(), user.getUsername(), user.getFullName(), user.getContactNumber(), user.getUserStatus());
+             redirectAttributes.addFlashAttribute("msg", "Profile updated successfully!");
+        } catch (Exception e) {
+             redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
+        }
+
+        return "redirect:/profile";
+    }
+
+    @PostMapping("/profile/shelter/submit")
+    public String updateProfileShelter(@ModelAttribute Shelter user,RedirectAttributes redirectAttributes) {
+        try {
+            Shelter theUser = (Shelter) userService.getCurrentUser();
+            userService.updateUserDetails(theUser, theUser.getEmail(), user.getUsername(), user.getFullName(), user.getContactNumber(), user.getUserStatus());
+            redirectAttributes.addFlashAttribute("msg", "Profile updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
+        }
+
+        return "redirect:/profile";
+    }
+
+    @PostMapping("/profile/vet/submit")
+    public String updateProfileVet(@ModelAttribute Vet user,RedirectAttributes redirectAttributes) {
+        try {
+            Vet theUser = (Vet) userService.getCurrentUser();
+            userService.updateUserDetails(theUser, theUser.getEmail(), user.getUsername(), user.getFullName(), user.getContactNumber(), user.getUserStatus());
+            redirectAttributes.addFlashAttribute("msg", "Profile updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
+        }
+        return "redirect:/profile";
     }
 }

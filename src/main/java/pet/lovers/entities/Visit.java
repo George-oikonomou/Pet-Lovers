@@ -49,6 +49,13 @@ public class Visit {
         this.contactNumber = adopter.getContactNumber();
     }
 
+    public Visit(LocalDateTime dateTime, Shelter shelter, Adopter adopter ) {
+        this.dateTime = dateTime;
+        this.shelter = shelter;
+        this.adopter = adopter;
+        this.contactNumber = adopter.getContactNumber();
+    }
+
     public Visit() {}
 
     // GETTERS AND SETTERS
