@@ -68,17 +68,6 @@ public class AdminController {
         return "admin/user";
     }
 
-    @GetMapping("/users/{user_id}/delete")//todo
-    public String deleteUser(@PathVariable Long user_id) {
-        User user = (User) userService.getUser(user_id);
-        String email = user.getEmail();
-        String username = user.getUsername();
-        userService.deleteUser(user_id);
-        emailService.sendDeleteUserMessage(email, username);
-        return "redirect:/admin/users";
-    }
-
-
     @PostMapping("/adopter/{user_id}")//todo
     public String editAdopter(@PathVariable Long user_id, @ModelAttribute("user") Adopter adopter) {
         Adopter theAdopter = (Adopter) userService.getUser(user_id);

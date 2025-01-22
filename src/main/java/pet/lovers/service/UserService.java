@@ -22,16 +22,18 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
 
+    private final EmailService emailService;
     private UserRepository userRepository;
 
     private RoleRepository roleRepository;
 
     private BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -83,6 +85,13 @@ public class UserService implements UserDetailsService {
         user.setUserStatus(userStatus);
 
         this.updateUser(user);
+
+        if (userStatus == UserStatus.APPROVED)
+            emailService.sendRejectedUserMessage(user.getEmail(), user.getUsername());
+        else if (userStatus == UserStatus.REJECTED)
+            emailService.sendRejectedUserMessage(user.getEmail(), user.getUsername());
+        else if (userStatus == UserStatus.PENDING)
+            emailService.sendPendingUserMessage(user.getEmail(), user.getUsername());
     }
 
     @Transactional
@@ -165,9 +174,5 @@ public class UserService implements UserDetailsService {
                 userRepository.save(user);
             }
         });
-    }
-
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
     }
 }

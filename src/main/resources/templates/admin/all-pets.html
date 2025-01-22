@@ -22,39 +22,39 @@
         <table class="datatable">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Sex</th>
-                <th>Type</th>
-                <th>Breed</th>
-                <th>Birth Year</th>
-                <th>Shelter</th>
-                <th>Health Status</th>
-                <th>User Status</th>
-                <th>Pet Status</th>
-                <th>Vet Phone</th>
-                <th>Actions</th>
+                <th style="font-size: 0.9em; padding: 8px;">Name</th>
+                <th style="font-size: 0.9em; padding: 8px;">Sex</th>
+                <th style="font-size: 0.9em; padding: 8px;">Type</th>
+                <th style="font-size: 0.9em; padding: 8px;">Breed</th>
+                <th style="font-size: 0.9em; padding: 8px;">Birth Year</th>
+                <th style="font-size: 0.9em; padding: 8px;">Shelter</th>
+                <th style="font-size: 0.9em; padding: 8px;">Health Status</th>
+                <th style="font-size: 0.9em; padding: 8px;">User Status</th>
+                <th style="font-size: 0.9em; padding: 8px;">Pet Status</th>
+                <th style="font-size: 0.9em; padding: 8px;">Vet Phone</th>
+                <th style="font-size: 0.9em; padding: 8px;">Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="pet : ${pets}">
-                <td th:text="${pet.name}"></td>
-                <td th:text="${pet.sex}"></td>
-                <td th:text="${pet.type}"></td>
-                <td th:text="${pet.breed}"></td>
-                <td th:text="${pet.yearBirthed}"></td>
-                <td>
+                <td style="font-size: 0.9em; padding: 8px;" th:text="${pet.name}"></td>
+                <td style="font-size: 0.9em; padding: 8px;" th:text="${pet.sex}"></td>
+                <td style="font-size: 0.9em; padding: 8px;" th:text="${pet.type}"></td>
+                <td style="font-size: 0.9em; padding: 8px;" th:text="${pet.breed}"></td>
+                <td style="font-size: 0.9em; padding: 8px;" th:text="${pet.yearBirthed}"></td>
+                <td style="font-size: 0.9em; padding: 8px;">
                     <a th:href="@{/admin/user/{user_id}(user_id=${pet.shelter.id})}"
                        th:text="${pet.shelter.fullName}"
                        style="color: black; text-decoration: underline">
                     </a>
                 </td>
-                <td th:text="${pet.healthStatus}"></td>
-                <td th:text="${pet.userStatus}"></td>
-                <td th:text="${pet.petStatus}"></td>
-
-
-                <td th:text="${pet.shelter != null && pet.shelter.vet != null ? pet.shelter.vet.contactNumber : 'N/A'}"></td>
-                <td>
+                <td style="font-size: 0.9em; padding: 8px;" th:text="${pet.healthStatus}"></td>
+                <td style="font-size: 0.9em; padding: 8px;" th:text="${pet.userStatus}"></td>
+                <td style="font-size: 0.9em; padding: 8px;" th:text="${pet.petStatus}"></td>
+                <td style="font-size: 0.9em; padding: 8px;"
+                    th:text="${pet.shelter != null && pet.shelter.vet != null ? pet.shelter.vet.contactNumber : 'N/A'}">
+                </td>
+                <td style="font-size: 0.9em; padding: 8px;">
                     <a th:if="${pet.adoptionRequests.size() > 0}" class="btn btn-info"
                        th:href="@{/admin/adoption-request/{id}(id=${pet.id})}">View Adoption Request</a>
                     <span th:if="${pet.adoptionRequests.size() == 0}">No Adoption Requests</span>
