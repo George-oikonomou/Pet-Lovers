@@ -25,18 +25,16 @@
             <tr>
                 <th>Shelter</th>
                 <th>Shelter Location</th>
+                <th>Shelter Email</th>
                 <th>Contact Number</th>
                 <th>Visit Time</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="visit : ${visits}">
-                <td>
-                    <a th:href="@{/view-shelter/{shelter_id}(shelter_id=${visit.shelter.id})}"
-                       th:text="${visit.shelter.fullName}"
-                       style="color: black; text-decoration: underline">
-                    </a>
-                </td>                <td th:text="${visit.shelter.location}"></td>
+                <td th:text="${visit.shelter.fullName}"></td>
+                <td th:text="${visit.shelter.location}"></td>
+                <td th:text="${visit.shelter.email}"></td>
                 <td th:text="${visit.shelter.contactNumber}"></td>
                 <td th:text="${visit.getReadableDateTime()}"></td>
             </tr>
