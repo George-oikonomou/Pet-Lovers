@@ -88,7 +88,7 @@
                         <input th:field="*{vet.contactNumber}" id="vetContactNumber" type="text" class="form-control" readonly style="width: 200px; padding: 10px; text-align: center;" />
                     </label><br>
                 </div>
-                <div th:if="${user.getVet.userStatus.toString() == 'PENDING'}" class="text-danger mt-2">
+                <div th:if="${user.getVet.userStatus.toString() != 'APPROVED'}" class="text-danger mt-2">
                     The assigned veterinarian is currently unavailable. We recommend reviewing and assigning a new vet to your shelter if necessary.
                 </div>
             </div>
