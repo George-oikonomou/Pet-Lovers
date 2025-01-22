@@ -7,13 +7,48 @@
 <head>
     <meta charset="UTF-8">
     <title>My Shelters</title>
+    <script>
+        function filterSelection(status) {
+            const shelters = document.querySelectorAll('.shelter-row');
+
+            shelters.forEach(function (request) {
+                let matchesStatus = false;
+
+                if (status === "ALL") {
+                    matchesStatus = true;
+                } else if (status === "APPROVED" && request.dataset.status === "APPROVED") {
+                    matchesStatus = true;
+                } else if (status === "NOT APPROVED" && request.dataset.status !== "APPROVED") {
+                    matchesStatus = true;
+                }
+
+                if (matchesStatus) {
+                    request.style.display = "table-row";
+                } else {
+                    request.style.display = "none";
+                }
+            });
+
+            // Show or hide the "No results" message
+            const visibleRows = Array.from(shelters).filter(row => row.style.display === "table-row");
+            document.getElementById("noResultsMessage").style.display = visibleRows.length ? "none" : "block";
+        }
+    </script>
 </head>
 <body>
 <div layout:fragment="main-content">
     <h1>My Shelters</h1>
 
-    <div th:if="${#lists.isEmpty(shelters)}">
-        <p>No shelters available at the moment.</p>
+    <!-- Message if no shelters -->
+    <div id="noResultsMessage" th:if="${#lists.isEmpty(shelters)}" style="display: none;">
+        <p>No Shelter found for the selected filter.</p>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div id="myBtnContainer">
+        <button class="btn active" onclick="filterSelection('ALL')">Show All</button>
+        <button class="btn" onclick="filterSelection('APPROVED')">Active</button>
+        <button class="btn" onclick="filterSelection('NOT APPROVED')">Inactive</button>
     </div>
 
     <div id="tableContainer" th:if="${not #lists.isEmpty(shelters)}">
@@ -28,7 +63,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="shelter : ${shelters}">
+            <tr th:each="shelter : ${shelters}"  class="shelter-row" th:data-status="${shelter.userStatus.toString()}">
                 <td th:text="${shelter.fullName}"></td>
                 <td th:text="${shelter.contactNumber}"></td>
                 <td th:text="${shelter.location}"></td>
