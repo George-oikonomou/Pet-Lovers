@@ -35,7 +35,6 @@ public class Vet extends User {
         super(username, email, password, contactNumber, location);
         this.fullName = fullName;
         this.documents = documents;
-        super.setUserStatus(UserStatus.APPROVED);
     }
 
     // GETTERS AND SETTERS

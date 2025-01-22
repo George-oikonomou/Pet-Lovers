@@ -42,7 +42,7 @@ public class User {
     private String location;
 
     @Enumerated(EnumType.STRING)
-    private UserStatus userStatus = UserStatus.PENDING; // Default status
+    private UserStatus userStatus = UserStatus.PENDING;
 
 
     @ManyToMany(fetch = FetchType.LAZY)

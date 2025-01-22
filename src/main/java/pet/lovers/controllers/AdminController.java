@@ -5,8 +5,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pet.lovers.entities.*;
 import pet.lovers.service.*;
+
+import java.util.Optional;
 
 
 @Controller
@@ -43,7 +46,7 @@ public class AdminController {
         return "admin/users";
     }
 
-    @GetMapping("/user/{user_id}")//todo
+    @GetMapping("/user/{user_id}")
     public String showUser(@PathVariable Long user_id, Model model) {
         User user = (User) userService.getUser(user_id);
 
@@ -68,21 +71,21 @@ public class AdminController {
         return "admin/user";
     }
 
-    @PostMapping("/adopter/{user_id}")//todo
+    @PostMapping("/adopter/{user_id}")
     public String editAdopter(@PathVariable Long user_id, @ModelAttribute("user") Adopter adopter) {
         Adopter theAdopter = (Adopter) userService.getUser(user_id);
         userService.updateUserDetails(theAdopter, adopter.getEmail(), adopter.getUsername(), adopter.getFullName(), adopter.getContactNumber(), adopter.getUserStatus());
         return "redirect:/admin/users";
     }
 
-    @PostMapping("/shelter/{user_id}")//todo
+    @PostMapping("/shelter/{user_id}")
     public String editShelter(@PathVariable Long user_id, @ModelAttribute("user") Shelter shelter) {
         Shelter theShelter = (Shelter) userService.getUser(user_id);
         userService.updateUserDetails(theShelter, shelter.getEmail(), shelter.getUsername(), shelter.getFullName(), shelter.getContactNumber(),shelter.getUserStatus());
         return "redirect:/admin/users";
     }
 
-    @PostMapping("/vet/{user_id}")//todo
+    @PostMapping("/vet/{user_id}")
     public String editVet(@PathVariable Long user_id, @ModelAttribute("user") Vet vet) {
         Vet theVet = (Vet) userService.getUser(user_id);
         userService.updateUserDetails(theVet, vet.getEmail(), vet.getUsername(), vet.getFullName(), vet.getContactNumber(), vet.getUserStatus());
@@ -90,67 +93,83 @@ public class AdminController {
     }
 
     //SHELTER MANAGEMENT
-    @GetMapping("/shelters")//todo
+    @GetMapping("/shelters")
     public String viewPendingShelters(Model model) {
         model.addAttribute("shelters", shelterService.getSheltersByUserStatus(UserStatus.PENDING));
         return "admin/shelters";
     }
 
-    @GetMapping("/shelters/approve/{id}")//todo
-    public String approveShelter(@PathVariable int id) {
-        shelterService.findByUserId(id).ifPresent(shelter -> {
+    @GetMapping("/shelters/approve/{id}")
+    public String approveShelter(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        Optional<Shelter> shelter = shelterService.findByUserId(id);
+        if (shelter.isPresent()) {
             shelterService.approveShelter(id);
-            emailService.sendAcceptShelterMessage(shelter);
-        });
-
+            emailService.sendAcceptShelterMessage(shelter.get());
+            redirectAttributes.addFlashAttribute("msg", "Successfully approved shelter.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Shelter not found.");
+        }
         return "redirect:/admin/shelters";
     }
 
-    @GetMapping("/shelters/reject/{id}")//todo
-    public String rejectShelter(@PathVariable int id) {
-        shelterService.findByUserId(id).ifPresent(shelter -> {
+
+    @GetMapping("/shelters/reject/{id}")
+    public String rejectShelter(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        Optional<Shelter> shelter = shelterService.findByUserId(id);
+        if (shelter.isPresent()) {
             shelterService.rejectShelter(id);
-            emailService.sendRejectShelterMessage(shelter);
-        });
+            emailService.sendRejectShelterMessage(shelter.get());
+            redirectAttributes.addFlashAttribute("msg", "Successfully rejected shelter.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Shelter not found.");
+        }
 
         return "redirect:/admin/shelters";
     }
 
     //PET MANAGEMENT
-    @GetMapping("/pets")//todo
+    @GetMapping("/pets")
     public String viewPets(Model model) {
         model.addAttribute("pets", petService.getPetsByUserStatus(UserStatus.PENDING));
         return "admin/pets";
     }
 
     @GetMapping("/pets/approve/{id}")//todo
-    public String approvePet(@PathVariable int id) {
-        petService.findById(id).ifPresent(pet -> {
+    public String approvePet(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        Optional<Pet> pet = petService.findById(id);
+        if (pet.isPresent()) {
             petService.approvePet(id);
-            emailService.sendApprovePetMessage(pet);
-        });
+            emailService.sendApprovePetMessage(pet.get());
+            redirectAttributes.addFlashAttribute("msg", "Successfully approved pet.");
+        }else {
+            redirectAttributes.addFlashAttribute("error", "Pet not found.");
+        }
 
         return "redirect:/admin/pets";
     }
 
-    @GetMapping("/pets/reject/{id}")//todo
-    public String rejectPet(@PathVariable int id) {
-        petService.findById(id).ifPresent(pet -> {
+    @GetMapping("/pets/reject/{id}")
+    public String rejectPet(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        Optional<Pet> pet = petService.findById(id);
+        if (pet.isPresent()) {
             petService.rejectPet(id);
-            emailService.sendRejectPetMessage(pet);
-        });
+            emailService.sendRejectPetMessage(pet.get());
+            redirectAttributes.addFlashAttribute("msg", "Successfully rejected pet.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Pet not found.");
+        }
 
         return "redirect:/admin/pets";
     }
 
-    @GetMapping("/pets/all")//todo
+    @GetMapping("/pets/all")
     public String viewAllPets(Model model) {
         model.addAttribute("pets", petService.getPets());
         return "admin/all-pets";
     }
 
     // VIEW ADOPTION REQUESTS
-    @GetMapping("/adoption-requests")//todo
+    @GetMapping("/adoption-requests")
     public String viewAdoptions(Model model) {
         model.addAttribute("adoptionRequests", adoptionRequestService.getAdoptionRequests());
         return "admin/adoption-requests";
@@ -158,21 +177,26 @@ public class AdminController {
 
     @GetMapping("/adoption-request/{id}")//todo
     public String viewAdoptionRequest(@PathVariable int id, Model model) {
-        AdoptionRequest request = adoptionRequestService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Adoption request not found"));
+        try {
+            AdoptionRequest request = adoptionRequestService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            model.addAttribute("adoptionRequest", request);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "Adoption request not found.");
+        }
 
-        model.addAttribute("adoptionRequest", request);
         return "admin/adoption-request";
     }
 
-    @PostMapping("/adoption-request/{id}/notify")//todo
-    public String notifyShelter(@PathVariable int id, HttpServletRequest request) {
+    @PostMapping("/adoption-request/{id}/notify")
+    public String notifyShelter(@PathVariable int id, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         adoptionRequestService.findById(id)
                               .ifPresent(emailService::sendReminderToShelter);
 
         String referer = request.getHeader("Referer");
 
         if (referer != null) {
+            redirectAttributes.addFlashAttribute("msg", "Successfully sent notification to shelter.");
+
             if (referer.contains("/adoption-requests")) {
                 return "redirect:/admin/adoption-requests";
             } else if (referer.contains("/adoption-request")) {
@@ -180,6 +204,7 @@ public class AdminController {
             }
         }
 
+        redirectAttributes.addFlashAttribute("msg", "Successfully sent notification to shelter.");
         return "redirect:/admin/adoption-requests";
     }
 }

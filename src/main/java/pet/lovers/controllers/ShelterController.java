@@ -4,16 +4,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import pet.lovers.entities.EmploymentRequest;
-import pet.lovers.entities.Pet;
-import pet.lovers.entities.Shelter;
-import pet.lovers.entities.Vet;
-import pet.lovers.entities.UserStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pet.lovers.entities.*;
 import pet.lovers.service.EmploymentRequestService;
 import pet.lovers.service.PetService;
 import pet.lovers.service.UserService;
@@ -21,6 +14,7 @@ import pet.lovers.service.VetService;
 import pet.lovers.service.ShelterService;
 
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -130,5 +124,54 @@ public class ShelterController {
             return "shelter/vet-review";
         }
         return "redirect:/shelter/vet-review?success";
+    }
+
+    @GetMapping("/pets/{petId}/edit")
+    public String editPet(Model model, @PathVariable String petId) {
+        Shelter shelter = (Shelter) userService.getCurrentUser();
+        try {
+            Pet pet = shelter.getPets().stream()
+                                       .filter(p -> p.getId() == Integer.parseInt(petId))
+                                       .findFirst()
+                                       .orElseThrow(IllegalArgumentException::new);
+
+            model.addAttribute("pet", pet);
+            model.addAttribute("PetStatuses", Arrays.asList(PetStatus.AVAILABLE, PetStatus.UNAVAILABLE));
+            return "shelter/edit-pet";
+        }catch (IllegalArgumentException e){
+            model.addAttribute("error", "Pet not found!");
+            return "shelter/pets";
+        }
+    }
+
+    @PostMapping("/pets/pet/edit")
+    public String updatePet(@ModelAttribute Pet pet, RedirectAttributes redirectAttributes) {
+        Shelter shelter = (Shelter) userService.getCurrentUser();
+
+
+
+        try {
+            Pet selectedPet = shelter.getPets().stream()
+                                               .filter(p -> p.getId() == pet.getId())
+                                               .findFirst()
+                                               .orElseThrow(IllegalArgumentException::new);
+
+
+            if (pet.getPetStatus() != selectedPet.getPetStatus()
+                    && (selectedPet.getPetStatus() == PetStatus.PENDING_ADOPTION || selectedPet.getPetStatus() == PetStatus.ADOPTED))
+            {
+                redirectAttributes.addFlashAttribute("error", "Pets under adoption process cannot be updated!");
+                return "redirect:/shelter/pets";
+            }
+
+
+
+            petService.updatePet(selectedPet, pet.getName(), pet.getBreed(), pet.getPetStatus(), pet.getYearBirthed(), pet.getType(), pet.getWeight(), pet.getSex());
+            redirectAttributes.addFlashAttribute("success", "Pet updated successfully!");
+            return "redirect:/shelter/pets";
+        }catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("error", "Pet not found!");
+            return "redirect:/shelter/pets";
+        }
     }
 }

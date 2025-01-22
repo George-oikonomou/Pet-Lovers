@@ -99,14 +99,10 @@ public class VetController {
         }
     }
 
-    @GetMapping("/shelters")//todo
+    @GetMapping("/shelters")
     public String viewShelters(Model model) {
         Vet vet = (Vet) userService.getCurrentUser();
-        List<Shelter> shelters = shelterService.findByVet(vet)
-                                               .stream()
-                                               .filter(shelterService::isActiveShelter)
-                                               .toList();
-
+        List<Shelter> shelters = shelterService.findByVet(vet);
 
         model.addAttribute("shelters", shelters);
         return "vet/shelters";

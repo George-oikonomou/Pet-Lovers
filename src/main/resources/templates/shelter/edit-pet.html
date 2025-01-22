@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Register New Pet</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+  <h1>Edit Pet</h1>
+
+  <form th:action="@{/shelter/pets/pet/edit}" method="post" th:object="${pet}" oninput="validateForm()">
+
+    <input type="hidden" th:field="*{id}" id="id" name="id"/>
+
+    <div class="form-group row">
+      <div class="col-md-6">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" th:field="*{name}" id="name" required
+               pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
+               title="Name must contain at least two words with alphabetic characters"
+               th:readonly="${pet.petStatus == 'ADOPTED'}"/>
+
+      </div>
+
+      <div class="col-md-6">
+        <label for="breed">Breed</label>
+        <input type="text" class="form-control" th:field="*{breed}" id="breed" required
+               pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
+               title="Breed must contain alphabetic characters"/>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-md-6">
+        <label for="type">Type</label>
+        <select id="type" th:field="*{type}" name="type" class="form-control" er>
+          <option value="dog">Dog</option>
+          <option value="cat">Cat</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="sex">Sex:</label>
+        <select id="sex" th:field="*{sex}" name="sex" class="form-control">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-md-6">
+        <label for="yearBirthed">Year Born</label>
+        <input type="text" th:field="*{yearBirthed}" id="yearBirthed" name="yearBirthed" class="form-control"
+               maxlength="4" required pattern="^\d{4}$"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 4); validateForm();"
+               title="The year should be between 2000 and 2025"/>
+      </div>
+
+      <div class="col-md-6">
+        <label for="weightNumber">Weight (kg)</label>
+        <input type="number" th:field="*{weight}" id="weightNumber" name="weight"
+               class="form-control" min="1" max="100" step="0.1" required
+               pattern="^\d{1,3}$"/>
+      </div>
+    </div>
+
+    <div th:if="${pet.petStatus.toString() != 'ADOPTED' and pet.petStatus.toString() != 'PENDING_ADOPTION'}">
+        <label for="petStatus">Pet Status </label>
+      <select id="petStatus" th:field="*{petStatus}" name="petStatus" class="form-control">
+              <option th:each="status : ${PetStatuses}"
+                      th:value="${status}" th:text="${status}">
+              </option>
+          </select>
+    </div>
+    <input type="hidden" th:field="*{petStatus}" id="petStatusHidden" name="petStatus"/>
+
+    <button type="submit" class="btn btn-primary" id="submitBtn"  style="margin-top: 10px" disabled >Update Pet</button>
+  </form>
+</div>
+</body>
+</html>
+
+<script>
+  window.onload = function () {
+    validateForm();
+  };
+
+  function validateForm() {
+    const name = document.getElementById('name').value.trim();
+    const breed = document.getElementById('breed').value.trim();
+    const type = document.getElementById('type').value;
+    const sex = document.getElementById('sex').value;
+    const yearBirthed = document.getElementById('yearBirthed').value.trim();
+    const weightNumber = document.getElementById('weightNumber').value.trim();
+    const submitBtn = document.getElementById('submitBtn');
+    const isTypeValid = type !== "" && type !== "Select type";
+    const isSexValid = sex !== "" && sex !== "Select sex";
+    const allFieldsFilled = name && breed && isTypeValid && isSexValid && yearBirthed.length === 4 && weightNumber;
+    submitBtn.disabled = !allFieldsFilled;
+  }
+
+  const petStatus = "[[${pet.petStatus}]]";
+
+  if (petStatus === 'ADOPTED') {
+    document.querySelectorAll('#name, #breed, #type, #sex, #yearBirthed, #weightNumber').forEach(field => {
+      field.setAttribute('readonly', "true");
+      field.setAttribute('disabled', "true");
+    });
+  }else if (petStatus === 'AVAILABLE' || petStatus === 'UNAVAILABLE') {
+    document.getElementById('petStatus').removeAttribute('disabled');
+    document.getElementById('petStatus').removeAttribute('readonly');
+
+  }
+</script>

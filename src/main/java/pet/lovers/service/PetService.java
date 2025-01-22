@@ -79,6 +79,17 @@ public class PetService {
         return pet.getPetStatus().equals(PetStatus.AVAILABLE) && pet.getUserStatus().equals(UserStatus.APPROVED) && pet.getHealthStatus().equals(HealthStatus.HEALTHY) && pet.getShelter().getUserStatus().equals(UserStatus.APPROVED);
     }
 
+    public void updatePet(Pet pet, String name, String breed,  PetStatus petStatus,Integer yearBirthed, String type, Double weight,String sex) {
+        pet.setName(name);
+        pet.setBreed(breed);
+        pet.setPetStatus(petStatus);
+        pet.setYearBirthed(yearBirthed);
+        pet.setType(type);
+        pet.setWeight(weight);
+        pet.setSex(sex);
+
+        petRepository.save(pet);
+    }
 
     public boolean existsByName(String name) {
         return petRepository.existsByName(name);
