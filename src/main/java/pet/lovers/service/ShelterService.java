@@ -53,7 +53,8 @@ public class ShelterService {
     @Transactional
     public void rejectShelter(Integer shelterId){
         Shelter shelter = shelterRepository.findById(shelterId).orElseThrow();
-        shelterRepository.delete(shelter);
+        shelter.setUserStatus(UserStatus.REJECTED);
+        shelterRepository.save(shelter);
     }
 
     public List<Shelter> findByVet(Vet vet) {

@@ -61,8 +61,6 @@ public class ShelterController {
     public String savePet(@ModelAttribute Pet pet, Model model){//todo Service
         Shelter shelter = (Shelter) userService.getCurrentUser();
         pet.setShelter(shelter);
-        shelter.getPets().add(pet);
-        shelterService.updateShelter(shelter);
         Integer id = petService.savePet(pet);
         String message = "Pet '"+id+"' : "+ pet.getName() +" saved successfully !";
         model.addAttribute("msg", message);
@@ -118,7 +116,6 @@ public class ShelterController {
 
             EmploymentRequest request = employmentRequestService.findByVetAndShelter(selectedVet, shelter).orElseThrow(IllegalArgumentException::new);
             employmentRequestService.deleteEmploymentRequest(request);
-            employmentRequestService.saveEmploymentRequest(request);
         }catch (IllegalArgumentException e){
             model.addAttribute("error", "Vet request not found!");
             return "shelter/vet-review";

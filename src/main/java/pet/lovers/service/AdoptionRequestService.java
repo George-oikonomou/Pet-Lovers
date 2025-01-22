@@ -3,8 +3,6 @@ package pet.lovers.service;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import pet.lovers.entities.AdoptionRequest;
-import pet.lovers.entities.Pet;
-import pet.lovers.entities.Shelter;
 import pet.lovers.entities.UserStatus;
 import pet.lovers.repositories.AdoptionRequestRepository;
 
@@ -25,9 +23,8 @@ public class AdoptionRequestService {
     }
 
     @Transactional
-    public Integer updateAdoptionRequest(AdoptionRequest adoptionRequest){
+    public void updateAdoptionRequest(AdoptionRequest adoptionRequest){
         adoptionRequestRepository.save(adoptionRequest);
-        return adoptionRequest.getId();
     }
 
     public Optional<AdoptionRequest> findActiveById(Integer id) {

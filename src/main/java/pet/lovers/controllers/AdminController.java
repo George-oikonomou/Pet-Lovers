@@ -178,7 +178,7 @@ public class AdminController {
     @GetMapping("/adoption-request/{id}")//todo
     public String viewAdoptionRequest(@PathVariable int id, Model model) {
         try {
-            AdoptionRequest request = adoptionRequestService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            AdoptionRequest request = adoptionRequestService.findById(id).orElseThrow(IllegalArgumentException::new);
             model.addAttribute("adoptionRequest", request);
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", "Adoption request not found.");

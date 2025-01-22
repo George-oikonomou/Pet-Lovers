@@ -7,19 +7,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Shelter Details</title>
-    <script>
-        function goBack() {
-            const referrer = document.referrer;
-
-             if (referrer.includes('/pets')) {
-                window.location.href = '/pets';
-            } else if (referrer.includes('/adopter/visits')) {
-                window.location.href = '/adopter/visits';
-            } else {
-                 window.location.href = '/pets';
-            }
-        }
-    </script>
 </head>
 <body>
 <div layout:fragment="main-content">
@@ -34,7 +21,7 @@
 
     <div>
         <a th:href="@{/adopter/shelter/{shelter_id}/request-visit(shelter_id=${shelter.id})}" class="btn btn-success">Request Visit</a>
-        <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
+        <a th:href="@{/pets}" class="btn btn-secondary">Back</a>
     </div>
 </div>
 </body>
