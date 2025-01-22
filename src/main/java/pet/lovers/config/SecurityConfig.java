@@ -27,12 +27,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/home", "/images/**", "/js/**", "/css/**", "/adopter/pets/**","/adopter/view-shelter/**").permitAll()
-                        .requestMatchers("/adopter/**", "/adoption-requests/adopter/**","/adopter/pets/**","/adopter/view-shelter/**").hasRole("ADOPTER")
+                        .requestMatchers("/", "/home", "/images/**", "/js/**", "/css/**","/pets/**","shelter-view").permitAll()
+                        .requestMatchers("/forgot-password","/reset-password", "/register/**","/login").anonymous()
+                        .requestMatchers("/adopter/**", "/adoption-requests/adopter/**").hasRole("ADOPTER")
                         .requestMatchers("/shelter/**" , "/adoption-requests/shelter/**" ).hasRole("SHELTER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/vet/**").hasRole("VET")
-                        .requestMatchers("/forgot-password","/reset-password", "/register/**","/login").anonymous()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new UserStatusAuthorizationFilter(userRepository), UsernamePasswordAuthenticationFilter.class)

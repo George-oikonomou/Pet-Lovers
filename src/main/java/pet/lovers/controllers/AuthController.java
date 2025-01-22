@@ -23,7 +23,7 @@ public class AuthController {
         this.petService = petService;
     }
 
-    @PostConstruct
+    @PostConstruct//todo
     public void setup() {
         Document document = new Document("path", true);
         Document documentOfVet = new Document("path2", true);
@@ -68,7 +68,6 @@ public class AuthController {
              adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "location", "full name", LocalDate.now().minusYears(21), document);
              userService.saveUser(adopter);
         }
-
     }
 
     @GetMapping("/login")

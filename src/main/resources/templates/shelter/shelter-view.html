@@ -7,6 +7,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Shelter Details</title>
+    <script>
+        function goBack() {
+            const referrer = document.referrer;
+
+             if (referrer.includes('/pets')) {
+                window.location.href = '/pets';
+            } else if (referrer.includes('/adopter/visits')) {
+                window.location.href = '/adopter/visits';
+            } else {
+                 window.location.href = '/pets';
+            }
+        }
+    </script>
 </head>
 <body>
 <div layout:fragment="main-content">
@@ -14,14 +27,14 @@
 
     <div>
         <p><strong>Name:</strong> <span th:text="${shelter.fullName}"></span></p>
-        <p><strong>location:</strong> <span th:text="${shelter.location}"></span></p>
-        <p><strong>email:</strong> <span th:text="${shelter.email}"></span></p>
-        <p><strong>contact Number:</strong> <span th:text="${shelter.contactNumber}"></span></p>
+        <p><strong>Location:</strong> <span th:text="${shelter.location}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${shelter.email}"></span></p>
+        <p><strong>Contact Number:</strong> <span th:text="${shelter.contactNumber}"></span></p>
     </div>
 
     <div>
         <a th:href="@{/adopter/shelter/{shelter_id}/request-visit(shelter_id=${shelter.id})}" class="btn btn-success">Request Visit</a>
-        <a href="/adopter/pets" class="btn btn-secondary">Back to List</a>
+        <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
     </div>
 </div>
 </body>

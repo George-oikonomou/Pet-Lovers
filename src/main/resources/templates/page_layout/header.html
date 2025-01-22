@@ -21,7 +21,7 @@
             <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/dashboard">home</a>
             <a sec:authorize="hasRole('ROLE_ADOPTER')" class="nav-link" href="/adopter/dashboard">home</a>
 
-            <a sec:authorize="!isAuthenticated() or hasRole('ROLE_ADOPTER')" class="nav-link" href="/adopter/pets">Pets</a>
+            <a sec:authorize="!isAuthenticated() or hasRole('ROLE_ADOPTER')" class="nav-link" href="/pets">Pets</a>
 
 
             <!-- Admin Links -->
@@ -41,6 +41,8 @@
             <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/employment-request">Request Shelter Submission</a>
             <a sec:authorize="hasRole('ROLE_VET')" class="nav-link" href="/vet/shelters">My Shelters</a>
             <!-- Adopter Links -->
+            <a sec:authorize="hasRole('ROLE_ADOPTER')" class="nav-link" href="/adopter/visits">Scheduled Visits</a>
+
             <a sec:authorize="hasRole('ROLE_ADOPTER')" class="nav-link" href="/adoption-requests/adopter">My Adoption Requests</a>
 
             <a sec:authorize="isAuthenticated() and !hasRole('ROLE_ADMIN')" class="nav-link" href="/profile">

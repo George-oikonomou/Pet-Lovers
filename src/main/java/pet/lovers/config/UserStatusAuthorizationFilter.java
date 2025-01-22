@@ -27,14 +27,14 @@ public class UserStatusAuthorizationFilter extends OncePerRequestFilter {
 
         boolean isShelterPath = (path.startsWith("/shelter/") || path.startsWith("/adoption-requests/shelter")) && !path.startsWith("/shelter/dashboard");
         boolean isVetPath = (path.startsWith("/vet/") || path.startsWith("/appointments/vet")) && !path.startsWith("/vet/dashboard");
-        boolean isAdopterPath = (path.startsWith("/adopter/") || path.startsWith("/adoption-requests/adopter")) && !(path.startsWith("/adopter/dashboard") || path.startsWith("/adopter/pets") || path.startsWith("/adopter/view-shelter"));
-
-        if (path.matches("^/adopter/pets/\\d+/.*$") || path.matches("^/adopter/view-shelter/\\d+/.*$")) {
-            request.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, HttpServletResponse.SC_FORBIDDEN);
-            request.getRequestDispatcher("/error?error=AdopterAwaitingApproval").forward(request, response);
-
-            return;
-        }
+        boolean isAdopterPath = (path.startsWith("/adopter/") || path.startsWith("/adoption-requests/adopter")) && !(path.startsWith("/adopter/dashboard"));
+//
+//        if (path.matches("^/adopter/pets/\\d+/.*$") || path.matches("^/adopter/view-shelter/\\d+/.*$")) {
+//            request.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, HttpServletResponse.SC_FORBIDDEN);
+//            request.getRequestDispatcher("/error?error=AdopterAwaitingApproval").forward(request, response);
+//
+//            return;
+//        }
 
         if (isShelterPath || isVetPath || isAdopterPath) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

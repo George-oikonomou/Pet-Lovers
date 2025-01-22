@@ -7,8 +7,9 @@ import pet.lovers.entities.EmploymentRequest;
 import pet.lovers.entities.Vet;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EmploymentRequestRepository extends JpaRepository<EmploymentRequest, Integer> {
-    List<EmploymentRequest> findByVetAndShelter(Vet vet, Shelter shelter);
+    Optional<EmploymentRequest> findByVetAndShelter(Vet vet, Shelter shelter);
 }

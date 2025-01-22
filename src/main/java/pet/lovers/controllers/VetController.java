@@ -12,6 +12,8 @@ import pet.lovers.service.EmploymentRequestService;
 import pet.lovers.service.PetService;
 import pet.lovers.service.ShelterService;
 import pet.lovers.service.UserService;
+import pet.lovers.service.VetService;
+
 import java.util.List;
 
 @Controller
@@ -22,16 +24,21 @@ public class VetController {
     private final PetService petService;
     private final ShelterService shelterService;
     private final EmploymentRequestService employmentRequestService;
+    private final VetService vetService;
 
-    public VetController(UserService userService, PetService petService, ShelterService shelterService, EmploymentRequestService employmentRequestService) {
+    public VetController(UserService userService, PetService petService, ShelterService shelterService, EmploymentRequestService employmentRequestService, VetService vetService) {
         this.userService = userService;
         this.petService = petService;
         this.shelterService = shelterService;
         this.employmentRequestService = employmentRequestService;
+        this.vetService = vetService;
+
      }
 
     @GetMapping("/dashboard")
-    public String dashboard() {return "index";}
+    public String dashboard() {
+        return "index";
+    }
 
     @GetMapping("/health-status")
     public String showPetStatus(Model model) {
@@ -40,7 +47,7 @@ public class VetController {
         List<Pet> pets = shelterService.findByVet(vet)
                                        .stream()
                                        .flatMap(shelter -> shelter.getPets().stream())
-                                       .filter(pet -> pet.getUserStatus() == UserStatus.APPROVED)
+                                       .filter(pet -> pet.getUserStatus() == UserStatus.APPROVED && pet.getPetStatus() != PetStatus.ADOPTED && pet.getShelter().getUserStatus() == UserStatus.APPROVED)
                                        .toList();
 
         model.addAttribute("pets", pets);
@@ -59,12 +66,12 @@ public class VetController {
     public String showEmploymentRequest(Model model) {
         Vet currentVet = (Vet) userService.getCurrentUser();
 
-        List<Shelter> sheltersWithoutVet = shelterService.getShelters()
-                                                         .stream()
-                                                         .filter(shelter -> shelter.getVet() == null)
-                                                         .toList();
+        List<Shelter> sheltersActiveWithoutVet = shelterService.getShelters()
+                                                               .stream()
+                                                               .filter(shelter -> shelter.getVet() == null)
+                                                               .toList();
 
-        model.addAttribute("shelters", sheltersWithoutVet);
+        model.addAttribute("shelters", sheltersActiveWithoutVet);
         model.addAttribute("currentVet", currentVet);
         return "vet/employment-request";
     }
@@ -73,20 +80,34 @@ public class VetController {
     @PostMapping("/employment-request")
     public String submitEmploymentRequest(@RequestParam("shelterId") int shelterId) {
         Vet vet = (Vet) userService.getCurrentUser();
-        Shelter shelter = shelterService.getShelterById(shelterId);
 
-        if (employmentRequestService.existsByVetAndShelter(vet, shelter))
-            return "redirect:/vet/employment-request?error=requestExists";
+        try {
+            Shelter shelter = shelterService.findActiveByUserId(shelterId).orElseThrow(IllegalArgumentException::new);
 
-        EmploymentRequest employmentRequest = new EmploymentRequest(vet, shelter);
-        employmentRequestService.saveEmploymentRequest(employmentRequest);
-        return "redirect:/vet/employment-request";
+            if (employmentRequestService.existsByVetAndShelter(vet, shelter))
+                return "redirect:/vet/employment-request?error=requestExists";
+
+            EmploymentRequest employmentRequest = new EmploymentRequest(vet, shelter);
+            vet.getEmploymentRequests().add(employmentRequest);
+            shelter.getEmploymentRequests().add(employmentRequest);
+            employmentRequestService.saveEmploymentRequest(employmentRequest);
+            vetService.updateVet(vet);
+            shelterService.updateShelter(shelter);
+            return "redirect:/vet/employment-request";
+        }catch (IllegalArgumentException e){
+            return "redirect:/vet/employment-request?error=shelterNotFound";
+        }
     }
 
-    @GetMapping("/shelters")
+    @GetMapping("/shelters")//todo
     public String viewShelters(Model model) {
         Vet vet = (Vet) userService.getCurrentUser();
-        List<Shelter> shelters = shelterService.findByVet(vet);
+        List<Shelter> shelters = shelterService.findByVet(vet)
+                                               .stream()
+                                               .filter(shelterService::isActiveShelter)
+                                               .toList();
+
+
         model.addAttribute("shelters", shelters);
         return "vet/shelters";
     }

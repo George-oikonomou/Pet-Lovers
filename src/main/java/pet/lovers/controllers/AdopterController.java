@@ -3,29 +3,40 @@ package pet.lovers.controllers;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import pet.lovers.entities.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import pet.lovers.entities.Adopter;
+import pet.lovers.entities.AdoptionRequest;
+import pet.lovers.entities.Pet;
+import pet.lovers.entities.Visit;
+import pet.lovers.entities.Shelter;
+import pet.lovers.entities.PetStatus;
 import pet.lovers.service.*;
+
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 @Controller
+@PreAuthorize("hasRole('ROLE_ADOPTER')")
 @RequestMapping("/adopter")
 public class AdopterController {
 
+    private final UserService userService;
     PetService petService;
     AdoptionRequestService adoptionRequestService;
     AdopterService adopterService;
     VisitService visitService;
     ShelterService shelterService;
 
-    public AdopterController(VisitService visitService, PetService petService, AdoptionRequestService adoptionRequestService, AdopterService adopterService,ShelterService shelterService) {
+    public AdopterController(VisitService visitService, PetService petService, AdoptionRequestService adoptionRequestService, AdopterService adopterService, ShelterService shelterService, UserService userService) {
         this.visitService = visitService;
         this.petService = petService;
         this.adoptionRequestService = adoptionRequestService;
         this.adopterService = adopterService;
         this.shelterService = shelterService;
+        this.userService = userService;
     }
 
     @GetMapping("/dashboard")
@@ -33,82 +44,71 @@ public class AdopterController {
         return "index";
     }
 
-    @GetMapping("/pets")
-    public String listAvailablePets(Model model) {
-        List<PetStatus> criteria = Arrays.asList(PetStatus.AVAILABLE, PetStatus.PENDING_ADOPTION);
-        List<Pet> pets = petService.getPetsByPetStatus(criteria);
-        model.addAttribute("pets", pets);
-        return "adopter/pets";
-    }
 
-    @GetMapping("/pets/{id}")
-    public String viewPetDetails(@PathVariable Integer id, Model model) {
-        Pet pet = petService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Pet not found"));
-        model.addAttribute("pet", pet);
-        return "adopter/pet-details";
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADOPTER')")
     @GetMapping("/pets/{id}/request-adoption")
     public String newAdoptionRequest(@PathVariable Integer id, Model model) {
-        Pet pet = petService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Pet not found"));
-
         Adopter adopter = adopterService.getCurrentUser();
 
-        Visit visit = new Visit(LocalDateTime.now(), pet.getShelter(), adopter, pet);
-
-        model.addAttribute("adoptionRequest",visit);
-        return "adopter/new-adoption-request";
+        try {
+            Pet pet = petService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            Visit visit = new Visit(LocalDateTime.now(), pet.getShelter(), adopter, pet);
+            model.addAttribute("adoptionRequest", visit);
+            return "adopter/new-adoption-request";
+        }catch (IllegalArgumentException e){
+            model.addAttribute("error", "Pet not found!");
+            return "/error/error-404";
+        }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADOPTER')")
     @PostMapping("/pets/{id}/request-adoption")
-    public String saveAdoptionRequest(@PathVariable int id, @ModelAttribute("adoptionRequest") Visit visit) {
+    public String saveAdoptionRequest(@PathVariable int id, @ModelAttribute("adoptionRequest") Visit visit, Model model) {
 
         Adopter adopter = adopterService.getCurrentUser();
 
-        Pet pet = petService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Pet not found"));
+        try {//service TODO
+            Pet pet = petService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            AdoptionRequest adoptionRequest = new AdoptionRequest(visit.getDateTime(), visit.getShelter(), adopter, visit.getPet());
+            adoptionRequestService.save(adoptionRequest);
+            adopter.getAdoptionRequests().add(adoptionRequest);
+            userService.updateUser(adopter);
 
-        AdoptionRequest adoptionRequest = new AdoptionRequest(visit.getDateTime(), visit.getShelter(), adopter, visit.getPet());
-        adoptionRequestService.save(adoptionRequest);
-
-        petService.updatePetStatus(pet, PetStatus.PENDING_ADOPTION);
-        return "redirect:/adoption-requests/adopter";
+            petService.updatePetStatus(pet, PetStatus.PENDING_ADOPTION);
+            return "redirect:/adoption-requests/adopter";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "Pet not found!");
+            return "/error/error-404";
+        }
     }
 
-    @GetMapping("/view-shelter/{shelter_id}")
-    public String viewShelter(Model model, @PathVariable int shelter_id){
-        Shelter shelter = shelterService.getShelterById(shelter_id);
-        model.addAttribute("shelter", shelter);
-        return "shelter/shelter-view";
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADOPTER')")
     @GetMapping("/shelter/{shelter_id}/request-visit")
     public String visitShelter(@PathVariable Integer shelter_id, Model model) {
-        Shelter shelter = shelterService.findByUserId(shelter_id)
-                .orElseThrow(() -> new IllegalArgumentException("Pet not found"));
-
         Adopter adopter = adopterService.getCurrentUser();
 
-        Visit visit = new Visit(LocalDateTime.now(), shelter, adopter);
-
-        model.addAttribute("visit",visit);
-        return "adopter/new-visit";
+        try {
+            Shelter shelter = shelterService.findActiveByUserId(shelter_id).orElseThrow(IllegalArgumentException::new);
+            Visit visit = new Visit(LocalDateTime.now(), shelter, adopter);
+            model.addAttribute("visit", visit);
+            return "adopter/new-visit";
+        }catch (IllegalArgumentException e){
+            model.addAttribute("error", "Shelter not found!");
+            return "/error/error-404";
+        }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADOPTER')")
     @PostMapping("/shelter/{shelter_id}/request-visit")
-    public String visitShelter(@PathVariable int shelter_id, Model model){
-        Shelter shelter = shelterService.getShelterById(shelter_id);
+    public String visitShelter(@PathVariable int shelter_id, Model model) {
         Adopter adopter = adopterService.getCurrentUser();
-        Visit visit = new Visit(LocalDateTime.now(),shelter,adopter);
-        visitService.save(visit);
-        return "redirect:/adopter/dashboard";
+
+        try {//service todo
+            Shelter shelter = shelterService.findActiveByUserId(shelter_id).orElseThrow(IllegalArgumentException::new);
+            Visit visit = new Visit(LocalDateTime.now(), shelter, adopter);
+            visitService.save(visit);
+            adopter.getVisits().add(visit);
+            userService.updateUser(adopter);
+            return "redirect:/adopter/visits";
+        }catch (IllegalArgumentException e){
+            model.addAttribute("error", "Shelter not found!");
+            return "/error/error-404";
+        }
     }
-
 }
-

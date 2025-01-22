@@ -6,6 +6,7 @@ import pet.lovers.entities.Shelter;
 import pet.lovers.entities.EmploymentRequest;
 import pet.lovers.entities.Vet;
 import pet.lovers.repositories.EmploymentRequestRepository;
+import java.util.Optional;
 
 @Service
 public class EmploymentRequestService {
@@ -22,7 +23,11 @@ public class EmploymentRequestService {
     }
 
     public boolean existsByVetAndShelter(Vet vet, Shelter shelter) {
-        return !employmentRequestRepository.findByVetAndShelter(vet, shelter).isEmpty();
+        return employmentRequestRepository.findByVetAndShelter(vet, shelter).isPresent();
+    }
+
+    public Optional<EmploymentRequest> findByVetAndShelter(Vet vet, Shelter shelter) {
+        return employmentRequestRepository.findByVetAndShelter(vet, shelter);
     }
 
     public void deleteEmploymentRequest(EmploymentRequest request) {

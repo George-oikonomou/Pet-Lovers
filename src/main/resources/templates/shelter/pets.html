@@ -15,6 +15,10 @@
         <p>No pets are on the shelter at the moment.</p>
     </div>
 
+    <div th:if="${msg}" class="alert alert-success">
+        <p th:text="${msg}"></p>
+    </div>
+
     <div id="tableContainer" th:if="${not #lists.isEmpty(pets)}">
         <table class="datatable">
             <thead>

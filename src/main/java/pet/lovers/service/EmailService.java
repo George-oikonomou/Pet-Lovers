@@ -14,7 +14,7 @@ public class EmailService {
     public static final String SENDER_EMAIL= "petloversplatform@gmail.com";
 
     private final JavaMailSender emailSender;
-    private final Boolean isEmailEnabled = true;
+    private final Boolean isEmailEnabled = false;
 
     public EmailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;

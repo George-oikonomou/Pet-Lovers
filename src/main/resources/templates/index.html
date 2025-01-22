@@ -7,7 +7,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Index Page</title>
+  <title>Home Page</title>
 </head>
 <body>
 <div layout:fragment="main-content">
@@ -36,6 +36,7 @@
       <li><a th:href="@{/shelter/new-pet}">Add New Pets to Your Shelter</a></li>
       <li><a th:href="@{/shelter/visits}">View Visits to Your Shelter</a></li>
       <li><a th:href="@{/shelter/vet-review}">View Vets that Want to Work at Your Shelter</a></li>
+      <li><a th:href="@{/profile}">View and Edit Your Shelter</a></li>
     </ul>
   </div>
 
@@ -44,10 +45,11 @@
     <h2>Vet Dashboard</h2>
     <p>Welcome, Vet! You can manage the health status of the pets you've examined:</p>
     <ul>
-      <li><a th:href="@{/vet/health-status}">View Adoption Requests for Your Shelter</a></li>
-      <li><a th:href="@{/vet/employment-request}">Request To work for a Shelter</a></li>
-      <li><a th:href="@{/vet/shelters}">View the Shelters You Work at</a></li>
-      </ul>
+      <li><a th:href="@{/vet/health-status}">Manage Health Status of Pets in Your Shelters</a></li>
+      <li><a th:href="@{/vet/employment-request}">Request to Join a Shelter</a></li>
+      <li><a th:href="@{/vet/shelters}">View Shelters You Are Associated With</a></li>
+      <li><a th:href="@{/profile}">View and Update Your Profile</a></li>
+    </ul>
   </div>
 
   <!-- Content for Adopter -->
@@ -55,7 +57,10 @@
     <h2>Adopter Dashboard</h2>
     <p>Welcome, Adopter! View your adoption requests:</p>
     <ul>
-      <li><a th:href="@{/adoption-requests/adopter}">View Your Adoption Requests</a></li>
+      <li><a th:href="@{/pets}">Browse Available Pets for Adoption from Shelters</a></li>
+      <li><a th:href="@{adopter/visits}">View Your scheduled Visits</a></li>
+      <li><a th:href="@{/adoption-requests/adopter}">Check Your Adoption Requests</a></li>
+      <li><a th:href="@{/profile}">View and Edit Your Profile</a></li>
     </ul>
   </div>
 </div>

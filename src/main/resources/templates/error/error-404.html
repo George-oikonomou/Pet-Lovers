@@ -10,7 +10,9 @@
 </head>
 <body>
 <div layout:fragment="main-content">
-    <h1>Resource Not Found!</h1>
+    <h1 th:text="${error}"></h1>
+
+    <h1 th:if="${error==null}">Error 404: Page Not Found</h1>
 </div>
 </body>
 </html>
