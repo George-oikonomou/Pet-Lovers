@@ -46,6 +46,7 @@ public class AdminController {
         return "admin/users";
     }
 
+
     @GetMapping("/user/{user_id}")
     public String showUser(@PathVariable Long user_id, Model model) {
         User user = (User) userService.getUser(user_id);
@@ -69,6 +70,20 @@ public class AdminController {
         model.addAttribute("userStatuses", UserStatus.values());
         model.addAttribute("redirectUrl", redirectUrl);
         return "admin/user";
+    }
+
+    @GetMapping("/users/{user_id}/delete")
+    public String deleteUser(@PathVariable Long user_id) {
+        User user = (User) userService.getUser(user_id);
+
+
+        String email = user.getEmail();
+        String username = user.getUsername();
+        userService.deleteUser(user);
+        System.out.println("Deleting user: " + user.getUsername()+ user.getEmail());
+
+        emailService.sendDeleteUserMessage(email, username);
+        return "redirect:/admin/users?deleted";
     }
 
     @PostMapping("/adopter/{user_id}")

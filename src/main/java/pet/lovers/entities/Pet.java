@@ -2,8 +2,6 @@ package pet.lovers.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
-import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 

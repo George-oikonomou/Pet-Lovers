@@ -97,7 +97,7 @@ public class AdoptionRequestController {
                 petService.savePet(request.getPet());
                 adoptionRequestService.updateAdoptionRequest(request);
             }
-            return "redirect:/shelter/adoption-requests";
+            return "redirect:/adoption-requests/shelter";
         }catch(IllegalArgumentException e){
             model.addAttribute("error", "Adoption request not found!");
             return "/error/error-404";

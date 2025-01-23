@@ -152,6 +152,25 @@ public class UserService implements UserDetailsService {
 
         return generator.generate(10);
     }
+    public void deleteUser(User user) {
+        if (user instanceof Shelter) {
+            ((Shelter) user).getPets().forEach(pet -> pet.setShelter(null));
+            ((Shelter) user).getAdoptionRequests().forEach(adoptionRequest -> adoptionRequest.setShelter(null));
+            ((Shelter) user).getEmploymentRequests().forEach(employmentRequest -> employmentRequest.setShelter(null));
+            ((Shelter) user).getVisits().forEach(visit -> visit.setShelter(null));
+        } else if (user instanceof Vet) {
+            ((Vet) user).getShelters().forEach(shelter -> shelter.setVet(null));
+            ((Vet) user).getEmploymentRequests().forEach(employmentRequest -> employmentRequest.setVet(null));
+        }else if (user instanceof Adopter) {
+            ((Adopter) user).getAdoptionRequests().forEach(adoptionRequest -> {
+                adoptionRequest.setAdopter(null);
+                adoptionRequest.getPet().setPetStatus(PetStatus.AVAILABLE);
+            });
+            ((Adopter) user).getVisits().forEach(visit -> visit.setAdopter(null));
+        }
+
+        userRepository.delete(user);
+    }
 
     public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);

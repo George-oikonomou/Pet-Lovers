@@ -56,24 +56,24 @@
                    title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')" required>
         </div>
 
-        <div th:if="${user.getClass().name == 'pet.lovers.entities.Adopter'}" id="identification.path">
-            <label for="identification.path">ID card/Passport URL</label><br>
-            <input type="url" class="form-control" th:field="*{identification.path}" required
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Adopter'}" id="identificationUrl">
+            <label for="identificationUrl">ID card/Passport URL</label><br>
+            <input type="url" class="form-control" th:field="*{documentUrl}" required
                    pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
                    title="Please enter a valid URL starting with 'http://' or 'https://'" />
-            <span th:if="${#fields.hasErrors('identification.path')}" th:errors="*{identification.path}"></span>
+            <span th:if="${#fields.hasErrors('documentUrl')}" th:errors="*{documentUrl}"></span>
         </div>
 
 
 
 
 
-        <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Shelter'}" id="documents.path">
-            <label for="documents.path">ID card/Passport URL</label><br>
-            <input type="url" class="form-control" th:field="*{documents.path}" required
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Shelter'}" id="documentUrl">
+            <label for="documentUrl">ID card/Passport URL</label><br>
+            <input type="url" class="form-control" th:field="*{documentUrl}" required
                    pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
                    title="Please enter a valid URL starting with 'http://' or 'https://'" />
-            <span th:if="${#fields.hasErrors('documents.path')}" th:errors="*{documents.path}"></span>
+            <span th:if="${#fields.hasErrors('documentUrl')}" th:errors="*{documentUrl}"></span>
         </div>
 
         <div th:if="${user.getClass().name == 'pet.lovers.entities.Shelter'}">

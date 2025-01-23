@@ -93,7 +93,7 @@ public class VetController {
             employmentRequestService.saveEmploymentRequest(employmentRequest);
             vetService.updateVet(vet);
             shelterService.updateShelter(shelter);
-            return "redirect:/vet/employment-request";
+            return "redirect:/vet/employment-request?success=true";
         }catch (IllegalArgumentException e){
             return "redirect:/vet/employment-request?error=shelterNotFound";
         }

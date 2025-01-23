@@ -1,42 +1,39 @@
 package pet.lovers.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
+@PrimaryKeyJoinColumn(name = "visit_id")
 public class AdoptionRequest extends Visit {
-
     // TABLE COLUMNS
-    @Column
-    @NotNull
-    @PrimaryKeyJoinColumn(name = "visit_id")
-    private boolean confirmedAdoption;
-    // CONSTRUCTORS
-    public AdoptionRequest() {
-    }
-
-
     @Enumerated(EnumType.STRING)
     private UserStatus requestStatus = UserStatus.PENDING; // Default status
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "pet_id")
+    private Pet pet;
+
+    // CONSTRUCTORS
+    public AdoptionRequest() {}
+
     public AdoptionRequest(LocalDateTime dateTime, Shelter shelter, Adopter adopter, Pet pet) {
-        super(dateTime, shelter, adopter, pet);
+        super(dateTime, shelter, adopter);
+        this.pet = pet;
     }
 
     // GETTERS AND SETTERS
-
-    public boolean isConfirmedAdoption() {
-        return confirmedAdoption;
-    }
-    public void setConfirmedAdoption(boolean confirmedAdoption) {
-        this.confirmedAdoption = confirmedAdoption;
-    }
-
     public UserStatus getRequestStatus() {
         return requestStatus;
     }
     public void setRequestStatus(UserStatus requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    public Pet getPet() {
+        return pet;
+    }
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
 }

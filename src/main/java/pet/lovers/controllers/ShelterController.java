@@ -108,19 +108,13 @@ public class ShelterController {
         Vet selectedVet = vetService.getVetById(vetRequestId);
 
         try {
-            shelter.setVet(selectedVet);
-            selectedVet.getShelters().add(shelter);
-
-            shelterService.updateShelter(shelter);
-            vetService.updateVet(selectedVet);
-
             EmploymentRequest request = employmentRequestService.findByVetAndShelter(selectedVet, shelter).orElseThrow(IllegalArgumentException::new);
             employmentRequestService.deleteEmploymentRequest(request);
         }catch (IllegalArgumentException e){
             model.addAttribute("error", "Vet request not found!");
             return "shelter/vet-review";
         }
-        return "redirect:/shelter/vet-review?success";
+        return "redirect:/shelter/vet-review?rejected";
     }
 
     @GetMapping("/pets/{petId}/edit")

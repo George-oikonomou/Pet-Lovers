@@ -36,18 +36,6 @@ public class Visit {
     @JoinColumn(name = "adopter_id")
     private Adopter adopter;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "pet_id")
-    private Pet pet;
-
-    public Visit(LocalDateTime dateTime, Shelter shelter, Adopter adopter, Pet pet) {
-        this.dateTime = dateTime;
-        this.shelter = shelter;
-        this.adopter = adopter;
-        this.pet = pet;
-        this.contactNumber = adopter.getContactNumber();
-    }
 
     public Visit(LocalDateTime dateTime, Shelter shelter, Adopter adopter ) {
         this.dateTime = dateTime;
@@ -67,7 +55,6 @@ public class Visit {
     public LocalDateTime getDateTime() {
         return dateTime;
     }
-
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
@@ -91,13 +78,6 @@ public class Visit {
     }
     public void setAdopter(Adopter adopter) {
         this.adopter = adopter;
-    }
-
-    public Pet getPet() {
-        return pet;
-    }
-    public void setPet(Pet pet) {
-        this.pet = pet;
     }
 
     public String getReadableDateTime() {

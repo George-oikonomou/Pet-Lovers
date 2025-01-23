@@ -175,7 +175,7 @@ public class UserController {
     public String updateProfileAdopter(@ModelAttribute Adopter user,RedirectAttributes redirectAttributes) {
          try {
              Adopter theUser = (Adopter) userService.getCurrentUser();
-             theUser.getIdentification().setPath(user.getIdentification().getPath());
+             theUser.setDocumentUrl(user.getDocumentUrl());
              userService.updateUserDetails(theUser, theUser.getEmail(), user.getUsername(), user.getFullName(), user.getContactNumber(), user.getUserStatus());
              redirectAttributes.addFlashAttribute("msg", "Profile updated successfully!");
         } catch (Exception e) {
@@ -190,7 +190,7 @@ public class UserController {
     public String updateProfileShelter(@ModelAttribute Shelter user,RedirectAttributes redirectAttributes) {
         try {
             Shelter theUser = (Shelter) userService.getCurrentUser();
-            theUser.getDocuments().setPath(user.getDocuments().getPath());
+            theUser.setDocumentUrl(user.getDocumentUrl());
             userService.updateUserDetails(theUser, theUser.getEmail(), user.getUsername(), user.getFullName(), user.getContactNumber(), user.getUserStatus());
             redirectAttributes.addFlashAttribute("msg", "Profile updated successfully!");
         } catch (Exception e) {
@@ -205,7 +205,7 @@ public class UserController {
     public String updateProfileVet(@ModelAttribute Vet user,RedirectAttributes redirectAttributes) {
         try {
             Vet theUser = (Vet) userService.getCurrentUser();
-            theUser.getDocuments().setPath(user.getDocuments().getPath());
+            theUser.setDocumentUrl(user.getDocumentUrl());
             userService.updateUserDetails(theUser, theUser.getEmail(), user.getUsername(), user.getFullName(), user.getContactNumber(), user.getUserStatus());
             redirectAttributes.addFlashAttribute("msg", "Profile updated successfully!");
         } catch (Exception e) {

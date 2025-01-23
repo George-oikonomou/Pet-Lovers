@@ -34,11 +34,11 @@
         </div>
 
         <div class="form-group">
-            <label for="documents.path">Documents URL</label>
-            <input type="url" class="form-control" th:field="*{documents.path}" id="documents.path" required
+            <label for="documentUrl">Documents URL</label>
+            <input type="url" class="form-control" th:field="*{documentUrl}" id="documentUrl" required
                    pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
                    title="Please enter a valid URL starting with 'http://' or 'https://'"/>
-            <span th:if="${#fields.hasErrors('documents.path')}" th:errors="*{documents.path}"></span>
+            <span th:if="${#fields.hasErrors('documentUrl')}" th:errors="*{documentUrl}"></span>
         </div>
 
         <div class="form-group">

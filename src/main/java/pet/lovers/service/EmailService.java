@@ -233,6 +233,22 @@ public class EmailService {
 
     }
 
+    public void sendDeleteUserMessage(String email,String username) {
+        String subject = "Account Deletion";
+        String text = """
+            Dear %s,
+            
+            We regret to inform you that your account has been deleted due to a violation of our rules.
+            This action was taken by the admin team as part of our policy enforcement.
+            If you believe this is a mistake or if you have any questions, please contact us immediately at petloversplatform@gmail.com .
+            Best regards,
+            The Pet Lovers Team
+            """.formatted(username);
+
+        sendSimpleMessage(email, subject, text);
+
+    }
+
 
 
     public void sendSimpleMessage(String recipient, String subject, String text) {

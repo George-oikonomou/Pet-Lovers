@@ -36,11 +36,11 @@
 
         <div class="form-group row">
             <div class="col-md-6">
-                <label for="identification.path">ID card/Passport URL</label>
-                <input type="url" class="form-control" th:field="*{identification.path}" id="identification.path" required
+                <label for="documentUrl">ID card/Passport URL</label>
+                <input type="url" class="form-control" th:field="*{documentUrl}" id="documentUrl" required
                        pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
                        title="Please enter a valid URL starting with 'http://' or 'https://'" />
-                <span th:if="${#fields.hasErrors('identification.path')}" th:errors="*{identification.path}"></span>
+                <span th:if="${#fields.hasErrors('documentUrl')}" th:errors="*{documentUrl}"></span>
             </div>
             <div class="col-md-6">
                 <label for="birthDate">Birthdate</label>

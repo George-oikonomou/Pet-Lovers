@@ -51,8 +51,8 @@ public class AdopterController {
 
         try {
             Pet pet = petService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
-            Visit visit = new Visit(LocalDateTime.now(), pet.getShelter(), adopter, pet);
-            model.addAttribute("adoptionRequest", visit);
+            AdoptionRequest adoptionRequest = new AdoptionRequest(LocalDateTime.now(), pet.getShelter(), adopter, pet);
+            model.addAttribute("adoptionRequest", adoptionRequest);
             return "adopter/new-adoption-request";
         }catch (IllegalArgumentException e){
             model.addAttribute("error", "Pet not found!");
@@ -61,15 +61,15 @@ public class AdopterController {
     }
 
     @PostMapping("/pets/{id}/request-adoption")
-    public String saveAdoptionRequest(@PathVariable int id, @ModelAttribute("adoptionRequest") Visit visit, Model model) {
+    public String saveAdoptionRequest(@PathVariable int id, @ModelAttribute("adoptionRequest") AdoptionRequest adoptionRequest, Model model) {
 
         Adopter adopter = adopterService.getCurrentUser();
 
         try {//service TODO
             Pet pet = petService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
-            AdoptionRequest adoptionRequest = new AdoptionRequest(visit.getDateTime(), visit.getShelter(), adopter, visit.getPet());
-            adoptionRequestService.save(adoptionRequest);
-            adopter.getAdoptionRequests().add(adoptionRequest);
+            AdoptionRequest theAdoptionRequest = new AdoptionRequest(adoptionRequest.getDateTime(), adoptionRequest.getShelter(), adopter, adoptionRequest.getPet());
+            adoptionRequestService.save(theAdoptionRequest);
+            adopter.getAdoptionRequests().add(theAdoptionRequest);
             userService.updateUser(adopter);
 
             petService.updatePetStatus(pet, PetStatus.PENDING_ADOPTION);
