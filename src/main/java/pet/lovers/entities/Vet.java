@@ -18,20 +18,18 @@ public class Vet extends User {
     @Size(max = 60)
     private String fullName;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "document_id", referencedColumnName = "id")
-    private Document documents;
-
-    @OneToMany(mappedBy = "vet", cascade= CascadeType.ALL)
+    @OneToMany(mappedBy = "vet",  cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private List<Shelter> shelters;
+
+    @OneToMany(mappedBy = "vet", cascade= CascadeType.ALL , orphanRemoval = true)
+    private List<EmploymentRequest> employmentRequests;
     // END TABLE COLUMNS
 
     public Vet() {}
 
-    public Vet(String username, String email, String password, String contactNumber, String location, String fullName,Document documents) {
-        super(username, email, password, contactNumber, location);
+    public Vet(String username, String email, String password, String contactNumber, String location, String fullName,String documentUrl) {
+        super(username, email, password, contactNumber, location, documentUrl);
         this.fullName = fullName;
-        this.documents = documents;
     }
 
     // GETTERS AND SETTERS
@@ -42,17 +40,17 @@ public class Vet extends User {
         this.fullName = fullName;
     }
 
-    public Document getDocuments() {
-        return documents;
-    }
-    public void setDocuments(Document documents) {
-        this.documents = documents;
-    }
-
     public List<Shelter> getShelters() {
         return shelters;
     }
     public void setShelters(List<Shelter> shelters) {
         this.shelters = shelters;
+    }
+
+    public List<EmploymentRequest> getEmploymentRequests() {
+        return employmentRequests;
+    }
+    public void setEmploymentRequests(List<EmploymentRequest> employmentRequests) {
+        this.employmentRequests = employmentRequests;
     }
 }

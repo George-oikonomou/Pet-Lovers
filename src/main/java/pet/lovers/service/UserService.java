@@ -22,16 +22,18 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
 
+    private final EmailService emailService;
     private UserRepository userRepository;
 
     private RoleRepository roleRepository;
 
     private BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -50,10 +52,10 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Integer updateUser(User user) {
+    public void updateUser(User user) {
         user = userRepository.save(user);
-        return user.getId();
     }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -75,13 +77,21 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void updateUserDetails(User user, String email, String username, String fullName, String contactNumber) {
+    public void updateUserDetails(User user, String email, String username, String fullName, String contactNumber, UserStatus userStatus) {
         user.setEmail(email);
         user.setUsername(username);
         user.setFullName(fullName);
         user.setContactNumber(contactNumber);
+        user.setUserStatus(userStatus);
 
         this.updateUser(user);
+
+        if (userStatus == UserStatus.APPROVED)
+            emailService.sendRejectedUserMessage(user.getEmail(), user.getUsername());
+        else if (userStatus == UserStatus.REJECTED)
+            emailService.sendRejectedUserMessage(user.getEmail(), user.getUsername());
+        else if (userStatus == UserStatus.PENDING)
+            emailService.sendPendingUserMessage(user.getEmail(), user.getUsername());
     }
 
     @Transactional
@@ -141,6 +151,25 @@ public class UserService implements UserDetailsService {
                 .build();
 
         return generator.generate(10);
+    }
+    public void deleteUser(User user) {
+        if (user instanceof Shelter) {
+            ((Shelter) user).getPets().forEach(pet -> pet.setShelter(null));
+            ((Shelter) user).getAdoptionRequests().forEach(adoptionRequest -> adoptionRequest.setShelter(null));
+            ((Shelter) user).getEmploymentRequests().forEach(employmentRequest -> employmentRequest.setShelter(null));
+            ((Shelter) user).getVisits().forEach(visit -> visit.setShelter(null));
+        } else if (user instanceof Vet) {
+            ((Vet) user).getShelters().forEach(shelter -> shelter.setVet(null));
+            ((Vet) user).getEmploymentRequests().forEach(employmentRequest -> employmentRequest.setVet(null));
+        }else if (user instanceof Adopter) {
+            ((Adopter) user).getAdoptionRequests().forEach(adoptionRequest -> {
+                adoptionRequest.setAdopter(null);
+                adoptionRequest.getPet().setPetStatus(PetStatus.AVAILABLE);
+            });
+            ((Adopter) user).getVisits().forEach(visit -> visit.setAdopter(null));
+        }
+
+        userRepository.delete(user);
     }
 
     public Boolean existsByEmail(String email) {

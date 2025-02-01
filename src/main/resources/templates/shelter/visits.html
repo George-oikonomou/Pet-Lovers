@@ -28,10 +28,11 @@
         <table class="datatable">
             <thead>
             <tr>
-                <th>Adopter Name</th>
-                <th>Pet Name</th>
-                <th>Date</th>
-                <th>Contact Number</th>
+                 <th>Adopter's Name</th>
+                 <th>Adopter's Address</th>
+                 <th>Adopter's Email Address</th>
+                 <th>Visits Date</th>
+                 <th>Contact Number</th>
             </tr>
             </thead>
             <tbody>
@@ -40,7 +41,8 @@
                 class="visit-row"
                 th:data-datetime="${visit.dateTime}">
                 <td th:text="${visit.adopter.fullName}"></td>
-                <td th:text="${visit.pet?.name ?: 'N/A'}"></td>
+                <td th:text="${visit.adopter.location}"></td>
+                <td th:text="${visit.adopter.email}"></td>
                 <td th:text="${#temporals.format(visit.dateTime, 'dd/MM/yyyy HH:mm')}"></td>
                 <td th:text="${visit.contactNumber}"></td>
             </tr>

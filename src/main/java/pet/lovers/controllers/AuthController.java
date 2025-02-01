@@ -11,7 +11,6 @@ import java.time.LocalDate;
 
 @Controller
 public class AuthController {
-
     private final RoleRepository roleRepository;
     private final UserService userService;
     private final PetService petService;
@@ -23,11 +22,8 @@ public class AuthController {
         this.petService = petService;
     }
 
-    @PostConstruct
+    @PostConstruct//todo
     public void setup() {
-        Document document = new Document("path", true);
-        Document documentOfVet = new Document("path2", true);
-        Document documentOfShelter = new Document("path3",true);
 
         // Save roles to ensure they are managed by the persistence context
         roleRepository.updateOrInsert(new Role(Role.ADOPTER));
@@ -36,8 +32,8 @@ public class AuthController {
         roleRepository.updateOrInsert(new Role(Role.SHELTER));
 
         // Create users
-        if (!userService.existsByUsername("admin")) {
-            User admin = new User("admin", "admin@gmail.com", "admin", "0123456789", "location");
+        if (!userService.existsByEmail("admin@gmail.com")) {
+            User admin = new User("admin", "admin@gmail.com", "admin", "0123456789", "location","path");
             admin.getRoles().add(roleAdmin);
             userService.saveUser(admin);
         }
@@ -45,13 +41,13 @@ public class AuthController {
         Adopter adopter;
         Shelter shelter;
 
-        if (!userService.existsByUsername("vet")) {
-            Vet vet = new Vet("vet", "vet@gmail.com", "vet", "1234567890", "location", "full name",  documentOfVet);
+        if (!userService.existsByEmail("vet@gmail.com")) {
+            Vet vet = new Vet("vet", "vet@gmail.com", "vet", "1234567890", "location", "full name",  "documentOfVet");
             userService.saveUser(vet);
         }
 
-        if (!userService.existsByUsername("shelter")) {
-            shelter = new Shelter("shelter", "shelter@gmail.com", "shelter", "1345678902", "location", "shelter name", documentOfShelter);
+        if (!userService.existsByEmail("shelter@gmail.com")) {
+            shelter = new Shelter("shelter", "shelter@gmail.com", "shelter", "1345678902", "location", "shelter name", "documentOfShelter");
             userService.saveUser(shelter);
 
             if (!petService.existsByName("Rocky")) {
@@ -64,11 +60,10 @@ public class AuthController {
             }
         }
 
-        if (!userService.existsByUsername("adopter")) {
-             adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "location", "full name", LocalDate.now().minusYears(21), document);
+        if (!userService.existsByEmail("adopter@gmail.com")) {
+             adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "location", "full name", LocalDate.now().minusYears(21), "document");
              userService.saveUser(adopter);
         }
-
     }
 
     @GetMapping("/login")

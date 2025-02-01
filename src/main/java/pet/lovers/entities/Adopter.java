@@ -26,26 +26,20 @@ public class Adopter extends User {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "identification", referencedColumnName = "id")
-    private Document identification;
-
-    @OneToMany(mappedBy = "adopter", cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "adopter", cascade = CascadeType.ALL , orphanRemoval = true )
     private List<Visit> visits;
 
-    @OneToMany(mappedBy = "adopter", cascade= CascadeType.ALL)
+    @OneToMany(mappedBy = "adopter", cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private List<AdoptionRequest> adoptionRequests;
     //END TABLE COLUMNS
 
     //CONSTRUCTORS
     public Adopter() {}
 
-    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDate birthDate, Document identification) {
-        super(username, email, password, contactNumber, location);
+    public Adopter(String username, String email, String password, String contactNumber, String location, String fullName, LocalDate birthDate, String identification) {
+        super(username, email, password, contactNumber, location, identification);
         this.fullName = fullName;
         this.birthDate = birthDate;
-        this.identification = identification;
-        super.setUserStatus(UserStatus.APPROVED); //adopter is automatically approved
     }
 
     //GETTERS AND SETTERS
@@ -63,14 +57,6 @@ public class Adopter extends User {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public Document getIdentification() {
-        return identification;
-    }
-
-    public void setIdentification(Document identification) {
-        this.identification = identification;
     }
 
     public List<AdoptionRequest> getAdoptionRequests() {
@@ -99,7 +85,7 @@ public class Adopter extends User {
                 "location=" + getLocation() +
                 "fullName='" + fullName + '\'' +
                 ", birthDate=" + birthDate +
-                ", identification=" + identification +
+                ", identification=" +  getDocumentUrl() +
                 ", visits=" + visits +
                 ", adoptionRequests=" + adoptionRequests +
                 '}';

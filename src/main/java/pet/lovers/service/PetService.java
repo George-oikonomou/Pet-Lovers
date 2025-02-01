@@ -42,6 +42,10 @@ public class PetService {
         return petRepository.findById(id);
     }
 
+    public Optional<Pet> findActiveById(Integer id) {
+        return petRepository.findById(id).filter(this::IsActivePet);
+    }
+
     @Transactional
     public void rejectPet(Integer petId){
         Pet pet = petRepository.findById(petId).orElseThrow();
@@ -69,6 +73,22 @@ public class PetService {
     @Transactional
     public List<Pet> getPetsByPetStatus(List<PetStatus> statuses) {
         return petRepository.findByPetStatusIn(statuses);
+    }
+
+    public boolean IsActivePet(Pet pet) {
+        return pet.getPetStatus().equals(PetStatus.AVAILABLE) && pet.getUserStatus().equals(UserStatus.APPROVED) && pet.getHealthStatus().equals(HealthStatus.HEALTHY) && pet.getShelter().getUserStatus().equals(UserStatus.APPROVED);
+    }
+
+    public void updatePet(Pet pet, String name, String breed,  PetStatus petStatus,Integer yearBirthed, String type, Double weight,String sex) {
+        pet.setName(name);
+        pet.setBreed(breed);
+        pet.setPetStatus(petStatus);
+        pet.setYearBirthed(yearBirthed);
+        pet.setType(type);
+        pet.setWeight(weight);
+        pet.setSex(sex);
+
+        petRepository.save(pet);
     }
 
     public boolean existsByName(String name) {

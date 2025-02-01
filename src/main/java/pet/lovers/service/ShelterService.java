@@ -2,6 +2,7 @@ package pet.lovers.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import pet.lovers.entities.Pet;
 import pet.lovers.entities.UserStatus;
 import pet.lovers.entities.Vet;
 import pet.lovers.repositories.ShelterRepository;
@@ -22,6 +23,10 @@ public class ShelterService {
 
     @Transactional
     public List<Shelter> getShelters(){
+        return shelterRepository.findByUserStatus(UserStatus.APPROVED);
+    }
+
+    public List<Shelter> getAllShelters(){
         return shelterRepository.findAll();
     }
 
@@ -32,6 +37,10 @@ public class ShelterService {
 
     public Optional<Shelter> findByUserId(Integer id) {
         return shelterRepository.findById(id);
+    }
+
+    public Optional<Shelter> findActiveByUserId(Integer id) {
+        return shelterRepository.findById(id).filter(this::isActiveShelter);
     }
 
     @Transactional
@@ -52,7 +61,9 @@ public class ShelterService {
         return shelterRepository.findByVet(vet);
     }
 
-    public Shelter getShelterById(int shelterId) { return shelterRepository.findById(shelterId).orElseThrow(); }
+    public boolean isActiveShelter(Shelter shelter) {
+        return shelter.getUserStatus() == UserStatus.APPROVED;
+    }
 
     public void updateShelter(Shelter shelter) {
         shelterRepository.save(shelter);

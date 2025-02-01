@@ -33,11 +33,17 @@
             <td th:text="*{requestStatus}"></td>
             <td th:text="*{getReadableDateTime()}"></td>
             <td>
-                <form th:action="@{/admin/adoption-request/{id}/notify(id=${adoptionRequest.id})}" method="post">
-                    <button type="submit" class="btn btn-success" style="margin-bottom:5px;"
-                        onclick="disableButton(this)">Notify Shelter</button>
-                </form>
+                <form  th:action="@{/admin/adoption-request/{id}/notify(id=${adoptionRequest.id})}" method="post">
+                    <button th:if="${adoptionRequest.requestStatus.toString() == 'PENDING'}" type="submit" class="btn btn-success" style="margin-bottom:5px;"
+                            onclick="disableButton(this)">Notify Shelter
+                    </button>
+
+                    <button th:unless="${adoptionRequest.requestStatus.toString() == 'PENDING'}" class="btn" style="margin-bottom:5px; background-color: #d3d3d3" disabled>
+                        No Actions
+                    </button>
+                 </form>
             </td>
+
         </tr>
         </tbody>
     </table>

@@ -39,23 +39,71 @@
       />
     </div>
 
-    <div th:if="${user != null}">
-      <div th:if="${user.getClass().name == 'pet.lovers.entities.Shelter'}">
+    <div th:if="${user.getClass().name == 'pet.lovers.entities.Shelter'}">
         <label for="name">Shelter Name</label>
         <input type="text" id="name" class="form-control" th:field="*{fullName}" required>
-      </div>
+    </div>
 
-      <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Adopter'}">
+    <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Adopter'}">
         <label for="fullName">Full Name</label>
         <input type="text" id="fullName" class="form-control" th:field="*{fullName}"
                pattern="[A-Za-z]+(?: [A-Za-z]+){1,4}"
                title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')" required>
+    </div>
+
+    <div class = "form-group user-status">
+      <label for="UserStatus">UserStatus</label>
+      <select id="UserStatus" class="form-control" th:field="*{userStatus}">
+        <option th:each="userStatus : ${userStatuses}" th:value="${userStatus}" th:text="${userStatus}"></option>
+      </select>
+    </div>
+
+    <div th:if="${user.getClass().name == 'pet.lovers.entities.Adopter'}" id="identification">
+      <label for="identification">Identification</label><br>
+      <div class="div-img">
+        <a th:href="|${user.getDocumentUrl()}|" target="_blank">
+          <img class="document-img"  th:src="|${user.getDocumentUrl()}|" alt="link" />
+        </a>
       </div>
     </div>
 
+    <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Shelter'}" id="Document">
+      <label for="Document">Document</label><br>
+      <div class="div-img">
+        <a th:href="|${user.getDocumentUrl()}|" target="_blank">
+          <img class="document-img" th:src="|${user.getDocumentUrl()}|" alt="link"/>
+        </a>
+      </div>
+    </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
 </body>
 </html>
+<style>
+  div.div-img {
+    display: inline-block;
+    padding: 0;
+    margin: 20px;
+    background: white;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+  }
+
+  img.document-img {
+    color: black;
+    max-width: 150px;
+    max-height: 150px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    transform: perspective(500px) rotateX(5deg);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  img.document-img:hover {
+    transform: perspective(500px) rotateX(0deg) scale(1.05);
+  }
+</style>

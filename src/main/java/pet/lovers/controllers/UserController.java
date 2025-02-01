@@ -1,30 +1,46 @@
 package pet.lovers.controllers;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestParam;
-import pet.lovers.entities.*;
-import pet.lovers.service.EmailService;
-import pet.lovers.service.UserService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pet.lovers.entities.Adopter;
+import pet.lovers.entities.Shelter;
+import pet.lovers.entities.User;
+import pet.lovers.entities.Vet;
+import pet.lovers.entities.Pet;
+import pet.lovers.entities.PetStatus;
+import pet.lovers.service.EmailService;
+import pet.lovers.service.PetService;
+import pet.lovers.service.ShelterService;
+import pet.lovers.service.UserService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
 public class UserController {
 
-    private final EmailService emailService;
     @Value("${google.api.key}")
     private String googleApiKey;
 
+    private final EmailService emailService;
     private final UserService userService;
+    private final PetService petService;
+    private final ShelterService shelterService;
 
-    public UserController(UserService userService, EmailService emailService) {
+    public UserController(UserService userService, EmailService emailService, PetService petService, ShelterService shelterService) {
         this.userService = userService;
         this.emailService = emailService;
+        this.petService = petService;
+        this.shelterService = shelterService;
     }
 
     @GetMapping("/register/adopter")
@@ -124,6 +140,116 @@ public class UserController {
         } catch (Exception e) {
             model.addAttribute("error", "An unexpected error occurred. Please try again.");
             return "auth/reset-password";
+        }
+    }
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        User user = userService.getCurrentUser();
+
+        String redirectUrl = switch (user) {
+            case Adopter adopter -> {
+                model.addAttribute("user", adopter);
+                yield "/profile/adopter/submit";
+            }
+            case Shelter shelter -> {
+                model.addAttribute("user", shelter);
+                yield "/profile/shelter/submit";
+            }
+            case Vet vet -> {
+                model.addAttribute("user", vet);
+                yield "/profile/vet/submit";
+            }
+            default -> "#";
+        };
+        model.addAttribute("msg", model.asMap().get("msg"));
+        model.addAttribute("error", model.asMap().get("error"));
+        model.addAttribute("redirectUrl", redirectUrl);
+        return "auth/profile";
+    }
+
+
+
+    @PreAuthorize("hasRole('ROLE_ADOPTER')")
+    @PostMapping("/profile/adopter/submit")
+    public String updateProfileAdopter(@ModelAttribute Adopter user,RedirectAttributes redirectAttributes) {
+         try {
+             Adopter theUser = (Adopter) userService.getCurrentUser();
+             theUser.setDocumentUrl(user.getDocumentUrl());
+             userService.updateUserDetails(theUser, theUser.getEmail(), user.getUsername(), user.getFullName(), user.getContactNumber(), user.getUserStatus());
+             redirectAttributes.addFlashAttribute("msg", "Profile updated successfully!");
+        } catch (Exception e) {
+             redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
+        }
+
+        return "redirect:/profile";
+    }
+
+    @PreAuthorize("hasRole('ROLE_SHELTER')")
+    @PostMapping("/profile/shelter/submit")
+    public String updateProfileShelter(@ModelAttribute Shelter user,RedirectAttributes redirectAttributes) {
+        try {
+            Shelter theUser = (Shelter) userService.getCurrentUser();
+            theUser.setDocumentUrl(user.getDocumentUrl());
+            userService.updateUserDetails(theUser, theUser.getEmail(), user.getUsername(), user.getFullName(), user.getContactNumber(), user.getUserStatus());
+            redirectAttributes.addFlashAttribute("msg", "Profile updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
+        }
+
+        return "redirect:/profile";
+    }
+
+    @PreAuthorize("hasRole('ROLE_VET')")
+    @PostMapping("/profile/vet/submit")
+    public String updateProfileVet(@ModelAttribute Vet user,RedirectAttributes redirectAttributes) {
+        try {
+            Vet theUser = (Vet) userService.getCurrentUser();
+            theUser.setDocumentUrl(user.getDocumentUrl());
+            userService.updateUserDetails(theUser, theUser.getEmail(), user.getUsername(), user.getFullName(), user.getContactNumber(), user.getUserStatus());
+            redirectAttributes.addFlashAttribute("msg", "Profile updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
+        }
+        return "redirect:/profile";
+    }
+
+    @PreAuthorize("!isAuthenticated() or hasRole('ROLE_ADOPTER')")
+    @GetMapping("/pets")
+    public String listAvailablePets(Model model) {
+        List<PetStatus> criteria = Arrays.asList(PetStatus.AVAILABLE, PetStatus.PENDING_ADOPTION);
+        List<Pet> pets = petService.getPetsByPetStatus(criteria)
+                                   .stream()
+                                   .filter(petService::IsActivePet)
+                                   .toList();
+
+        model.addAttribute("pets", pets);
+        return "adopter/pets";
+    }
+
+    @PreAuthorize("!isAuthenticated() or hasRole('ROLE_ADOPTER')")
+    @GetMapping("/pets/{id}")
+    public String viewPetDetails(@PathVariable Integer id, Model model) {
+        try {
+            Pet pet = petService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            model.addAttribute("pet", pet);
+            return "adopter/pet-details";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "Pet not found!");
+            return "error/error-404";
+        }
+    }
+
+    @PreAuthorize("!isAuthenticated() or hasRole('ROLE_ADOPTER')")
+    @GetMapping("/view-shelter/{shelter_id}")
+    public String viewShelter(Model model, @PathVariable int shelter_id){
+        try {
+            Shelter shelter = shelterService.findActiveByUserId(shelter_id).orElseThrow(IllegalArgumentException::new);
+            model.addAttribute("shelter", shelter);
+            return "shelter/shelter-view";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "Shelter not found!");
+            return "error/error-404";
         }
     }
 }

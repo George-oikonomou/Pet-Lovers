@@ -20,23 +20,21 @@
         <p><strong>Request Status:</strong> <span th:text="${adoptionRequest.requestStatus}"></span></p>
         <p><strong>Request Date:</strong> <span th:text="${adoptionRequest.getReadableDateTime()}"></span></p>
     </div>
-
-<!-- TODO: make it work    -->
-
-<!--    &lt;!&ndash; Approval and Rejection Buttons &ndash;&gt;-->
-<!--    <div th:if="${adoptionRequest.requestStatus == T(pet.lovers.entities.UserStatus).PENDING}">-->
-<!--        <form th:action="@{/adoption-requests/{id}/approve(id=${adoptionRequest.id})}" method="post">-->
-<!--            <button type="submit" class="btn btn-success">Approve</button>-->
-<!--        </form>-->
-<!--        <form th:action="@{/adoption-requests/{id}/reject(id=${adoptionRequest.id})}" method="post">-->
-<!--            <button type="submit" class="btn btn-danger">Reject</button>-->
-<!--        </form>-->
-<!--    </div>-->
+    <!-- Approval and Rejection Buttons -->
+    <div th:if="${adoptionRequest.requestStatus.toString() == 'PENDING'}">
+        <form th:action="@{/adoption-requests/shelter/{id}/approve(id=${adoptionRequest.id})}" method="post" style="display: inline-block; margin-right: 10px;">
+            <button type="submit" class="btn btn-success">Approve</button>
+        </form>
+        <form th:action="@{/adoption-requests/shelter/{id}/reject(id=${adoptionRequest.id})}" method="post" style="display: inline-block;">
+            <button type="submit" class="btn btn-danger">Reject</button>
+        </form>
+    </div>
 
     <!-- Back to List -->
     <div>
-        <a href="/adoption-requests/shelter" class="btn btn-secondary">Back to List</a>
+        <a href="/adoption-requests/shelter" class="btn btn-secondary" style="margin-top: 10px">Back to List</a>
     </div>
+
 </div>
 </body>
 </html>

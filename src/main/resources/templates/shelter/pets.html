@@ -15,6 +15,19 @@
         <p>No pets are on the shelter at the moment.</p>
     </div>
 
+    <div th:if="${msg}" class="alert alert-success">
+        <p th:text="${msg}"></p>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+    </div>
+
+
+    <div th:if="${success}" class="alert alert-success">
+        <p th:text="${success}"></p>
+    </div>
+
     <div id="tableContainer" th:if="${not #lists.isEmpty(pets)}">
         <table class="datatable">
             <thead>
@@ -27,6 +40,7 @@
                 <th>Birth Year</th>
                 <th>Health Status</th>
                 <th>Adoption Status</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -39,6 +53,11 @@
                 <td th:text="${pet.yearBirthed}"></td>
                 <td th:text="${pet.healthStatus}"></td>
                 <td th:text="${pet.petStatus}"></td>
+                <td>
+                    <a class="btn" th:href="@{/shelter/pets/{pet_id}/edit(pet_id=${pet.id})}">
+                        Edit
+                    </a>
+                </td>
             </tr>
             </tbody>
         </table>

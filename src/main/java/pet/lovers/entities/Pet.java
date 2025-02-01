@@ -2,8 +2,6 @@ package pet.lovers.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
-import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 
@@ -84,6 +82,7 @@ public class Pet {
     public int getId() {
         return id;
     }
+    public void setId(int id) {this.id = id;}
 
     public String getName() {
         return name;

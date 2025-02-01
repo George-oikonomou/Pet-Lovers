@@ -15,20 +15,14 @@ public class RoleBasedSuccessHandler extends SavedRequestAwareAuthenticationSucc
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        // Redirect based on role
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN))) {
             getRedirectStrategy().sendRedirect(request, response, "/admin/dashboard");
-        }
-        else if(authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.SHELTER))) {
+        } else if(authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.SHELTER))) {
             getRedirectStrategy().sendRedirect(request, response, "/shelter/dashboard");
         }else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.VET))) {
             getRedirectStrategy().sendRedirect(request, response, "/vet/dashboard");
-        }
-//        else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.ADOPTER))) {
-//            getRedirectStrategy().sendRedirect(request, response, "/adopter/dashboard");
-//        }
-        else {
-            getRedirectStrategy().sendRedirect(request, response, "/");
+        } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Role.ADOPTER))) {
+            getRedirectStrategy().sendRedirect(request, response, "/adopter/dashboard");
         }
     }
 }

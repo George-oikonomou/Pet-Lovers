@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pet.lovers.entities.*;
-import pet.lovers.service.*;
+import pet.lovers.service.EmploymentRequestService;
+import pet.lovers.service.PetService;
+import pet.lovers.service.ShelterService;
+import pet.lovers.service.UserService;
+import pet.lovers.service.VetService;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/vet")
@@ -19,29 +23,32 @@ public class VetController {
     private final UserService userService;
     private final PetService petService;
     private final ShelterService shelterService;
-    private final ShelterRequestService shelterRequestService;
+    private final EmploymentRequestService employmentRequestService;
     private final VetService vetService;
 
-    public VetController(UserService userService, PetService petService, ShelterService shelterService, ShelterRequestService shelterRequestService, VetService vetService) {
+    public VetController(UserService userService, PetService petService, ShelterService shelterService, EmploymentRequestService employmentRequestService, VetService vetService) {
         this.userService = userService;
         this.petService = petService;
         this.shelterService = shelterService;
-        this.shelterRequestService = shelterRequestService;
+        this.employmentRequestService = employmentRequestService;
         this.vetService = vetService;
-    }
+
+     }
 
     @GetMapping("/dashboard")
-    public String dashboard() {return "index";}
+    public String dashboard() {
+        return "index";
+    }
 
     @GetMapping("/health-status")
     public String showPetStatus(Model model) {
         Vet vet = (Vet) userService.getCurrentUser();
 
         List<Pet> pets = shelterService.findByVet(vet)
-                .stream()
-                .flatMap(shelter -> shelter.getPets().stream())
-                .filter(pet -> pet.getUserStatus() == UserStatus.APPROVED)
-                .collect(Collectors.toList());
+                                       .stream()
+                                       .flatMap(shelter -> shelter.getPets().stream())
+                                       .filter(pet -> pet.getUserStatus() == UserStatus.APPROVED && pet.getPetStatus() != PetStatus.ADOPTED && pet.getShelter().getUserStatus() == UserStatus.APPROVED)
+                                       .toList();
 
         model.addAttribute("pets", pets);
         model.addAttribute("healthStatuses", HealthStatus.values());
@@ -50,44 +57,53 @@ public class VetController {
 
 
     @PostMapping("/health-status")
-    public String updateHealthStatus(@RequestParam("petId") int petId,
-                                     @RequestParam("healthStatus") String healthStatus) {
+    public String updateHealthStatus(@RequestParam("petId") int petId, @RequestParam("healthStatus") String healthStatus) {
         petService.updateHealthStatus(petId, healthStatus);
         return "redirect:/vet/health-status";
     }
 
-    @GetMapping("/shelter-request")
-    public String showShelterRequest(Model model) {
+    @GetMapping("/employment-request")
+    public String showEmploymentRequest(Model model) {
         Vet currentVet = (Vet) userService.getCurrentUser();
 
-        List<Shelter> sheltersWithoutVet = shelterService.getShelters()
-                .stream()
-                .filter(shelter -> shelter.getVet() == null)
-                .collect(Collectors.toList());
+        List<Shelter> sheltersActiveWithoutVet = shelterService.getShelters()
+                                                               .stream()
+                                                               .filter(shelter -> shelter.getVet() == null)
+                                                               .toList();
 
-        model.addAttribute("shelters", sheltersWithoutVet);
+        model.addAttribute("shelters", sheltersActiveWithoutVet);
         model.addAttribute("currentVet", currentVet);
-        return "vet/shelter-request";
+        return "vet/employment-request";
     }
 
 
-    @PostMapping("/shelter-request")
-    public String submitShelterRequest(@RequestParam("shelterId") int shelterId) {
+    @PostMapping("/employment-request")
+    public String submitEmploymentRequest(@RequestParam("shelterId") int shelterId) {
         Vet vet = (Vet) userService.getCurrentUser();
-        Shelter shelter = shelterService.getShelterById(shelterId);
-        boolean exists = shelterRequestService.existsByVetAndShelter(vet, shelter);
-        if (exists) {
-            return "redirect:/vet/shelter-request";
+
+        try {
+            Shelter shelter = shelterService.findActiveByUserId(shelterId).orElseThrow(IllegalArgumentException::new);
+
+            if (employmentRequestService.existsByVetAndShelter(vet, shelter))
+                return "redirect:/vet/employment-request?error=requestExists";
+
+            EmploymentRequest employmentRequest = new EmploymentRequest(vet, shelter);
+            vet.getEmploymentRequests().add(employmentRequest);
+            shelter.getEmploymentRequests().add(employmentRequest);
+            employmentRequestService.saveEmploymentRequest(employmentRequest);
+            vetService.updateVet(vet);
+            shelterService.updateShelter(shelter);
+            return "redirect:/vet/employment-request?success=true";
+        }catch (IllegalArgumentException e){
+            return "redirect:/vet/employment-request?error=shelterNotFound";
         }
-        ShelterRequest shelterRequest = new ShelterRequest(vet, shelter);
-        shelterRequestService.saveShelterRequest(shelterRequest);
-        return "redirect:/vet/shelter-request";
     }
 
     @GetMapping("/shelters")
     public String viewShelters(Model model) {
         Vet vet = (Vet) userService.getCurrentUser();
         List<Shelter> shelters = shelterService.findByVet(vet);
+
         model.addAttribute("shelters", shelters);
         return "vet/shelters";
     }

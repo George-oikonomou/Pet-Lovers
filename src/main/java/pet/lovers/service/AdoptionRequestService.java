@@ -3,7 +3,6 @@ package pet.lovers.service;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import pet.lovers.entities.AdoptionRequest;
-import pet.lovers.entities.Shelter;
 import pet.lovers.entities.UserStatus;
 import pet.lovers.repositories.AdoptionRequestRepository;
 
@@ -24,21 +23,28 @@ public class AdoptionRequestService {
     }
 
     @Transactional
-    public Integer updateAdoptionRequest(AdoptionRequest adoptionRequest){
+    public void updateAdoptionRequest(AdoptionRequest adoptionRequest){
         adoptionRequestRepository.save(adoptionRequest);
-        return adoptionRequest.getId();
+    }
+
+    public Optional<AdoptionRequest> findActiveById(Integer id) {
+        return adoptionRequestRepository.findById(id).filter(this::hasApprovedAdopter);
     }
 
     public Optional<AdoptionRequest> findById(Integer id) {
         return adoptionRequestRepository.findById(id);
     }
 
-    public List<AdoptionRequest> findByAdopterId(Integer adopterID) {
-        return adoptionRequestRepository.findByAdopterId(adopterID);
+    public List<AdoptionRequest> findByAdopterId(Integer adopterId) {
+        return adoptionRequestRepository.findByAdopterId(adopterId);
     }
 
-    public List<AdoptionRequest> findByShelter(Shelter shelter) {
-        return adoptionRequestRepository.findByShelter(shelter);
+    public List<AdoptionRequest> findByShelterId(Integer shelterId) {
+        return adoptionRequestRepository.findByShelterId(shelterId);
+    }
+
+    public boolean hasApprovedAdopter(AdoptionRequest adoptionRequest){
+        return adoptionRequest.getAdopter().getUserStatus().equals(UserStatus.APPROVED);
     }
 
     public void save(AdoptionRequest adoptionRequest) {

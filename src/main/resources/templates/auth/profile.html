@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>My Profile</h1>
+
+         <div th:if="${msg}" class="alert alert-success">
+            <p th:text="${msg}"></p>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger">
+            <p th:text="${error}"></p>
+        </div>
+
+    <form th:action="@{${redirectUrl}}" th:object="${user}" method="post">
+
+        <div class="form-group">
+            <input type="hidden" id="id" class="form-control" th:field="*{id}">
+        </div>
+
+        <div class="form-group">
+            <label for="firstName">Username</label>
+            <input type="text" id="firstName" class="form-control" th:field="*{username}">
+        </div>
+
+        <div class="form-group">
+            <label for="contactNumber">contactNumber</label>
+            <input type="text" class="form-control"
+                   th:field="*{contactNumber}"
+                   id="contactNumber"
+                   required
+                   pattern="[0-9]{10}"
+                   title="Contact number must be exactly 10 digits"
+                   maxlength="10"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            />
+        </div>
+
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Shelter'}">
+            <label for="name">Shelter Name</label>
+            <input type="text" id="name" class="form-control" th:field="*{fullName}" required>
+        </div>
+
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Adopter'}">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" class="form-control" th:field="*{fullName}"
+                   pattern="[A-Za-z]+(?: [A-Za-z]+){1,4}"
+                   title="Full name must contain at least two words with alphabetic characters (e.g., 'John Doe' or 'Mary Ann')" required>
+        </div>
+
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Adopter'}" id="identificationUrl">
+            <label for="identificationUrl">ID card/Passport URL</label><br>
+            <input type="url" class="form-control" th:field="*{documentUrl}" required
+                   pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
+                   title="Please enter a valid URL starting with 'http://' or 'https://'" />
+            <span th:if="${#fields.hasErrors('documentUrl')}" th:errors="*{documentUrl}"></span>
+        </div>
+
+
+
+
+
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Vet' or user.getClass().name == 'pet.lovers.entities.Shelter'}" id="documentUrl">
+            <label for="documentUrl">ID card/Passport URL</label><br>
+            <input type="url" class="form-control" th:field="*{documentUrl}" required
+                   pattern="https?://(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(/\S*)?"
+                   title="Please enter a valid URL starting with 'http://' or 'https://'" />
+            <span th:if="${#fields.hasErrors('documentUrl')}" th:errors="*{documentUrl}"></span>
+        </div>
+
+        <div th:if="${user.getClass().name == 'pet.lovers.entities.Shelter'}">
+            <div th:if="*{vet}" class="mb-3 d-flex flex-column align-items-center" style="margin-top: 20px;">
+                <label class="form-label" style="margin-bottom: 10px; font-weight: bold;">Current Assigned Vet</label>
+                <div class="d-flex gap-3" style="gap: 15px; justify-content: center; align-items: center;">
+                    <label for="vetFullName">Full Name
+                        <input th:field="*{vet.fullName}" id="vetFullName" type="text" class="form-control" readonly style="width: 200px; padding: 10px; text-align: center;" />
+                    </label>
+
+                    <label for="vetContactNumber">Contact Number
+                        <input th:field="*{vet.contactNumber}" id="vetContactNumber" type="text" class="form-control" readonly style="width: 200px; padding: 10px; text-align: center;" />
+                    </label><br>
+                </div>
+                <div th:if="${user.getVet.userStatus.toString() != 'APPROVED'}" class="text-danger mt-2">
+                    The assigned veterinarian is currently unavailable. We recommend reviewing and assigning a new vet to your shelter if necessary.
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <input type="hidden" id="status" class="form-control" th:field="*{userStatus}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</body>
+</html>
+<style>
+    div.div-img {
+        display: inline-block;
+        padding: 0;
+        margin: 20px;
+        background: white;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+    }
+
+    img.document-img {
+        color: black;
+        max-width: 150px;
+        max-height: 150px;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+        transform: perspective(500px) rotateX(5deg);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    img.document-img:hover {
+        transform: perspective(500px) rotateX(0deg) scale(1.05);
+    }
+</style>

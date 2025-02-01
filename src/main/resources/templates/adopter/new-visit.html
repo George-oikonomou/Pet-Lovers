@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Request Visit</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+  <h1>Request Visit</h1>
+
+  <form th:action="@{/adopter/shelter/{shelter_id}/request-visit(shelter_id=${visit.shelter.id})}" method="post" th:object="${visit}">
+
+    <!-- Display adopter's name -->
+    <div class="form-group">
+      <label for="adopterName">Adopter Name</label>
+      <input type="text" class="form-control" id="adopterName" th:value="${visit.adopter.fullName}" readonly>
+    </div>
+
+    <!-- Display Shelter -->
+    <div class="form-group">
+      <label for="shelterLoc">Shelter</label>
+      <input type="text" class="form-control" id="shelterLoc" th:value="${visit.shelter.fullName}" readonly>
+    </div>
+
+    <!-- Display Location -->
+    <div class="form-group">
+      <label for="location">Location</label>
+      <input type="text" class="form-control" id="location" th:value="${visit.shelter.location}" readonly>
+    </div>
+
+    <!-- Display Number -->
+    <div class="form-group">
+      <label for="contactNumber">Contact Number</label>
+      <input type="text" class="form-control" id="contactNumber" th:field="${visit.contactNumber}" readonly>
+    </div>
+
+    <!-- Input for desired visit time -->
+    <div class="form-group">
+      <label for="dateTime">Time of Visit</label>
+      <input type="datetime-local" class="form-control" id="dateTime" th:field="*{dateTime}" required>
+    </div>
+
+    <!-- Submit and cancel buttons -->
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit Request</button>
+      <a th:href="@{/view-shelter/{shelter_id}(shelter_id=${visit.shelter.id})}" class="btn btn-success">Cancel</a>
+    </div>
+
+
+    <!-- Hidden fields-->
+    <input type="hidden" id="adopter" th:field="*{adopter}">
+    <input type="hidden" id="shelter" th:field="*{shelter}">
+  </form>
+</div>
+</body>
+</html>

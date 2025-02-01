@@ -41,8 +41,13 @@ public class User {
     @NotBlank
     private String location;
 
+    @Column
+    @NotBlank
+    @Size(max = 1000)
+    private String DocumentUrl;
+
     @Enumerated(EnumType.STRING)
-    private UserStatus userStatus = UserStatus.PENDING; // Default status
+    private UserStatus userStatus = UserStatus.PENDING;
 
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -57,15 +62,15 @@ public class User {
     @Column(name = "verification_code_expiration")
     private LocalDateTime verificationCodeExpiration;
 
-    public User() {
-    }
+    public User() {}
 
-    public User(String username, String email, String password, String contactNumber, String location) {
+    public User(String username, String email, String password, String contactNumber, String location, String DocumentUrl) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.contactNumber = contactNumber;
         this.location = location;
+        this.DocumentUrl = DocumentUrl;
     }
 
     public String getContactNumber() {
@@ -95,7 +100,6 @@ public class User {
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -103,7 +107,6 @@ public class User {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -111,7 +114,6 @@ public class User {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -119,7 +121,6 @@ public class User {
     public Set<Role> getRoles() {
         return roles;
     }
-
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
@@ -127,15 +128,20 @@ public class User {
     public UserStatus getUserStatus() {
         return userStatus;
     }
-
     public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public String getDocumentUrl() {
+        return DocumentUrl;
+    }
+    public void setDocumentUrl(String DocumentUrl) {
+        this.DocumentUrl = DocumentUrl;
     }
 
     public String getVerificationCode() {
         return verificationCode;
     }
-
     public void setVerificationCode(String verificationCode) {
         this.verificationCode = verificationCode;
     }
@@ -143,7 +149,6 @@ public class User {
     public LocalDateTime getVerificationCodeExpiration() {
         return verificationCodeExpiration;
     }
-
     public void setVerificationCodeExpiration(LocalDateTime VerificationCodeExpiration) {
         this.verificationCodeExpiration = VerificationCodeExpiration;
     }

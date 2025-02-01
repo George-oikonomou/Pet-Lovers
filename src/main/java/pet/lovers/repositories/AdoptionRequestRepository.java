@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface AdoptionRequestRepository extends JpaRepository<AdoptionRequest, Integer> {
-    List<AdoptionRequest> findByShelter(Shelter shelter);
+    List<AdoptionRequest> findByShelterId(Integer adopterId);
 
     List<AdoptionRequest> findByAdopterId(Integer adopterId);
 

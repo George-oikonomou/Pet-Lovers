@@ -45,8 +45,8 @@ public class EmailService {
         String text = """
             Dear %s,
             
-            Thank you for submitting your shelter to our platform.
-            After careful review, we regret to inform you that your submission has not been approved at this time.
+            Thank you for submitting a shelter registration to our platform.
+            After careful review, we regret to inform you that your submission has not been approved at this time and your account has been deleted.
             
             We value your interest and encourage you to reach out if you would like further details or guidance
             on how to meet the necessary criteria in the future.
@@ -174,6 +174,79 @@ public class EmailService {
             """.formatted(username);
 
         sendSimpleMessage(email, subject, text);
+    }
+
+    //account of user rejected by admin  for rule breaking
+    public void sendRejectedUserMessage(String email,String username) {
+        String subject = "Account Deletion";
+        String text = """
+            Dear %s,
+            
+            We regret to inform you that your account has been suspended due to a violation of our rules and certain actions will be limited.
+            This action was taken by the admin team as part of our policy enforcement.
+
+            If you believe this is a mistake or if you have any questions, please contact us immediately at petloversplatform@gmail.com .
+
+            Best regards,
+            The Pet Lovers Team
+            """.formatted(username);
+
+        sendSimpleMessage(email, subject, text);
+
+    }
+
+    //account of user under review by admin  for rule breaking
+    public void sendPendingUserMessage(String email,String username) {
+        String subject = "Account Deletion";
+        String text = """
+            Dear %s,
+            
+            We would like to inform you that your account is currently under review by the admin team.
+            Certain actions will be limited until the review is completed.
+            
+            If you have any questions or concerns, please contact us at petloversplatform@gmail.com
+            
+            Best regards,
+            The Pet Lovers Team
+            """.formatted(username);
+
+        sendSimpleMessage(email, subject, text);
+
+    }
+
+    //account of user Approved by admin
+    public void sendApprovedUserMessage(String email,String username) {
+        String subject = "Account Deletion";
+        String text = """
+            Dear %s,
+            
+            We are pleased to inform you that your account has been approved by the admin team.
+            You now have full access to all features on our platform.
+            
+            If you have any questions or need assistance, please do not hesitate to contact us.
+            
+            Best regards,
+            The Pet Lovers Team
+            """.formatted(username);
+
+        sendSimpleMessage(email, subject, text);
+
+    }
+
+    public void sendDeleteUserMessage(String email,String username) {
+        String subject = "Account Deletion";
+        String text = """
+            Dear %s,
+            
+            We regret to inform you that your account has been deleted due to a violation of our rules.
+            This action was taken by the admin team as part of our policy enforcement.
+            If you believe this is a mistake or if you have any questions, please contact us immediately at petloversplatform@gmail.com .
+            Best regards,
+            The Pet Lovers Team
+            """.formatted(username);
+
+        sendSimpleMessage(email, subject, text);
+
     }
 
 

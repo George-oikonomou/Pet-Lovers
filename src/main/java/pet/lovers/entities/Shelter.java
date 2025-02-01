@@ -19,33 +19,31 @@ public class Shelter extends User{
     @Size(min = 2, max = 50)
     private String fullName;
 
-    @OneToMany(mappedBy = "shelter", cascade= CascadeType.ALL)
+    @OneToMany(mappedBy = "shelter",  cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdoptionRequest> adoptionRequests;
+
+    @OneToMany(mappedBy = "shelter",  cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Visit> visits;
 
     @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pet> pets;
 
+    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EmploymentRequest> employmentRequests;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name="vet_id")
     private Vet vet;
-
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "documents", referencedColumnName = "id")
-    private Document documents;
     // END TABLE COLUMNS
 
 
     //CONSTRUCTORS
-    public Shelter(String username, String email, String password, String contactNumber, String location, String name,Document documents) {
-        super(username, email, password, contactNumber, location);
+    public Shelter(String username, String email, String password, String contactNumber, String location, String name,String documents) {
+        super(username, email, password, contactNumber, location, documents);
         this.fullName = name;
-        this.documents = documents;
     }
 
-    public Shelter() {};
+    public Shelter() {}
 
     //GETTERS AND SETTERS
     public String getFullName() {
@@ -77,10 +75,17 @@ public class Shelter extends User{
         this.vet = vet;
     }
 
-    public Document getDocuments() {
-        return documents;
+    public List<EmploymentRequest> getEmploymentRequests() {
+        return employmentRequests;
     }
-    public void setDocuments(Document documents) {
-        this.documents = documents;
+    public void setEmploymentRequests(List<EmploymentRequest> employmentRequests) {
+        this.employmentRequests = employmentRequests;
+    }
+
+    public List<Visit> getVisits() {
+        return visits;
+    }
+    public void setVisits(List<Visit> visits) {
+        this.visits = visits;
     }
 }

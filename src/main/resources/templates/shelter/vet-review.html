@@ -16,6 +16,10 @@
         <p class="alert alert-success">Vet successfully selected!</p>
     </div>
 
+    <div th:if="${param.rejected}">
+        <p class="alert alert-info">Vet successfully Rejected!</p>
+    </div>
+
     <!-- Check if there are no pending vets -->
     <div th:if="${#lists.isEmpty(pendingVets)}">
         <p>No pending vet requests at the moment.</p>
@@ -41,18 +45,21 @@
                 <td th:text="${vetRequest.vet.location}"></td>
                 <td th:text="${vetRequest.vet.contactNumber}"></td>
                 <td>
-                    <a th:href="|${vetRequest.vet.documents.path}|"
+                    <a th:href="|${vetRequest.vet.documentUrl}|"
                        target="_blank">
-                        <img th:src="|${vetRequest.vet.documents.path}|"
+                        <img th:src="|${vetRequest.vet.documentUrl}|"
                              alt="link" />
                     </a>
                 </td>
                 <td>
-                    <form th:action="@{/shelter/vet-review}" method="post">
+                    <form th:action="@{/shelter/vet-review/approve}" method="post">
                         <input type="hidden" name="vetRequestId" th:value="${vetRequest.vet.id}"/>
                         <button class="btn btn-primary" type="submit">Select Vet</button>
                     </form>
-
+                    <form th:action="@{/shelter/vet-review/reject}" method="post">
+                        <input type="hidden" name="vetRequestId" th:value="${vetRequest.vet.id}"/>
+                        <button class="btn btn-primary" type="submit">Reject Vet</button>
+                    </form>
                 </td>
             </tr>
             </tbody>

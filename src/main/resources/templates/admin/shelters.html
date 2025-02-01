@@ -35,9 +35,9 @@
                 <td th:text="${shelter.email}"></td>
                 <td th:text="${shelter.contactNumber}"></td>
                 <td>
-                    <a th:href="|${shelter.documents.path}|"
+                    <a th:href="|${shelter.documentUrl}|"
                        target="_blank">
-                        <img th:src="|${shelter.documents.path}|"
+                        <img th:src="|${shelter.documentUrl}|"
                              alt="link" />
                     </a>
                 </td>

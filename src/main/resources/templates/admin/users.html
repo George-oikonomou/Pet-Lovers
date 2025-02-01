@@ -12,6 +12,10 @@
 <div layout:fragment="main-content">
   <h1>User Management</h1>
 
+    <div th:if="${param.deleted}">
+      <p class="alert alert-success">Vet successfully selected!</p>
+    </div>
+
 
     <div id="tableContainer" th:if="${not #lists.isEmpty(users)}">
       <table class="datatable">
@@ -32,6 +36,13 @@
           <td th:text="${user.email}"></td>
           <td th:if="${user.id}">
             <a class="btn" th:href="@{/admin/user/{id}(id=${user.id})}">Edit</a>
+            <a class="btn btn-danger"
+               style="background-color: red; border-color: red; transition: background-color 0.3s, border-color 0.3s;"
+               onmouseover="this.style.backgroundColor='#cc0000'; this.style.borderColor='#cc0000';"
+               onmouseout="this.style.backgroundColor='red'; this.style.borderColor='red';"
+               th:href="@{/admin/users/{user_id}/delete(user_id=${user.id})}">
+              Delete
+            </a>
           </td>
         </tr>
         </tbody>
@@ -40,10 +51,6 @@
 
     <div th:if="${#lists.isEmpty(users)}" class="no-data">
       No Users Found!
-    </div>
-
-    <div style="margin-top: 20px; text-align: center;">
-      <a href="/register/adopter" class="btn">Create New User</a>
     </div>
   </div>
 </div>
