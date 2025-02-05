@@ -1,20 +1,25 @@
 package pet.lovers.service;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import pet.lovers.entities.AdoptionRequest;
 import pet.lovers.entities.Pet;
 import pet.lovers.entities.Shelter;
 
 @Service
+@Configuration
+@EnableAsync
 public class EmailService {
 
     public static final String SENDER_EMAIL= "petloversplatform@gmail.com";
 
     private final JavaMailSender emailSender;
-    private final Boolean isEmailEnabled = true;
+    private final Boolean isEmailEnabled = false;
 
     public EmailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;
@@ -250,7 +255,7 @@ public class EmailService {
     }
 
 
-
+    @Async
     public void sendSimpleMessage(String recipient, String subject, String text) {
         if (!isEmailEnabled)
             return;
