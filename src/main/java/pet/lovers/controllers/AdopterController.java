@@ -50,7 +50,7 @@ public class AdopterController {
         Adopter adopter = adopterService.getCurrentUser();
 
         try {
-            Pet pet = petService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            Pet pet = petService.findById(id).orElseThrow(IllegalArgumentException::new);
             AdoptionRequest adoptionRequest = new AdoptionRequest(LocalDateTime.now(), pet.getShelter(), adopter, pet);
             model.addAttribute("adoptionRequest", adoptionRequest);
             return "adopter/new-adoption-request";
@@ -66,7 +66,7 @@ public class AdopterController {
         Adopter adopter = adopterService.getCurrentUser();
 
         try {//service TODO
-            Pet pet = petService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            Pet pet = petService.findById(id).orElseThrow(IllegalArgumentException::new);
             AdoptionRequest theAdoptionRequest = new AdoptionRequest(adoptionRequest.getDateTime(), adoptionRequest.getShelter(), adopter, adoptionRequest.getPet());
             adoptionRequestService.save(theAdoptionRequest);
             adopter.getAdoptionRequests().add(theAdoptionRequest);

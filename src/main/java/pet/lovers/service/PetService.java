@@ -37,13 +37,8 @@ public class PetService {
         return petRepository.findByShelter(shelter);
     }
 
-
     public Optional<Pet> findById(Integer id) {
         return petRepository.findById(id);
-    }
-
-    public Optional<Pet> findActiveById(Integer id) {
-        return petRepository.findById(id).filter(this::IsActivePet);
     }
 
     @Transactional
@@ -70,15 +65,6 @@ public class PetService {
         petRepository.save(pet);
     }
 
-    @Transactional
-    public List<Pet> getPetsByPetStatus(List<PetStatus> statuses) {
-        return petRepository.findByPetStatusIn(statuses);
-    }
-
-    public boolean IsActivePet(Pet pet) {
-        return pet.getPetStatus().equals(PetStatus.AVAILABLE) && pet.getUserStatus().equals(UserStatus.APPROVED) && pet.getHealthStatus().equals(HealthStatus.HEALTHY) && pet.getShelter().getUserStatus().equals(UserStatus.APPROVED);
-    }
-
     public void updatePet(Pet pet, String name, String breed,  PetStatus petStatus,Integer yearBirthed, String type, Double weight,String sex) {
         pet.setName(name);
         pet.setBreed(breed);
@@ -99,5 +85,9 @@ public class PetService {
     public void updatePetStatus(Pet pet, PetStatus petStatus) {
         pet.setPetStatus(petStatus);
         petRepository.save(pet);
+    }
+
+    public List<Pet> getActivePetsByStatus(List<PetStatus> statuses) {
+        return petRepository.findActivePetsByStatus(statuses);
     }
 }
