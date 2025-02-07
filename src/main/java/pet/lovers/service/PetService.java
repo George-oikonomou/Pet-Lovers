@@ -95,4 +95,9 @@ public class PetService {
     public List<Pet> getActivePetsByStatus(List<PetStatus> statuses) {
         return petRepository.findActivePetsByStatus(statuses);
     }
+
+    public int countNewPetListings() {
+        return petRepository.findByUserStatus(UserStatus.PENDING).size();
+    }
+
 }

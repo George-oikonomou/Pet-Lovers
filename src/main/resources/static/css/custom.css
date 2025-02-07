@@ -75,3 +75,45 @@ a:hover, a:focus {
 .cover-container {
     max-width: 75em;
 }
+
+.dashboard-container {
+    background-color: #588157;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dashboard-container h2 {
+    color: #f1fff1;
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+.dashboard-container p, .dashboard-container ul {
+    color: #e8f5e9;
+    font-size: 1em;
+    line-height: 1.5em;
+}
+
+.dashboard-container ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.dashboard-container li {
+    padding: 5px 0;
+}
+
+a {
+    color: #f1fff1;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

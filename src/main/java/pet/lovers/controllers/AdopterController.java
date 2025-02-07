@@ -41,7 +41,13 @@ public class AdopterController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        Adopter currentUser = adopterService.getCurrentUser();
+        List<Visit> visits  = currentUser.getVisits()
+                .stream()
+                .toList();
+
+        model.addAttribute("adoptionRequests", visits);
         return "index";
     }
 

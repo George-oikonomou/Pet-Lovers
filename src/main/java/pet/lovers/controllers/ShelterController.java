@@ -35,7 +35,17 @@ public class ShelterController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        Shelter shelter = (Shelter) userService.getCurrentUser();
+        List<Shelter> thisShelter = List.of(shelter);
+        model.addAttribute("totalPets", petService.findByShelters(thisShelter).size());
+
+        List<Visit> visits = visitService.getVisitsByShelterId(shelter.getId())
+                .stream()
+                .filter(visit -> visit.getDateTime().isAfter(LocalDateTime.now()))
+                .toList();
+
+        model.addAttribute("upcomingVisits", visits);
         return "index";
     }
 

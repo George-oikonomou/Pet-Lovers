@@ -36,7 +36,8 @@ public class VetController {
      }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        model.addAttribute("vetShelters", shelterService.findByVet((Vet) userService.getCurrentUser()));
         return "index";
     }
 
