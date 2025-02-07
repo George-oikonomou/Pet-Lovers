@@ -58,7 +58,7 @@
                     </form>
                     <form th:action="@{/shelter/vet-review/reject}" method="post">
                         <input type="hidden" name="vetRequestId" th:value="${vetRequest.vet.id}"/>
-                        <button class="btn btn-primary" type="submit">Reject Vet</button>
+                        <button class="btn btn-danger" type="submit">Reject Vet</button>
                     </form>
                 </td>
             </tr>

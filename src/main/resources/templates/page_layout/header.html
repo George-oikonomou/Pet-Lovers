@@ -29,6 +29,8 @@
                 <i class="fa fa-home" aria-hidden="true"></i> Home
             </a>
 
+            <a sec:authorize="!isAuthenticated()" class="nav-link" href="/">Greeting Page</a>
+
             <a sec:authorize="!isAuthenticated() or hasRole('ROLE_ADOPTER')" class="nav-link" href="/pets">
                 <i class="fa fa-paw" aria-hidden="true"></i> Pets
             </a>

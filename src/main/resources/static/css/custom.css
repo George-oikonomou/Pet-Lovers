@@ -58,6 +58,16 @@ a:hover, a:focus {
     border-radius: 5px;
 }
 
+.form-text {
+    color: #a3b18a;
+    font-size: 0.9rem;
+}
+
+.text-danger {
+    color: #d9534f;
+    font-size: 0.9rem;
+}
+
 .cover-container {
     max-width: 75em;
 }
