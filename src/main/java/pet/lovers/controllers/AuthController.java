@@ -1,5 +1,6 @@
 package pet.lovers.controllers;
 
+import org.springframework.ui.Model;
 import pet.lovers.entities.*;
 import pet.lovers.repositories.RoleRepository;
 import jakarta.annotation.PostConstruct;
@@ -74,5 +75,21 @@ public class AuthController {
     @GetMapping("/login")
     public String login() {
         return "auth/login";
+    }
+
+    @GetMapping("/about")
+    public String aboutPage(Model model) {
+        model.addAttribute("title", "About Us");
+        model.addAttribute("content", "Our mission is to help pets find loving homes by connecting adopters with animal shelters.");
+        return "auth/about";
+    }
+
+    @GetMapping("/contact")
+    public String contactPage(Model model) {
+        model.addAttribute("title", "Contact Us");
+        model.addAttribute("email", "support@petadoption.com");
+        model.addAttribute("phone", "+1 (800) 555-1234");
+        model.addAttribute("address", "123 Pet Lane, Adoption City, PA 55555");
+        return "auth/contact";
     }
 }

@@ -27,7 +27,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/home", "/images/**", "/js/**", "/css/**","/pets/**","shelter-view").permitAll()
+                        .requestMatchers("/", "/home", "/images/**", "/js/**", "/css/**","/pets/**","shelter-view", "about", "contact").permitAll()
                         .requestMatchers("/forgot-password","/reset-password", "/register/**","/login").anonymous()
                         .requestMatchers("/adopter/**", "/adoption-requests/adopter/**").hasRole("ADOPTER")
                         .requestMatchers("/shelter/**" , "/adoption-requests/shelter/**" ).hasRole("SHELTER")
