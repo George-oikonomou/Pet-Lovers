@@ -1,16 +1,44 @@
-.cover-container {
-    max-width: 75em;
+/* Standardize link styles */
+a, a:visited {
+    color: #d8efd8;
+    text-decoration: none;
+}
+
+a:hover, a:focus {
+    color: #f1fff1;
+}
+
+.nav-link.active {
+    color: #f1fff1 !important;
+    background-color: transparent;
+    border-bottom: 2px solid #5d935d;
 }
 
 .masthead-brand{
-   float: inherit;
+    float: inherit;
 }
 
 .nav-masthead {
     float: inherit;
 }
+
+.masthead-brand{
+    float: inherit;
+}
+
+/* Fix buttons globally */
+.btn, input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 .btn-info {
-    background-color: #17a2b8;
+    background-color: #46af4d;
     color: white;
     padding: 6px 12px;
     text-decoration: none;
@@ -18,5 +46,18 @@
 }
 
 .btn-info:hover {
-    background-color: #138496;
+    background-color: #388E3C;
+}
+
+
+.form-control {
+    max-width: 500px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.cover-container {
+    max-width: 75em;
 }

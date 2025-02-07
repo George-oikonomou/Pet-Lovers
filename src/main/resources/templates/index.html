@@ -13,8 +13,19 @@
 <div layout:fragment="main-content">
   <h1>Welcome to the Pet Adoption Platform!</h1>
 
+  <!-- Section for signed-out users -->
+  <div class="welcome-section" sec:authorize="!isAuthenticated()" style="background-color: #588157; padding: 40px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); text-align: center;">
+    <img th:src="@{/images/catanddog.jpg}" alt="Happy Pets" style="border-radius: 8px; margin-bottom: 20px; width: 300px; height: auto;">
+    <h3 style="color: #f1fff1; font-size: 2.2em; margin-bottom: 15px;">Change Their Lives, Let Them Change Yours</h3>
+    <p style="color: #e8f5e9; font-size: 1.3em; line-height: 1.8em; margin-bottom: 30px;">
+      Adopting a pet isn’t just about giving them a home—it’s about creating a bond that lasts a lifetime.
+      Discover dogs, cats, and more waiting to meet you. Their loyalty and love will transform your world.
+    </p>
+    <a class="btn-explore" th:href="@{/pets}" style="background-color: #6aa669; padding: 12px 25px; font-size: 1.2em; font-weight: bold; border-radius: 5px; color: white;">🐾 Start your adoption journey today!</a>
+  </div>
+
   <!-- Content for Admin -->
-  <div sec:authorize="hasRole('ROLE_ADMIN')">
+  <div sec:authorize="hasRole('ROLE_ADMIN')" class="dashboard-section">
     <h2>Admin Dashboard</h2>
     <p>Welcome, Admin! Here are your tools:</p>
     <ul>
@@ -27,7 +38,7 @@
   </div>
 
   <!-- Content for Shelter -->
-  <div sec:authorize="hasRole('ROLE_SHELTER')">
+  <div sec:authorize="hasRole('ROLE_SHELTER')" class="dashboard-section">
     <h2>Shelter Dashboard</h2>
     <p>Welcome, Shelter! Manage your adoption requests, view your pets and add new ones:</p>
     <ul>
@@ -41,7 +52,7 @@
   </div>
 
   <!-- Content for Vet -->
-  <div sec:authorize="hasRole('ROLE_VET')">
+  <div sec:authorize="hasRole('ROLE_VET')" class="dashboard-section">
     <h2>Vet Dashboard</h2>
     <p>Welcome, Vet! You can manage the health status of the pets you've examined:</p>
     <ul>
@@ -53,12 +64,12 @@
   </div>
 
   <!-- Content for Adopter -->
-  <div sec:authorize="hasRole('ROLE_ADOPTER')">
+  <div sec:authorize="hasRole('ROLE_ADOPTER')" class="dashboard-section">
     <h2>Adopter Dashboard</h2>
     <p>Welcome, Adopter! View your adoption requests:</p>
     <ul>
       <li><a th:href="@{/pets}">Browse Available Pets for Adoption from Shelters</a></li>
-      <li><a th:href="@{adopter/visits}">View Your scheduled Visits</a></li>
+      <li><a th:href="@{adopter/visits}">View Your Scheduled Visits</a></li>
       <li><a th:href="@{/adoption-requests/adopter}">Check Your Adoption Requests</a></li>
       <li><a th:href="@{/profile}">View and Edit Your Profile</a></li>
     </ul>
