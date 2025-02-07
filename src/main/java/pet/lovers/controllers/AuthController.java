@@ -42,12 +42,12 @@ public class AuthController {
         Shelter shelter;
 
         if (!userService.existsByEmail("vet@gmail.com")) {
-            Vet vet = new Vet("vet", "vet@gmail.com", "vet", "1234567890", "location", "full name",  "documentOfVet");
+            Vet vet = new Vet("vet", "vet@gmail.com", "vet", "1234567890", "Athens", "Vet Doe",  "https://www.4icu.org/i/programs-courses-degrees/bachelor-of-veterinary-medicine-500x356.png");
             userService.saveUser(vet);
         }
 
         if (!userService.existsByEmail("shelter@gmail.com")) {
-            shelter = new Shelter("shelter", "shelter@gmail.com", "shelter", "1345678902", "location", "shelter name", "documentOfShelter");
+            shelter = new Shelter("shelter", "shelter@gmail.com", "shelter", "1345678902", "Athens", "Lucky Dog Refuge", "https://www.luckydogrefuge.com/uploads/1/4/2/2/142271538/editor/dept-of-agriculture-animal-shelter-asf-000019.png?1699560754");
             userService.saveUser(shelter);
 
             if (!petService.existsByName("Rocky")) {
@@ -61,8 +61,13 @@ public class AuthController {
         }
 
         if (!userService.existsByEmail("adopter@gmail.com")) {
-             adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "location", "full name", LocalDate.now().minusYears(21), "document");
+             adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "Athens,Tavros", "Jane Doe", LocalDate.now().minusYears(21), "https://t3.ftcdn.net/jpg/03/74/95/16/360_F_374951602_cmtwzq4Erge2HNa94YWDup1QII4IvRpO.jpg");
              userService.saveUser(adopter);
+        }
+
+        if (!userService.existsByEmail("adopter2@gmail.com")) {
+            adopter = new Adopter("adopter2", "adopter2@gmail.com", "adopter2", "1222228405", "Athens,Zografou", "John Doe", LocalDate.now().minusYears(24), "https://t4.ftcdn.net/jpg/02/32/92/21/360_F_232922178_YCAxIU0vlGoGY2H76ZsATswNrOVbWlUv.jpg");
+            userService.saveUser(adopter);
         }
     }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pet.lovers.entities.*;
 import pet.lovers.repositories.PetRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +34,12 @@ public class PetService {
         petRepository.save(pet);
     }
 
-    public List<Pet> findByShelter(Shelter shelter) {
-        return petRepository.findByShelter(shelter);
+    public List<Pet> findByShelters(List<Shelter> shelters) {
+        List<Pet> pets = new ArrayList<>();
+        for(Shelter shelter : shelters){
+            pets.addAll(petRepository.findByShelter(shelter));
+        }
+        return pets;
     }
 
     public Optional<Pet> findById(Integer id) {

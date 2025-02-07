@@ -37,6 +37,10 @@ a:hover, a:focus {
     cursor: pointer;
 }
 
+.btn:hover, input[type="submit"]:hover {
+    background-color: #3d673d;
+}
+
 .btn-info {
     background-color: #46af4d;
     color: white;
