@@ -17,6 +17,7 @@ import pet.lovers.entities.PetStatus;
 import pet.lovers.service.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_ADOPTER')")
@@ -110,5 +111,18 @@ public class AdopterController {
             model.addAttribute("error", "Shelter not found!");
             return "/error/error-404";
         }
+    }
+
+
+    @GetMapping("/visits")
+    public String viewAdopterAdoptionRequests(Model model) {
+        Adopter currentUser = adopterService.getCurrentUser();
+        List<Visit> visits  = currentUser.getVisits()
+                .stream()
+                .filter(visit -> visit.getDateTime().isAfter(LocalDateTime.now()))
+                .toList();
+
+        model.addAttribute("visits", visits);
+        return "adopter/visit";
     }
 }

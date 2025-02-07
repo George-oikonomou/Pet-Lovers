@@ -7,13 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pet.lovers.entities.*;
-import pet.lovers.service.EmploymentRequestService;
-import pet.lovers.service.PetService;
-import pet.lovers.service.UserService;
-import pet.lovers.service.VetService;
-import pet.lovers.service.ShelterService;
+import pet.lovers.service.*;
 
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,13 +23,15 @@ public class ShelterController {
     private final EmploymentRequestService employmentRequestService;
     private final VetService vetService;
     private final ShelterService shelterService;
+    private final VisitService visitService;
 
-    public ShelterController(UserService userService, PetService petService, EmploymentRequestService employmentRequestService, VetService vetService, ShelterService shelterService) {
+    public ShelterController(UserService userService, PetService petService, EmploymentRequestService employmentRequestService, VetService vetService, ShelterService shelterService, VisitService visitService) {
         this.userService = userService;
         this.petService = petService;
         this.employmentRequestService = employmentRequestService;
         this.vetService = vetService;
         this.shelterService = shelterService;
+        this.visitService = visitService;
     }
 
     @GetMapping("/dashboard")
@@ -164,5 +163,18 @@ public class ShelterController {
             redirectAttributes.addFlashAttribute("error", "Pet not found!");
             return "redirect:/shelter/pets";
         }
+    }
+
+    @GetMapping("/visits")
+    public String showVisits(Model model) {
+        Shelter shelter = (Shelter) userService.getCurrentUser();
+
+        List<Visit> visits = visitService.getVisitsByShelterId(shelter.getId())
+                .stream()
+                .toList();
+
+        model.addAttribute("visits", visits);
+
+        return "shelter/visits";
     }
 }
