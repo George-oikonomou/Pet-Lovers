@@ -62,10 +62,12 @@ a:hover, a:focus {
     border-radius: 5px;
 }
 
-.form-control select,
 select.form-control {
-    line-height: 1.5;
-    height: auto;      /* remove any forced height */
+    line-height: 1.6;
+    padding: 5px 10px;
+    height: auto;
+    font-size: 1rem;
+    vertical-align: middle;
 }
 
 .form-text {
