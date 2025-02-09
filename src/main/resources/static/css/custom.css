@@ -55,11 +55,13 @@ a:hover, a:focus {
 
 
 .form-control {
-    max-width: 500px;
+    max-width: 400px;
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin: 10px auto;
+    display: block;
 }
 
 select.form-control {
