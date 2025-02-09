@@ -38,7 +38,7 @@ a:hover, a:focus {
 }
 
 .btn:hover, input[type="submit"]:hover {
-    background-color: #3d673d;
+    background-color: #529a52;
 }
 
 .btn-info {
@@ -60,6 +60,12 @@ a:hover, a:focus {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+
+.form-control select,
+select.form-control {
+    line-height: 1.5;
+    height: auto;      /* remove any forced height */
 }
 
 .form-text {
@@ -107,13 +113,4 @@ a:hover, a:focus {
 
 .dashboard-container li {
     padding: 5px 0;
-}
-
-a {
-    color: #f1fff1;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
 }
