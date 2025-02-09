@@ -87,7 +87,7 @@ public class UserService implements UserDetailsService {
         this.updateUser(user);
 
         if (userStatus == UserStatus.APPROVED)
-            emailService.sendRejectedUserMessage(user.getEmail(), user.getUsername());
+            emailService.sendApprovedUserMessage(user.getEmail(), user.getUsername());
         else if (userStatus == UserStatus.REJECTED)
             emailService.sendRejectedUserMessage(user.getEmail(), user.getUsername());
         else if (userStatus == UserStatus.PENDING)
@@ -193,5 +193,9 @@ public class UserService implements UserDetailsService {
                 userRepository.save(user);
             }
         });
+    }
+
+    public long countTotalUsers() {
+        return userRepository.count();
     }
 }

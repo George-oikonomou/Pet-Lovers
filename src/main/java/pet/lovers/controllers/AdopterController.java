@@ -17,6 +17,7 @@ import pet.lovers.entities.PetStatus;
 import pet.lovers.service.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_ADOPTER')")
@@ -40,7 +41,13 @@ public class AdopterController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        Adopter currentUser = adopterService.getCurrentUser();
+        List<Visit> visits  = currentUser.getVisits()
+                .stream()
+                .toList();
+
+        model.addAttribute("adoptionRequests", visits);
         return "index";
     }
 
@@ -50,7 +57,7 @@ public class AdopterController {
         Adopter adopter = adopterService.getCurrentUser();
 
         try {
-            Pet pet = petService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            Pet pet = petService.findById(id).orElseThrow(IllegalArgumentException::new);
             AdoptionRequest adoptionRequest = new AdoptionRequest(LocalDateTime.now(), pet.getShelter(), adopter, pet);
             model.addAttribute("adoptionRequest", adoptionRequest);
             return "adopter/new-adoption-request";
@@ -66,7 +73,7 @@ public class AdopterController {
         Adopter adopter = adopterService.getCurrentUser();
 
         try {//service TODO
-            Pet pet = petService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            Pet pet = petService.findById(id).orElseThrow(IllegalArgumentException::new);
             AdoptionRequest theAdoptionRequest = new AdoptionRequest(adoptionRequest.getDateTime(), adoptionRequest.getShelter(), adopter, adoptionRequest.getPet());
             adoptionRequestService.save(theAdoptionRequest);
             adopter.getAdoptionRequests().add(theAdoptionRequest);
@@ -110,5 +117,18 @@ public class AdopterController {
             model.addAttribute("error", "Shelter not found!");
             return "/error/error-404";
         }
+    }
+
+
+    @GetMapping("/visits")
+    public String viewAdopterAdoptionRequests(Model model) {
+        Adopter currentUser = adopterService.getCurrentUser();
+        List<Visit> visits  = currentUser.getVisits()
+                .stream()
+                .filter(visit -> visit.getDateTime().isAfter(LocalDateTime.now()))
+                .toList();
+
+        model.addAttribute("visits", visits);
+        return "adopter/visit";
     }
 }

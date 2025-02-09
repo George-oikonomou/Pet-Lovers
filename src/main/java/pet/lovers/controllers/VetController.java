@@ -36,7 +36,8 @@ public class VetController {
      }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        model.addAttribute("vetShelters", shelterService.findByVet((Vet) userService.getCurrentUser()));
         return "index";
     }
 
@@ -44,11 +45,12 @@ public class VetController {
     public String showPetStatus(Model model) {
         Vet vet = (Vet) userService.getCurrentUser();
 
-        List<Pet> pets = shelterService.findByVet(vet)
-                                       .stream()
-                                       .flatMap(shelter -> shelter.getPets().stream())
-                                       .filter(pet -> pet.getUserStatus() == UserStatus.APPROVED && pet.getPetStatus() != PetStatus.ADOPTED && pet.getShelter().getUserStatus() == UserStatus.APPROVED)
-                                       .toList();
+        List<Pet> pets = petService.findByShelters(vet.getShelters())
+                .stream()
+                .filter(pet -> pet.getUserStatus() == UserStatus.APPROVED
+                        && pet.getPetStatus() != PetStatus.ADOPTED
+                        && pet.getShelter().getUserStatus() == UserStatus.APPROVED)
+                .toList();
 
         model.addAttribute("pets", pets);
         model.addAttribute("healthStatuses", HealthStatus.values());

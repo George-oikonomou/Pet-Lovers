@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Pet Details</title>
+    <title>Pets For Adoption</title>
     <script>
         function filterSelection(status) {
             const pets = document.querySelectorAll('.pet-row');
@@ -49,7 +49,8 @@
                 <th>Weight</th>
                 <th>Shelter</th>
                 <th>Location</th>
-                <th>Status</th>
+                <th>Availability</th>
+                <th>Health Status</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -69,8 +70,9 @@
                 </td>
                 <td th:text="${pet.shelter.location}"></td>
                 <td th:text="${pet.petStatus}"></td>
+                <td th:text="${pet.healthStatus}"></td>
                 <td>
-                    <a th:href="@{/pets/{id}(id=${pet.id})}" class="btn btn-primary">View Details</a>
+                    <a th:href="@{/pets/{id}(id=${pet.id})}" class="btn">View Details</a>
                     <a th:href="@{/adopter/pets/{id}/request-adoption(id=${pet.id})}" class="btn btn-success" style="margin-top:5px">Request Adoption</a>
                 </td>
             </tr>

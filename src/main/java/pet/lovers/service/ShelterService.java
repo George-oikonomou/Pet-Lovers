@@ -68,4 +68,9 @@ public class ShelterService {
     public void updateShelter(Shelter shelter) {
         shelterRepository.save(shelter);
     }
+
+    public int countPendingShelters() {
+        return shelterRepository.findByUserStatus(UserStatus.PENDING).size();
+    }
+
 }

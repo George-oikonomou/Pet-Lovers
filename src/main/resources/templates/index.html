@@ -7,61 +7,78 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Home Page</title>
+  <title>Dashboard - Pet Adoption Platform</title>
 </head>
 <body>
 <div layout:fragment="main-content">
-  <h1>Welcome to the Pet Adoption Platform!</h1>
+  <h1 style="color: #e8f5e9; text-align: center;">Welcome to the Pet Adoption Platform!</h1>
 
-  <!-- Content for Admin -->
-  <div sec:authorize="hasRole('ROLE_ADMIN')">
-    <h2>Admin Dashboard</h2>
-    <p>Welcome, Admin! Here are your tools:</p>
-    <ul>
-      <li><a th:href="@{/admin/users}">Manage Users</a></li>
-      <li><a th:href="@{/admin/shelters}">Review New Shelters</a></li>
-      <li><a th:href="@{/admin/pets/all}">View All Pets</a></li>
-      <li><a th:href="@{/admin/pets}">Review New Pet Listings</a></li>
-      <li><a th:href="@{/admin/adoption-requests}">View All Adoption Requests</a></li>
-    </ul>
+  <!-- Section for signed-out users -->
+  <div class="dashboard-container" sec:authorize="!isAuthenticated()">
+    <img th:src="@{/images/catanddog.jpg}" alt="Happy Pets" style="border-radius: 8px; margin-bottom: 20px; width: 300px; height: auto;">
+    <h3>Change Their Lives, Let Them Change Yours</h3>
+    <p>
+      Adopting a pet isn’t just about giving them a home—it’s about creating a bond that lasts a lifetime.
+      Discover dogs, cats, and more waiting to meet you. Their loyalty and love will transform your world.
+    </p>
+    <a class="btn-explore" th:href="@{/pets}" style="background-color: #6aa669; padding: 12px 25px; font-size: 1.2em; font-weight: bold; border-radius: 5px; color: white;">🐾 Start your adoption journey today!</a>
   </div>
 
-  <!-- Content for Shelter -->
-  <div sec:authorize="hasRole('ROLE_SHELTER')">
-    <h2>Shelter Dashboard</h2>
-    <p>Welcome, Shelter! Manage your adoption requests, view your pets and add new ones:</p>
+  <!-- Admin Dashboard -->
+  <div class="dashboard-container" sec:authorize="hasRole('ROLE_ADMIN')">
+    <h2>Welcome, Admin!</h2>
+    <p>You have access to manage users, shelters, and adoption requests. Here are your tools:</p>
     <ul>
-      <li><a th:href="@{/adoption-requests/shelter}">View Adoption Requests for Your Shelter</a></li>
-      <li><a th:href="@{/shelter/pets}">View All the Pets for Your Shelter</a></li>
-      <li><a th:href="@{/shelter/new-pet}">Add New Pets to Your Shelter</a></li>
-      <li><a th:href="@{/shelter/visits}">View Visits to Your Shelter</a></li>
-      <li><a th:href="@{/shelter/vet-review}">View Vets that Want to Work at Your Shelter</a></li>
-      <li><a th:href="@{/profile}">View and Edit Your Shelter</a></li>
+      <li>Total Users: <strong th:text="${totalUsers}"></strong></li>
+      <li>Pending Shelter Approvals: <strong th:text="${pendingShelters}"></strong></li>
+      <li>New Pet Listings: <strong th:text="${newPets}"></strong></li>
     </ul>
+    <p><a th:href="@{/admin/users}">Go to User Management</a></p>
   </div>
 
-  <!-- Content for Vet -->
-  <div sec:authorize="hasRole('ROLE_VET')">
-    <h2>Vet Dashboard</h2>
-    <p>Welcome, Vet! You can manage the health status of the pets you've examined:</p>
-    <ul>
-      <li><a th:href="@{/vet/health-status}">Manage Health Status of Pets in Your Shelters</a></li>
-      <li><a th:href="@{/vet/employment-request}">Request to Join a Shelter</a></li>
-      <li><a th:href="@{/vet/shelters}">View Shelters You Are Associated With</a></li>
-      <li><a th:href="@{/profile}">View and Update Your Profile</a></li>
-    </ul>
+  <!-- Adopter Dashboard -->
+  <div class="dashboard-container" sec:authorize="hasRole('ROLE_ADOPTER')">
+    <h2>Welcome Back, Adopter!</h2>
+    <p>Your adoption journey is off to a great start! Here are your current requests:</p>
+
+    <div th:if="${not #lists.isEmpty(adoptionRequests)}">
+      <h3>Adoption Requests</h3>
+      <ul>
+        <li th:each="request : ${adoptionRequests}">
+          Request for <strong th:text="${request.pet.name}"></strong> from shelter <em th:text="${request.pet.shelter.fullName}"></em> - Status: <span th:text="${request.requestStatus}"></span>
+        </li>
+      </ul>
+    </div>
+    <p>Looking for new pets? <a th:href="@{/pets}">Browse our available pets here.</a></p>
   </div>
 
-  <!-- Content for Adopter -->
-  <div sec:authorize="hasRole('ROLE_ADOPTER')">
-    <h2>Adopter Dashboard</h2>
-    <p>Welcome, Adopter! View your adoption requests:</p>
-    <ul>
-      <li><a th:href="@{/pets}">Browse Available Pets for Adoption from Shelters</a></li>
-      <li><a th:href="@{adopter/visits}">View Your scheduled Visits</a></li>
-      <li><a th:href="@{/adoption-requests/adopter}">Check Your Adoption Requests</a></li>
-      <li><a th:href="@{/profile}">View and Edit Your Profile</a></li>
+  <!-- Vet Dashboard -->
+  <div class="dashboard-container" sec:authorize="hasRole('ROLE_VET')">
+    <h2>Welcome, Vet!</h2>
+    <p>You are currently working with the following shelters:</p>
+
+    <ul th:if="${not #lists.isEmpty(vetShelters)}" th:each="shelter : ${vetShelters}">
+      <li>
+        <strong th:text="${shelter.fullName}"></strong> - Located at <em th:text="${shelter.location}"></em>
+      </li>
     </ul>
+
+    <p>Thank you for your contributions to keeping our pets healthy and safe. <a th:href="@{/vet/health-status}">Update the health status of pets here.</a></p>
+  </div>
+
+  <!-- Shelter Dashboard -->
+  <div class="dashboard-container" sec:authorize="hasRole('ROLE_SHELTER')">
+    <h2>Welcome, Shelter!</h2>
+    <p>You currently have <strong th:text="${totalPets}"></strong> pets under your care.</p>
+
+    <h3>Upcoming Visits</h3>
+    <ul th:if="${not #lists.isEmpty(upcomingVisits)}" th:each="visit : ${upcomingVisits}">
+      <li>
+        Visit scheduled with <strong th:text="${visit.adopter.fullName}"></strong> on <em th:text="${#temporals.format(visit.dateTime, 'dd MMM yyyy, HH:mm')}"></em>
+      </li>
+    </ul>
+
+    <p>Need to add more pets? <a th:href="@{/shelter/new-pet}">Add new pets to your shelter here.</a></p>
   </div>
 </div>
 </body>

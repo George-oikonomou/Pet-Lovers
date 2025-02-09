@@ -218,10 +218,7 @@ public class UserController {
     @GetMapping("/pets")
     public String listAvailablePets(Model model) {
         List<PetStatus> criteria = Arrays.asList(PetStatus.AVAILABLE, PetStatus.PENDING_ADOPTION);
-        List<Pet> pets = petService.getPetsByPetStatus(criteria)
-                                   .stream()
-                                   .filter(petService::IsActivePet)
-                                   .toList();
+        List<Pet> pets = petService.getActivePetsByStatus(criteria);
 
         model.addAttribute("pets", pets);
         return "adopter/pets";
@@ -231,7 +228,7 @@ public class UserController {
     @GetMapping("/pets/{id}")
     public String viewPetDetails(@PathVariable Integer id, Model model) {
         try {
-            Pet pet = petService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            Pet pet = petService.findById(id).orElseThrow(IllegalArgumentException::new);
             model.addAttribute("pet", pet);
             return "adopter/pet-details";
         } catch (IllegalArgumentException e) {

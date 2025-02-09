@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{page_layout/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${title}">About Us</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+  <h1 th:text="${title}"></h1>
+  <p th:text="${content}"></p>
+</div>
+</body>
+</html>

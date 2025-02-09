@@ -34,7 +34,15 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String getAdminDashboard(Model model) {
+        long totalUsers = userService.countTotalUsers();
+        int pendingShelters = shelterService.countPendingShelters();
+        int newPets = petService.countNewPetListings();
+
+        model.addAttribute("totalUsers", totalUsers);
+        model.addAttribute("pendingShelters", pendingShelters);
+        model.addAttribute("newPets", newPets);
+
         return "index";
     }
 

@@ -75,16 +75,16 @@
             <input type="text" class="form-control" th:field="*{location}" id="location-autocomplete" placeholder="Start typing your address..." required />
 
             <!-- Display error message if validation fails -->
-            <small class="form-text text-muted">Use the autocomplete field to quickly find your address.</small>
-            <span th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="text-danger"></span>
+            <small class="form-text">Use the autocomplete field to quickly find your address.</small>
+            <span th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="text-danger" style="color: #d9534f;"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Register</button>
+        <button type="submit" class="btn" id="submitBtn" disabled>Register</button>
 
         <div class="form-group">
             <a th:href="@{/register/adopter}"><u>Sign up as a Adopter</u></a><br>
-            <a th:href="@{/register/vet}"><u>Sign up as a Vet</u></a>
-            <a th:href="@{/login}" style="font-size: 12px; color: #888;"><u>Already have an account?<br> Log In!</u></a>
+            <a th:href="@{/register/vet}"><u>Sign up as a Vet</u></a> <br>
+            <a th:href="@{/login}" style="font-size: 12px; color: #a3b18a;"><u>Already have an account?<br> Log In!</u></a>
         </div>
     </form>
 </div>
