@@ -43,6 +43,10 @@ public class AdoptionRequestService {
         return adoptionRequestRepository.findByShelterId(shelterId);
     }
 
+    public Optional<AdoptionRequest> findActiveByPetId(Integer petId) {
+        return adoptionRequestRepository.findByPetId(petId).stream().filter(this::hasApprovedAdopter).findFirst();
+    }
+
     public boolean hasApprovedAdopter(AdoptionRequest adoptionRequest){
         return adoptionRequest.getAdopter().getUserStatus().equals(UserStatus.APPROVED);
     }

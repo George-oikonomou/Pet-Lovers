@@ -1,4 +1,8 @@
- $(document).ready(function () {
+$(document).ready(function () {
+    var nonSortableIndexes = $('th.no-sort').map(function () {
+        return $(this).index();
+    }).get();
+
     $('.datatable').DataTable({
         paging: true,
         lengthMenu: [5, 10, 25, 50],
@@ -14,13 +18,18 @@
         responsive: true,
         columnDefs: [
             {
-                targets: "no-search",//todo: add class to the column that we don't want to be searchable
+                targets: "no-search",
                 searchable: false,
             },
             {
-                targets: "searchable",//todo: add class to the column that we want to be searchable
+                targets: "searchable",
                 searchable: true,
+            },
+            {
+                targets: nonSortableIndexes,
+                orderable: false,
             }
-        ]
+        ],
+        order: []
     });
 });

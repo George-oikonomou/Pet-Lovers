@@ -39,6 +39,11 @@ public class Pet {
     private String breed;
 
     @Column
+    @NotBlank
+    @Size(max = 25000)
+    private String photoUrl;
+
+    @Column
     @NotNull(message = "Weight is required.")
     @DecimalMin(value = "1.0", message = "Weight must be at least 1 kg.")
     @DecimalMax(value = "100.0", message = "Weight must be less than 100 kg.")
@@ -66,7 +71,7 @@ public class Pet {
 
 
     //CONSTRUCTORS
-    public Pet(String name, String sex,Shelter shelter, int yearBirthed, String type, String breed, double weight) {
+    public Pet(String name, String sex,Shelter shelter, int yearBirthed, String type, String breed, double weight, String photoUrl) {
         this.name = name;
         this.sex = sex;
         this.shelter = shelter;
@@ -74,6 +79,7 @@ public class Pet {
         this.type = type;
         this.breed = breed;
         this.weight = weight;
+        this.photoUrl = photoUrl;
     }
 
     public Pet() {}
@@ -152,6 +158,13 @@ public class Pet {
     }
     public void setAdoptionRequests(List<AdoptionRequest> adoptionRequests) {
         this.adoptionRequests = adoptionRequests;
+    }
+
+    public @NotBlank String getPhotoUrl() {
+        return photoUrl;
+    }
+    public void setPhotoUrl(@NotBlank String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public UserStatus getUserStatus() {
