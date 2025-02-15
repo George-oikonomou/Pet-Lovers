@@ -11,7 +11,7 @@
 <body>
 <div layout:fragment="main-content">
     <h1>Pet Details</h1>
-
+        <img th:src="${pet.photoUrl}" alt="pet Image"/>
     <div>
         <p><strong>Name:</strong> <span th:text="${pet.name}"></span></p>
         <p><strong>Breed:</strong> <span th:text="${pet.breed}"></span></p>
@@ -28,3 +28,17 @@
 </div>
 </body>
 </html>
+<style>
+    img {
+        max-width: 300px;
+        max-height: 300px;
+        display: block;
+        margin: 0 auto;
+        height: auto;
+        transition: 0.3s;
+        width: 100%;
+        object-fit: cover;
+        overflow-clip-margin: unset;
+        border-radius: 15px;
+    }
+</style>
