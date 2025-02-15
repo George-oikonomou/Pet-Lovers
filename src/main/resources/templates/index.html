@@ -59,7 +59,7 @@
 
     <ul th:if="${not #lists.isEmpty(vetShelters)}" th:each="shelter : ${vetShelters}">
       <li>
-        <strong th:text="${shelter.fullName}"></strong> - Located at <em th:text="${shelter.location}"></em>
+        <strong th:text="${shelter.fullName}"></strong> - Located in <em th:text="${shelter.location}"></em>
       </li>
     </ul>
 
