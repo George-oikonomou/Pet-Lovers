@@ -1,7 +1,7 @@
 # **Pet Lovers Project**
 
 ## Description
-This repository was created for a university project in the subject of Distributed Systems. The project focuses on developing a web application for managing animal shelters, veterinarians, adopters, and pets. The application provides a comprehensive platform for shelters to efficiently oversee their operations, including managing pet information, processing adoption requests, and coordinating with veterinarians. Additionally, system administrators have full control over user management, allowing them to create, modify, and delete user accounts as needed.
+This repository was created for a university project in the subject of Distributed Systems. The project focuses on developing a web application for managing animal shelters, veterinarians, adopters, and pets. The application provides a comprehensive platform for shelters to efficiently oversee their operations, including managing pet information, processing adoption requests, and coordinating with veterinarians. Additionally, system administrators have control over user management, allowing them to modify, and delete user accounts as needed.
 
 ## Technologies Used
 ### Backend:
@@ -32,7 +32,7 @@ Before you begin, ensure you have the following installed on your system:
 
    Open a terminal and run the following commands on a folder of your choice:
 ```
-   git clone https://github.com/team/repo.git
+   git clone https://github.com/George-oikonomou/full-stack-dev-uni.git
    ```
 2. **Connect to your DataBase**
 
@@ -40,11 +40,11 @@ Before you begin, ensure you have the following installed on your system:
     - **Update the `application.properties` with your database credentials on the following lines:
       `spring.datasource.username`, `spring.datasource.password`, `spring.datasource.url`**
 
-   #### Otherwise you can install it from [here](https://dashboard.render.com/login)
+   #### Else if you can install it from [here](https://dashboard.render.com/login)
     - **Login/Register to the website.**
     - **Create a new PostgreSQL database and add the needed fields.**
     - **Update the `application.properties` with your database credentials by replacing the following lines: `spring.datasource.username`, `spring.datasource.password`, `spring.datasource.url`**
-
+   #### Otherwise, use the existing credentials, that already exist in the `application.properties` file.
 3. **Run Project**
     
    ### You can run the project by a terminal...
