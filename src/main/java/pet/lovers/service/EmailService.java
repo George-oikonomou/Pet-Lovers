@@ -202,7 +202,7 @@ public class EmailService {
 
     //account of user under review by admin  for rule breaking
     public void sendPendingUserMessage(String email,String username) {
-        String subject = "Account Deletion";
+        String subject = "Account Pending Approval";
         String text = """
             Dear %s,
             
@@ -219,9 +219,27 @@ public class EmailService {
 
     }
 
+    public void sendPendingAdopterMessage(String email, String username) {
+        String subject = "Account Pending Approval";
+        String text = """
+            Dear %s,
+            
+            We would like to inform you that your account is currently under review by the admin team.
+            Certain actions will be limited until the review is completed.
+            Furthermore, your adoption requests will be removed.
+            
+            If you have any questions or concerns, please contact us at petloversplatform@gmail.com
+            
+            Best regards,
+            The Pet Lovers Team
+            """.formatted(username);
+
+        sendSimpleMessage(email, subject, text);
+    }
+
     //account of user Approved by admin
     public void sendApprovedUserMessage(String email,String username) {
-        String subject = "Account Deletion";
+        String subject = "Account Approval";
         String text = """
             Dear %s,
             
