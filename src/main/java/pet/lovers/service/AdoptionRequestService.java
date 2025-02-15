@@ -54,4 +54,8 @@ public class AdoptionRequestService {
     public void save(AdoptionRequest adoptionRequest) {
         adoptionRequestRepository.save(adoptionRequest);
     }
+
+    public void delete(AdoptionRequest adoptionRequest) {
+        adoptionRequestRepository.delete(adoptionRequest);
+    }
 }
