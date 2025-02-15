@@ -43,11 +43,11 @@ public class AdopterController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         Adopter currentUser = adopterService.getCurrentUser();
-        List<Visit> visits  = currentUser.getVisits()
+        List<AdoptionRequest> adoptionRequests  = currentUser.getAdoptionRequests()
                 .stream()
                 .toList();
 
-        model.addAttribute("adoptionRequests", visits);
+        model.addAttribute("adoptionRequests", adoptionRequests);
         return "index";
     }
 
@@ -103,14 +103,14 @@ public class AdopterController {
     }
 
     @PostMapping("/shelter/{shelter_id}/request-visit")
-    public String visitShelter(@PathVariable int shelter_id, Model model) {
+    public String visitShelter(@PathVariable int shelter_id, @ModelAttribute("visit") Visit visit ,Model model) {
         Adopter adopter = adopterService.getCurrentUser();
 
-        try {//service todo
+        try {
             Shelter shelter = shelterService.findActiveByUserId(shelter_id).orElseThrow(IllegalArgumentException::new);
-            Visit visit = new Visit(LocalDateTime.now(), shelter, adopter);
-            visitService.save(visit);
-            adopter.getVisits().add(visit);
+            Visit Thevisit = new Visit(visit.getDateTime(), shelter, adopter);
+            visitService.save(Thevisit);
+            adopter.getVisits().add(Thevisit);
             userService.updateUser(adopter);
             return "redirect:/adopter/visits";
         }catch (IllegalArgumentException e){

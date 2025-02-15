@@ -67,7 +67,13 @@
         <td th:text="${request.adopter.email}"></td>
         <td th:text="${request.pet.name}"></td>
         <td th:text="${request.pet.id}"></td>
-        <td th:text="${request.pet.shelter.fullName}"></td>
+        <td>
+          <a th:href="@{/admin/user/{shelter_id}(shelter_id=${request.pet.shelter.id})}"
+             th:text="${request.pet.shelter.fullName}"
+             style="color: black; text-decoration: underline">
+          </a>
+        </td>
+
         <td th:text="${request.getReadableDateTime()}"></td>
         <td th:text="${request.requestStatus}"></td>
         <td>

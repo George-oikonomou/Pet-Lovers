@@ -2,7 +2,8 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{page_layout/layout}">
+      layout:decorate="~{page_layout/layout}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -20,9 +21,21 @@
     </div>
 
     <div>
-        <a th:href="@{/adopter/shelter/{shelter_id}/request-visit(shelter_id=${shelter.id})}" class="btn btn-success">Request Visit</a>
-        <a th:href="@{/pets}" class="btn btn-secondary">Back</a>
+        <a sec:authorize="hasRole('ROLE_ADOPTER')" th:href="@{/adopter/shelter/{shelter_id}/request-visit(shelter_id=${shelter.id})}" class="btn btn-success">Request Visit</a>
+        <a id="backButton" th:href="@{/pets}" class="btn btn-secondary">Back</a>
     </div>
 </div>
 </body>
 </html>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let referrer = document.referrer;
+        let backButton = document.getElementById("backButton");
+
+        if (referrer) {
+            backButton.href = referrer;
+        } else {
+            backButton.href = "/pets";
+        }
+    });
+</script>

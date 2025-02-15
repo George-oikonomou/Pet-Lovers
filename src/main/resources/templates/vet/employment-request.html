@@ -36,7 +36,18 @@
             </thead>
             <tbody>
             <tr th:each="shelter : ${shelters}">
-                <td th:text="${shelter.fullName}"></td>
+                <td>
+                    <a th:if="${shelter.userStatus.toString() == 'APPROVED'}"
+                       th:href="@{/view-shelter/{shelter_id}(shelter_id=${shelter.id})}"
+                       th:text="${shelter.fullName}"
+                       style="color: black; text-decoration: underline;">
+                    </a>
+                    <span th:if="${shelter.userStatus.toString() != 'APPROVED'}"
+                          th:text="${shelter.fullName}"
+                          style="color: black;">
+                    </span>
+                </td>
+
                 <td th:text="${shelter.location}"></td>
                 <td th:text="${shelter.contactNumber}"></td>
                 <td>

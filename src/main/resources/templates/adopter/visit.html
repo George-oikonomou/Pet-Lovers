@@ -32,7 +32,17 @@
             </thead>
             <tbody>
             <tr th:each="visit : ${visits}">
-                <td th:text="${visit.shelter.fullName}"></td>
+                <td>
+                    <a th:if="${visit.shelter.userStatus.toString() == 'APPROVED'}"
+                       th:href="@{/view-shelter/{shelter_id}(shelter_id=${visit.shelter.id})}"
+                       th:text="${visit.shelter.fullName}"
+                       style="color: black; text-decoration: underline;">
+                    </a>
+                    <span th:if="${visit.shelter.userStatus.toString() != 'APPROVED'}"
+                          th:text="${visit.shelter.fullName}"
+                          style="color: black;">
+                    </span>
+                </td>
                 <td th:text="${visit.shelter.location}"></td>
                 <td th:text="${visit.shelter.email}"></td>
                 <td th:text="${visit.shelter.contactNumber}"></td>
