@@ -21,7 +21,7 @@
     </div>
 
     <div>
-        <a sec:authorize="hasRole('ROLE_ADOPTER')" th:href="@{/adopter/shelter/{shelter_id}/request-visit(shelter_id=${shelter.id})}" class="btn btn-success">Request Visit</a>
+        <a sec:authorize="!isAuthenticated() or hasRole('ROLE_ADOPTER')" th:href="@{/adopter/shelter/{shelter_id}/request-visit(shelter_id=${shelter.id})}" class="btn btn-success">Request Visit</a>
         <a id="backButton" th:href="@{/pets}" class="btn btn-secondary">Back</a>
     </div>
 </div>
