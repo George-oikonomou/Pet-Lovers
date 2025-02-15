@@ -52,11 +52,11 @@ public class AuthController {
             userService.saveUser(shelter);
 
             if (!petService.existsByName("Rocky")) {
-                Pet rocky = new Pet("Rocky", "male", shelter, 2018, "Dog", "Lab", 10.0);
+                Pet rocky = new Pet("Rocky", "male", shelter, 2018, "Dog", "Lab", 10.0, "https://animalcorner.org/wp-content/uploads/2020/04/Morkie-2-1024x819.jpg");
                 petService.savePet(rocky);
             }
             if (!petService.existsByName("Meow")) {
-                Pet meow = new Pet("Meow", "female", shelter, 2023, "Cat", "Unknown", 3.5);
+                Pet meow = new Pet("Meow", "female", shelter, 2023, "Cat", "Unknown", 3.5, "https://www.nekocatcafe.com/asset/677c5b1eca829/Front%20Page%201.2025.jpg");
                 petService.savePet(meow);
             }
         }
@@ -80,7 +80,7 @@ public class AuthController {
     @GetMapping("/about")
     public String aboutPage(Model model) {
         model.addAttribute("title", "About Us");
-        model.addAttribute("content", "Our mission is to help pets find loving homes by connecting adopters with animal shelters.");
+        model.addAttribute("content", "Our mission is to help pets find loving homes by connecting adopters with animal shelters. We started in 2024 and have since helped a lot of pets find their forever homes. We believe that every pet deserves a loving home and we are here to help make that happen!");
         return "auth/about";
     }
 

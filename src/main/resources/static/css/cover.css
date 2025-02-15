@@ -21,7 +21,7 @@ body {
 }
 
 .cover-container {
-    max-width: 60em; /* Increased width to allow larger forms or tables */
+    max-width: 100em; /* Increased width to allow larger forms or tables */
 }
 
 .cover .btn-lg {

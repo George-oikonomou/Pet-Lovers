@@ -1,13 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{page_layout/layout}">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{page_layout/layout}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title th:text="${title}">About Us</title>
 </head>
 <body>
 <div layout:fragment="main-content">
-  <h1 th:text="${title}"></h1>
-  <p th:text="${content}"></p>
+  <div class="dashboard-container" sec:authorize="!isAuthenticated()">
+    <h1 th:text="${title}"></h1>
+    <img th:src="@{/images/about.jpg}" alt="Happy Pets" style="border-radius: 8px; margin-bottom: 20px; width: 300px; height: auto;">
+    <p th:text="${content}"></p>
+  </div>
 </div>
 </body>
 </html>
+<style>
+  .photo-layout {
+    background-image: url('/images/about.jpg');
+    background-size: 20000px 2000px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+</style>

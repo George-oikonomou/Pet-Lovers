@@ -23,17 +23,19 @@ public class UserService implements UserDetailsService {
 
 
     private final EmailService emailService;
+    private final AdoptionRequestService adoptionRequestService;
     private UserRepository userRepository;
 
     private RoleRepository roleRepository;
 
     private BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService, AdoptionRequestService adoptionRequestService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.adoptionRequestService = adoptionRequestService;
     }
 
     @Transactional
@@ -83,6 +85,12 @@ public class UserService implements UserDetailsService {
         user.setFullName(fullName);
         user.setContactNumber(contactNumber);
         user.setUserStatus(userStatus);
+        if (user instanceof Adopter adopter && userStatus != UserStatus.APPROVED) {
+            adopter.getAdoptionRequests().forEach(adoptionRequest -> {
+                adoptionRequestService.delete(adoptionRequest);
+                adoptionRequest.getPet().setPetStatus(PetStatus.AVAILABLE);
+            });
+        }
 
         this.updateUser(user);
 
@@ -90,8 +98,11 @@ public class UserService implements UserDetailsService {
             emailService.sendApprovedUserMessage(user.getEmail(), user.getUsername());
         else if (userStatus == UserStatus.REJECTED)
             emailService.sendRejectedUserMessage(user.getEmail(), user.getUsername());
+        else if (userStatus == UserStatus.PENDING && user instanceof Adopter)
+            emailService.sendPendingAdopterMessage(user.getEmail(), user.getUsername());
         else if (userStatus == UserStatus.PENDING)
             emailService.sendPendingUserMessage(user.getEmail(), user.getUsername());
+
     }
 
     @Transactional

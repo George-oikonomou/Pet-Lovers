@@ -41,6 +41,7 @@
         <table class="datatable">
             <thead>
             <tr>
+                <th class="no-sort">Image</th>
                 <th>Pet Name</th>
                 <th>Breed</th>
                 <th>Type</th>
@@ -51,11 +52,18 @@
                 <th>Location</th>
                 <th>Availability</th>
                 <th>Health Status</th>
-                <th>Actions</th>
+                <th  class="no-sort">Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="pet : ${pets}" class="pet-row" th:data-type="${pet.type}">
+                <td>
+                    <a th:href="|${pet.photoUrl}|"
+                       target="_blank">
+                        <img th:src="|${pet.photoUrl}|"
+                             alt="pet Image" />
+                    </a>
+                </td>
                 <td th:text="${pet.name}"></td>
                 <td th:text="${pet.breed}"></td>
                 <td th:text="${pet.type}"></td>
@@ -83,6 +91,35 @@
 </div>
 </body>
 </html>
+<style>
+    td img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        transform: perspective(500px) rotateX(5deg);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    td {
+        width: 100px;
+        height: 80px;
+        padding: 0;
+        text-align: center;
+    }
+
+    td img:hover {
+        transform: perspective(500px) rotateX(0deg) scale(1.05);
+    }
+    table {
+        width: auto;
+        border-collapse: collapse;
+        margin-top: 20px;
+        height: auto;
+    }
+
+</style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
