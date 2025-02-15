@@ -7,7 +7,7 @@
 </head>
 <body>
 <div layout:fragment="main-content">
-  <div class="dashboard-container" sec:authorize="!isAuthenticated()">
+  <div class="dashboard-container">
     <h1 th:text="${title}"></h1>
     <img th:src="@{/images/about.jpg}" alt="Happy Pets" style="border-radius: 8px; margin-bottom: 20px; width: 300px; height: auto;">
     <p th:text="${content}"></p>
