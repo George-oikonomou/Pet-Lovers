@@ -242,7 +242,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("!hasRole('ROLE_SHELTER')")
+    @PreAuthorize("!isAuthenticated() or !hasRole('ROLE_SHELTER')")
     @GetMapping("/view-shelter/{shelter_id}")
     public String viewShelter(Model model, @PathVariable int shelter_id){
         try {
