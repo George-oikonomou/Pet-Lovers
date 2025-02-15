@@ -37,17 +37,6 @@ public class SetupController {
         Adopter adopter;
         Shelter shelter;
 
-        // approved shelter me misa approved pets kai vet
-        // approved vet me shelter^
-        // approved adopter me visit kai adoption request se healthy pet apo to approved shelter
-
-        // na exo note me etoima links gia eikones
-        // na deiksoume ta emails
-
-        //na ftiakso ta datatables search
-        //na ftiakso ta messages pantou
-
-
         if (!userService.existsByEmail("vet@gmail.com")) {
             Vet vet = new Vet("vet", "vet@gmail.com", "vet", "1234567890", "Athens", "Vet Doe",  "https://www.4icu.org/i/programs-courses-degrees/bachelor-of-veterinary-medicine-500x356.png");
             userService.saveUser(vet);
