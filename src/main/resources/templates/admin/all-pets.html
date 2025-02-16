@@ -9,7 +9,7 @@
     <title>All Pets</title>
 </head>
 <body>
-<div layout:fragment="main-content" class="container">
+<div layout:fragment="main-content">
     <h1>All Pets</h1>
 
     <div th:if="${#lists.isEmpty(pets)}" class="no-pets">
@@ -17,7 +17,7 @@
     </div>
 
 
-    <div id="tableContainer" th:if="${not #lists.isEmpty(pets)}" class="table-container">
+    <div id="tableContainer" th:if="${not #lists.isEmpty(pets)}">
         <table class="datatable">
             <thead>
             <tr>

@@ -1,5 +1,6 @@
 html, body {
     height: 100%;
+    overflow-x: auto;
     background-color: #4a6e49;
 }
 
