@@ -6,12 +6,15 @@ This repository was created for a university project in the subject of Distribut
 ## Technologies Used
 ### Backend:
 - **Spring Boot (3.3.4)**
+- **Hibernate**
+- **Mailjet**
 ### Database:
 - **PostgreSQL**
 ### Frontend:
 - **Bootstrap**
 - **Spring Boot  (3.3.4)**
 - **Thymeleaf**
+- **Google Maps API**
 
 ## User Roles
 The system includes the following user roles:
