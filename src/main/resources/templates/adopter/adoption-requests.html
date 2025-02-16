@@ -64,7 +64,19 @@
         </td>
         <td th:text="${request.pet.name}"></td>
         <td th:text="${request.pet.id}"></td>
-        <td th:text="${request.pet.shelter.fullName}"></td>
+        <td>
+          <a th:if="${request.pet.shelter.userStatus.toString() == 'APPROVED'}"
+             th:href="@{/view-shelter/{shelter_id}(shelter_id=${request.pet.shelter.id})}"
+             th:text="${request.pet.shelter.fullName}"
+             style="color: black; text-decoration: underline;">
+          </a>
+          <span th:if="${request.pet.shelter.userStatus.toString() != 'APPROVED'}"
+                th:text="${request.pet.shelter.fullName}"
+                style="color: black;">
+          </span>
+        </td>
+
+
         <td th:text="${request.pet.shelter.location}"></td>
         <td th:text="${request.pet.shelter.contactNumber}"></td>
         <td th:text="${request.getReadableDateTime()}"></td>

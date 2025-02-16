@@ -43,6 +43,11 @@ public class UserController {
         this.shelterService = shelterService;
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "auth/login";
+    }
+
     @GetMapping("/register/adopter")
     public String registerAdopter(Model model) {
         Adopter adopter = new Adopter();
@@ -237,7 +242,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("!isAuthenticated() or hasRole('ROLE_ADOPTER')")
+    @PreAuthorize("!isAuthenticated() or !hasRole('ROLE_SHELTER')")
     @GetMapping("/view-shelter/{shelter_id}")
     public String viewShelter(Model model, @PathVariable int shelter_id){
         try {

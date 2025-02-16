@@ -58,16 +58,27 @@
                 <th>Full Name</th>
                 <th>Contact Number</th>
                 <th>Location</th>
-                <th>Vet Assigned</th>
+                <th>Status</th>
                 <th>Number of Pets</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="shelter : ${shelters}"  class="shelter-row" th:data-status="${shelter.userStatus.toString()}">
-                <td th:text="${shelter.fullName}"></td>
+                <td>
+                    <a th:if="${shelter.userStatus.toString() == 'APPROVED'}"
+                       th:href="@{/view-shelter/{shelter_id}(shelter_id=${shelter.id})}"
+                       th:text="${shelter.fullName}"
+                       style="color: black; text-decoration: underline;">
+                    </a>
+                    <span th:if="${shelter.userStatus.toString() != 'APPROVED'}"
+                          th:text="${shelter.fullName}"
+                          style="color: black;">
+                    </span>
+                </td>
+
                 <td th:text="${shelter.contactNumber}"></td>
                 <td th:text="${shelter.location}"></td>
-                <td th:text="${shelter.vet != null ? shelter.vet.fullName : 'No Vet Assigned'}"></td>
+                <td th:text="${shelter.userStatus.toString() != 'APPROVED' ? 'Inactive' : 'Active'}"></td>
                 <td th:text="${#lists.size(shelter.pets)}"></td>
             </tr>
             </tbody>

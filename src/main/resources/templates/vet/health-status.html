@@ -45,7 +45,18 @@
                     <td th:text="${pet.breed}"></td>
                     <td th:text="${pet.weight}"></td>
                     <td th:text="${pet.yearBirthed}"></td>
-                    <td th:text="${pet.shelter.fullName}"></td>
+                    <td>
+                        <a th:if="${pet.shelter.userStatus.toString() == 'APPROVED'}"
+                           th:href="@{/view-shelter/{shelter_id}(shelter_id=${pet.shelter.id})}"
+                           th:text="${pet.shelter.fullName}"
+                           style="color: black; text-decoration: underline;">
+                        </a>
+                        <span th:if="${pet.shelter.userStatus.toString() != 'APPROVED'}"
+                              th:text="${pet.shelter.fullName}"
+                              style="color: black;">
+                        </span>
+                    </td>
+
 
                     <td>
                         <form th:action="@{/vet/health-status}" method="post">

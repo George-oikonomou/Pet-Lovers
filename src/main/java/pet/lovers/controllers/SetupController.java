@@ -1,38 +1,33 @@
 package pet.lovers.controllers;
 
-import org.springframework.ui.Model;
 import pet.lovers.entities.*;
 import pet.lovers.repositories.RoleRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import pet.lovers.service.PetService;
 import pet.lovers.service.UserService;
 import java.time.LocalDate;
 
 @Controller
-public class AuthController {
+public class SetupController {
     private final RoleRepository roleRepository;
     private final UserService userService;
     private final PetService petService;
 
 
-    public AuthController(RoleRepository roleRepository, UserService userService, PetService petService) {
+    public SetupController(RoleRepository roleRepository, UserService userService, PetService petService) {
         this.roleRepository = roleRepository;
         this.userService = userService;
         this.petService = petService;
     }
 
-    @PostConstruct//todo
+    @PostConstruct
     public void setup() {
-
-        // Save roles to ensure they are managed by the persistence context
         roleRepository.updateOrInsert(new Role(Role.ADOPTER));
         Role roleAdmin = roleRepository.updateOrInsert(new Role(Role.ADMIN));
         roleRepository.updateOrInsert(new Role(Role.VET));
         roleRepository.updateOrInsert(new Role(Role.SHELTER));
 
-        // Create users
         if (!userService.existsByEmail("admin@gmail.com")) {
             User admin = new User("admin", "admin@gmail.com", "admin", "0123456789", "location","path");
             admin.getRoles().add(roleAdmin);
@@ -70,26 +65,5 @@ public class AuthController {
             adopter = new Adopter("adopter2", "adopter2@gmail.com", "adopter2", "1222228405", "Athens,Zografou", "John Doe", LocalDate.now().minusYears(24), "https://t4.ftcdn.net/jpg/02/32/92/21/360_F_232922178_YCAxIU0vlGoGY2H76ZsATswNrOVbWlUv.jpg");
             userService.saveUser(adopter);
         }
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "auth/login";
-    }
-
-    @GetMapping("/about")
-    public String aboutPage(Model model) {
-        model.addAttribute("title", "About Us");
-        model.addAttribute("content", "Our mission is to help pets find loving homes by connecting adopters with animal shelters. We started in 2024 and have since helped a lot of pets find their forever homes. We believe that every pet deserves a loving home and we are here to help make that happen!");
-        return "auth/about";
-    }
-
-    @GetMapping("/contact")
-    public String contactPage(Model model) {
-        model.addAttribute("title", "Contact Us");
-        model.addAttribute("email", "support@petadoption.com");
-        model.addAttribute("phone", "+1 (800) 555-1234");
-        model.addAttribute("address", "123 Pet Lane, Adoption City, PA 55555");
-        return "auth/contact";
     }
 }
