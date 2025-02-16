@@ -6,14 +6,12 @@ This repository was created for a university project in the subject of Distribut
 ## Technologies Used
 ### Backend:
 - **Spring Boot (3.3.4)**
-    - Starter Web, Starter Data JPA, Starter Security, Starter Validation, Starter Mail
 ### Database:
 - **PostgreSQL**
 ### Frontend:
 - **Bootstrap**
-- **Spring Boot Starter Thymeleaf**
-- **Thymeleaf Extras Spring Security**
-- **Thymeleaf Layout Dialect**
+- **Spring Boot  (3.3.4)**
+- **Thymeleaf**
 
 ## User Roles
 The system includes the following user roles:
