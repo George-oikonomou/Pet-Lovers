@@ -94,7 +94,8 @@ td {
 
 
 .btn:hover {
-    background-color: rgba(21, 21, 17, 0.3);
+    background-color: rgb(168, 170, 126);
+    transition-delay: 0.1s;
 }
 
 .btn-danger {
