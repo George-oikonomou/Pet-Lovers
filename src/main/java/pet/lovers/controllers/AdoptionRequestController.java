@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pet.lovers.entities.AdoptionRequest;
 import pet.lovers.entities.PetStatus;
 import pet.lovers.entities.UserStatus;
@@ -70,7 +71,7 @@ public class AdoptionRequestController {
 
     @PreAuthorize("hasRole('ROLE_SHELTER')")
     @PostMapping("/shelter/{id}/approve")
-    public String approveAdoptionRequest(@PathVariable Integer id, Model model) {
+    public String approveAdoptionRequest(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
             AdoptionRequest request = adoptionRequestService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
             if (request.getRequestStatus().equals(UserStatus.PENDING)) {//todo  SERVICE
@@ -78,6 +79,7 @@ public class AdoptionRequestController {
                 request.getPet().setPetStatus(PetStatus.ADOPTED);
                 petService.savePet(request.getPet());
                 adoptionRequestService.updateAdoptionRequest(request);
+                redirectAttributes.addFlashAttribute("msg", "Adoption request approved. " + request.getPet().getName() + " has been adopted.");
             }
             return "redirect:/adoption-requests/shelter";
         }catch(IllegalArgumentException e){
@@ -88,7 +90,7 @@ public class AdoptionRequestController {
 
     @PreAuthorize("hasRole('ROLE_SHELTER')")
     @PostMapping("/shelter/{id}/reject")
-    public String rejectAdoptionRequest(@PathVariable Integer id,Model model) {
+    public String rejectAdoptionRequest(@PathVariable Integer id,Model model, RedirectAttributes redirectAttributes) {
         try {
             AdoptionRequest request = adoptionRequestService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
             if (request.getRequestStatus().equals(UserStatus.PENDING)) {//todo SERVICE
@@ -96,6 +98,9 @@ public class AdoptionRequestController {
                 request.getPet().setPetStatus(PetStatus.AVAILABLE);
                 petService.savePet(request.getPet());
                 adoptionRequestService.updateAdoptionRequest(request);
+                redirectAttributes.addFlashAttribute("msg", "Adoption request declined. "+request.getPet().getName()+" is now available for adoption."
+
+);
             }
             return "redirect:/adoption-requests/shelter";
         }catch(IllegalArgumentException e){

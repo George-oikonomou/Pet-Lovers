@@ -31,6 +31,11 @@
         <button class="btn" onclick="filterSelection('Cat')"> Cats</button>
     </div>
 
+    <div th:if="${error}" class="alert alert-danger" style="margin-block: 10px;">
+        <p th:text="${error}" style="margin-bottom: 0;"></p>
+    </div>
+
+
     <!-- Message if no pets -->
     <div th:if="${#lists.isEmpty(pets)}">
         <p>No pets found for the selected filter.</p>

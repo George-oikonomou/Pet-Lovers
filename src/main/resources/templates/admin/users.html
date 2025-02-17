@@ -13,7 +13,15 @@
   <h1>User Management</h1>
 
     <div th:if="${param.deleted}">
-      <p class="alert alert-success">Vet successfully selected!</p>
+      <p class="alert alert-success">User successfully Deleted!</p>
+    </div>
+
+     <div th:if="${param.error}">
+      <p class="alert alert-danger">Error deleting user!</p>
+    </div>
+
+    <div th:if="${param.updated}">
+      <p class="alert alert-success">User details successfully updated!</p>
     </div>
 
 

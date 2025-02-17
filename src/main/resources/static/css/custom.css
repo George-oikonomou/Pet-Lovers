@@ -38,7 +38,7 @@ a:hover, a:focus {
 }
 
 .btn:hover, input[type="submit"]:hover {
-    background-color: #529a52;
+    filter: brightness(0.85);
 }
 
 .btn-info {

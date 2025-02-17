@@ -93,10 +93,7 @@ td {
 }
 
 
-.btn:hover {
-    background-color: rgb(168, 170, 126);
-    transition-delay: 0.1s;
-}
+
 
 .btn-danger {
     background-color: #d9534f;

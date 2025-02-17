@@ -13,6 +13,10 @@
 <div layout:fragment="main-content">
     <h1>Upcoming Visits</h1>
 
+    <div th:if="${msg}" class="alert alert-success" style="margin-block: 10px;">
+        <p th:text="${msg}" style="margin-bottom: 0;"></p>
+    </div>
+
     <!-- Message if no  visit requests -->
     <div th:if="${#lists.isEmpty(visits)}">
         <p>You have no Scheduled visits</p>
