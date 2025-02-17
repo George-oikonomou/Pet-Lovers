@@ -57,12 +57,10 @@ public class UserController {
     }
 
     @PostMapping("/register/adopter")
-    public String saveAdopter(@ModelAttribute Adopter adopter, Model model) {
+    public String saveAdopter(@ModelAttribute Adopter adopter) {
         System.out.println("Adopter: " + adopter);
-        Integer id = userService.saveUser(adopter);
-        String message = "Adopter '" + id + "' saved successfully !";
+        userService.saveUser(adopter);
         emailService.sendRegistrationMessageToUser(adopter.getEmail(),adopter.getFullName());
-        model.addAttribute("msg", message);
         return "index";
     }
 
@@ -76,12 +74,10 @@ public class UserController {
     }
 
     @PostMapping("/register/shelter")
-    public String saveShelter(@ModelAttribute Shelter shelter,  Model model) {
+    public String saveShelter(@ModelAttribute Shelter shelter) {
         System.out.println("Shelter: " + shelter);
-        Integer id = userService.saveUser(shelter);
-        String message = "Shelter '" + id + "' saved successfully !";
+        userService.saveUser(shelter);
         emailService.sendRegistrationMessageToUser(shelter.getEmail(),shelter.getFullName());
-        model.addAttribute("msg", message);
         return "index";
     }
 
@@ -95,12 +91,10 @@ public class UserController {
     }
 
     @PostMapping("/register/vet")
-    public String saveVet(@ModelAttribute Vet vet, Model model){
+    public String saveVet(@ModelAttribute Vet vet){
         System.out.println("Roles: "+vet.getRoles());
-        Integer id = userService.saveUser(vet);
-        String message = "User '"+id+"' saved successfully !";
+        userService.saveUser(vet);
         emailService.sendRegistrationMessageToUser(vet.getEmail(),vet.getFullName());
-        model.addAttribute("msg", message);
         return "index";
     }
 

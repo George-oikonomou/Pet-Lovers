@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pet.lovers.entities.*;
 import pet.lovers.service.EmploymentRequestService;
 import pet.lovers.service.PetService;
@@ -59,8 +60,9 @@ public class VetController {
 
 
     @PostMapping("/health-status")
-    public String updateHealthStatus(@RequestParam("petId") int petId, @RequestParam("healthStatus") String healthStatus) {
+    public String updateHealthStatus(@RequestParam("petId") int petId, @RequestParam("healthStatus") String healthStatus, RedirectAttributes redirectAttributes) {
         petService.updateHealthStatus(petId, healthStatus);
+        redirectAttributes.addFlashAttribute("msg", "Health status updated successfully");
         return "redirect:/vet/health-status";
     }
 

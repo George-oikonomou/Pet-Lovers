@@ -8,57 +8,66 @@
     <title>Adoption Request Details</title>
 </head>
 <body>
-<div id="tableContainer" layout:fragment="main-content" class="container">
+<div layout:fragment="main-content">
     <h1>Adoption Request Details</h1>
-    <table class="datatable">
-        <thead>
-        <tr>
-            <th class="no-sort">Image</th>
-            <th>Adopter Name</th>
-            <th>Adopter Email</th>
-            <th>Pet Name</th>
-            <th>Pet ID</th>
-            <th>Shelter</th>
-            <th>Request Status</th>
-            <th>Request Date</th>
-            <th class="no-sort">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:object="${adoptionRequest}" th:data-id="${adoptionRequest.id}" class="adoption-request-row">
-            <td>
-                <a th:href="|${adoptionRequest.pet.photoUrl}|"
-                   target="_blank">
-                    <img th:src="|${adoptionRequest.pet.photoUrl}|"
-                         alt="pet Image" />
-                </a>
-            </td>
-            <td th:text="*{adopter.fullName}"></td>
-            <td th:text="*{adopter.email}"></td>
-            <td th:text="*{pet.name}"></td>
-            <td th:text="*{pet.id}"></td>
-            <td th:text="*{pet.shelter.fullName}"></td>
-            <td th:text="*{requestStatus}"></td>
-            <td th:text="*{getReadableDateTime()}"></td>
-            <td>
-                <form  th:action="@{/admin/adoption-request/{id}/notify(id=${adoptionRequest.id})}" method="post">
-                    <button th:if="${adoptionRequest.requestStatus.toString() == 'PENDING'}" type="submit" class="btn btn-success" style="margin-bottom:5px;"
-                            onclick="disableButton(this)">Notify Shelter
-                    </button>
 
-                    <button th:unless="${adoptionRequest.requestStatus.toString() == 'PENDING'}" class="btn" style="margin-bottom:5px; background-color: #d3d3d3" disabled>
-                        No Actions
-                    </button>
-                 </form>
-            </td>
+    <div id="tableContainer"  class="container">
 
-        </tr>
-        </tbody>
-    </table>
-<!--   space under the table and between the button  -->
+        <div th:if="${msg}" class="alert alert-success">
+            <p th:text="${msg}" style="margin-bottom: 0;"></p>
+        </div>
 
-    <div>
-        <a href="/admin/pets/all" class="btn button btn-secondary" style="margin-top: 20px">Back to List</a>
+        <div th:if="${error}" class="alert alert-success">
+            <p th:text="${error}" style="margin-bottom: 0;"></p>
+        </div>
+
+        <table class="datatable">
+            <thead>
+            <tr>
+                <th class="no-sort">Image</th>
+                <th>Adopter Name</th>
+                <th>Adopter Email</th>
+                <th>Pet Name</th>
+                <th>Pet ID</th>
+                <th>Shelter</th>
+                <th>Request Status</th>
+                <th>Request Date</th>
+                <th class="no-sort">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:object="${adoptionRequest}" th:data-id="${adoptionRequest.id}" class="adoption-request-row">
+                <td>
+                    <a th:href="|${adoptionRequest.pet.photoUrl}|"
+                       target="_blank">
+                        <img th:src="|${adoptionRequest.pet.photoUrl}|"
+                             alt="pet Image" />
+                    </a>
+                </td>
+                <td th:text="*{adopter.fullName}"></td>
+                <td th:text="*{adopter.email}"></td>
+                <td th:text="*{pet.name}"></td>
+                <td th:text="*{pet.id}"></td>
+                <td th:text="*{pet.shelter.fullName}"></td>
+                <td th:text="*{requestStatus}"></td>
+                <td th:text="*{getReadableDateTime()}"></td>
+                <td>
+                    <form  th:action="@{/admin/adoption-request/{id}/notify(id=${adoptionRequest.id})}" method="post">
+                        <button th:if="${adoptionRequest.requestStatus.toString() == 'PENDING'}" type="submit" class="btn btn-success" style="margin-bottom:5px;"
+                                onclick="disableButton(this)">Notify Shelter
+                        </button>
+
+                        <button th:unless="${adoptionRequest.requestStatus.toString() == 'PENDING'}" class="btn" style="margin-bottom:5px; background-color: #d3d3d3" disabled>
+                            No Actions
+                        </button>
+                     </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div>
+            <a href="/admin/pets/all" class="btn button btn-secondary" style="margin-top: 20px">Back to List</a>
+        </div>
     </div>
 </div>
 </body>
