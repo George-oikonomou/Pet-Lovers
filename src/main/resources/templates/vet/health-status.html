@@ -12,6 +12,10 @@
 <div layout:fragment="main-content">
     <h1>Health Status Management</h1>
 
+     <div th:if="${msg}" class="alert alert-success" style="margin-block: 10px;">
+        <p th:text="${msg}" style="margin-bottom: 0;"></p>
+    </div>
+
     <div th:if="${#lists.isEmpty(pets)}">
         <p>No pets are currently available for health check.</p>
     </div>

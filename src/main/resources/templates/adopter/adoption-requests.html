@@ -24,12 +24,18 @@
 <div layout:fragment="main-content">
   <h1>Adoption Requests</h1>
 
+
+
   <!-- Filter Buttons -->
   <div id="myBtnContainer">
     <button class="btn active" onclick="filterSelection('ALL')"> Show All</button>
     <button class="btn" onclick="filterSelection('PENDING')"> Pending</button>
     <button class="btn" onclick="filterSelection('APPROVED')"> Approved</button>
     <button class="btn" onclick="filterSelection('REJECTED')"> Rejected</button>
+  </div>
+
+  <div th:if="${msg}" class="alert alert-success" style="margin-block: 10px;">
+    <p th:text="${msg}" style="margin-bottom: 0;"></p>
   </div>
 
   <!-- Message if no requests -->

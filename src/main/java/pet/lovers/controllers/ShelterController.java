@@ -67,13 +67,15 @@ public class ShelterController {
     }
 
     @PostMapping("/new-pet")
-    public String savePet(@ModelAttribute Pet pet, Model model){//todo Service
+    public String savePet(@ModelAttribute Pet pet,RedirectAttributes redirectAttributes){//todo Service
         Shelter shelter = (Shelter) userService.getCurrentUser();
-        pet.setShelter(shelter);
-        Integer id = petService.savePet(pet);
-        String message = "Pet '"+id+"' : "+ pet.getName() +" saved successfully !";
-        model.addAttribute("msg", message);
-        return "shelter/pets";
+        try {
+            pet.setShelter(shelter);
+            redirectAttributes.addFlashAttribute("msg", "Pet " + pet.getName() + " saved successfully !");
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("error", "Error saving Pet!");
+        }
+        return "redirect:/shelter/pets";
     }
 
     @GetMapping("/vet-review")
@@ -89,8 +91,8 @@ public class ShelterController {
         return "shelter/vet-review";
     }
 
-    @PostMapping("/vet-review/approve")//todo
-    public String approveVet(@RequestParam("vetRequestId") Integer vetRequestId,Model model) {
+    @PostMapping("/vet-review/approve")
+    public String approveVet(@RequestParam("vetRequestId") Integer vetRequestId,Model model, RedirectAttributes redirectAttributes) {
         Shelter shelter = (Shelter) userService.getCurrentUser();
         Vet selectedVet = vetService.getVetById(vetRequestId);
 
@@ -111,7 +113,7 @@ public class ShelterController {
         return "redirect:/shelter/vet-review?success";
     }
 
-    @PostMapping("/vet-review/reject")//todo
+    @PostMapping("/vet-review/reject")
     public String rejectVet(@RequestParam("vetRequestId") Integer vetRequestId,Model model) {
         Shelter shelter = (Shelter) userService.getCurrentUser();
         Vet selectedVet = vetService.getVetById(vetRequestId);
@@ -165,9 +167,10 @@ public class ShelterController {
             }
 
 
-
-            petService.updatePet(selectedPet, pet.getName(), pet.getBreed(), pet.getPetStatus(), pet.getYearBirthed(), pet.getType(), pet.getWeight(), pet.getSex());
-            redirectAttributes.addFlashAttribute("success", "Pet updated successfully!");
+            if (pet.getPetStatus() != PetStatus.ADOPTED){
+                petService.updatePet(selectedPet, pet.getName(), pet.getBreed(), pet.getPetStatus(), pet.getYearBirthed(), pet.getType(), pet.getWeight(), pet.getSex());
+            }
+            redirectAttributes.addFlashAttribute("success", "Pet "+pet.getName()+" updated successfully!");
             return "redirect:/shelter/pets";
         }catch (IllegalArgumentException e){
             redirectAttributes.addFlashAttribute("error", "Pet not found!");
@@ -180,8 +183,8 @@ public class ShelterController {
         Shelter shelter = (Shelter) userService.getCurrentUser();
 
         List<Visit> visits = visitService.getVisitsByShelterId(shelter.getId())
-                .stream()
-                .toList();
+                                         .stream()
+                                         .toList();
 
         model.addAttribute("visits", visits);
 

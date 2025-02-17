@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pet.lovers.entities.Adopter;
 import pet.lovers.entities.AdoptionRequest;
 import pet.lovers.entities.Pet;
@@ -68,24 +69,34 @@ public class AdopterController {
     }
 
     @PostMapping("/pets/{id}/request-adoption")
-    public String saveAdoptionRequest(@PathVariable int id, @ModelAttribute("adoptionRequest") AdoptionRequest adoptionRequest, Model model) {
+    public String saveAdoptionRequest(@PathVariable int id, @ModelAttribute("adoptionRequest") AdoptionRequest adoptionRequest, Model model, RedirectAttributes redirectAttributes) {
 
         Adopter adopter = adopterService.getCurrentUser();
 
-        try {//service TODO
+        try {
             Pet pet = petService.findById(id).orElseThrow(IllegalArgumentException::new);
-            AdoptionRequest theAdoptionRequest = new AdoptionRequest(adoptionRequest.getDateTime(), adoptionRequest.getShelter(), adopter, adoptionRequest.getPet());
+            if (adoptionRequestService.existsPendingRequest(adopter, pet))
+                throw new IllegalStateException("You have already requested to adopt this pet!");
+
+
+            AdoptionRequest theAdoptionRequest = new AdoptionRequest(adoptionRequest.getDateTime(), adoptionRequest.getShelter(), adopter, pet);
             adoptionRequestService.save(theAdoptionRequest);
             adopter.getAdoptionRequests().add(theAdoptionRequest);
             userService.updateUser(adopter);
 
             petService.updatePetStatus(pet, PetStatus.PENDING_ADOPTION);
+
+            redirectAttributes.addFlashAttribute("msg", "Adoption request sent successfully!");
             return "redirect:/adoption-requests/adopter";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", "Pet not found!");
             return "/error/error-404";
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/pets";
         }
     }
+
 
     @GetMapping("/shelter/{shelter_id}/request-visit")
     public String visitShelter(@PathVariable Integer shelter_id, Model model) {
@@ -103,7 +114,7 @@ public class AdopterController {
     }
 
     @PostMapping("/shelter/{shelter_id}/request-visit")
-    public String visitShelter(@PathVariable int shelter_id, @ModelAttribute("visit") Visit visit ,Model model) {
+    public String visitShelter(@PathVariable int shelter_id, @ModelAttribute("visit") Visit visit ,Model model, RedirectAttributes redirectAttributes) {
         Adopter adopter = adopterService.getCurrentUser();
 
         try {
@@ -112,6 +123,7 @@ public class AdopterController {
             visitService.save(Thevisit);
             adopter.getVisits().add(Thevisit);
             userService.updateUser(adopter);
+            redirectAttributes.addFlashAttribute("msg", "Visit request sent successfully!");
             return "redirect:/adopter/visits";
         }catch (IllegalArgumentException e){
             model.addAttribute("error", "Shelter not found!");

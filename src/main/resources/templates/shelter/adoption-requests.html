@@ -38,6 +38,10 @@
         <button class="btn" onclick="filterSelection('REJECTED')">Rejected</button>
     </div>
 
+    <div th:if="${msg}" class="alert alert-success" style="margin-block: 10px;">
+        <p th:text="${msg}" style="margin-bottom: 0;"></p>
+    </div>
+
     <!-- Message if no requests -->
     <div id="noResultsMessage" th:if="${#lists.isEmpty(adoptionRequests)}" style="display: none;">
         <p>No adoption requests found for the selected filter.</p>
