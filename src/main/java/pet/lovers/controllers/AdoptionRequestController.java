@@ -74,11 +74,20 @@ public class AdoptionRequestController {
     public String approveAdoptionRequest(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
             AdoptionRequest request = adoptionRequestService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
-            if (request.getRequestStatus().equals(UserStatus.PENDING)) {//todo  SERVICE
+            if (request.getRequestStatus().equals(UserStatus.PENDING)) {
                 request.setRequestStatus(UserStatus.APPROVED);
                 request.getPet().setPetStatus(PetStatus.ADOPTED);
                 petService.savePet(request.getPet());
                 adoptionRequestService.updateAdoptionRequest(request);
+
+                List<AdoptionRequest> otherRequests = adoptionRequestService.findActiveByPetId(request.getPet().getId());
+                for (AdoptionRequest otherRequest : otherRequests) {
+                    if (otherRequest.getId() != request.getId() && otherRequest.getRequestStatus().equals(UserStatus.PENDING)) {
+                        otherRequest.setRequestStatus(UserStatus.REJECTED);
+                        adoptionRequestService.updateAdoptionRequest(otherRequest);
+                    }
+                }
+
                 redirectAttributes.addFlashAttribute("msg", "Adoption request approved. " + request.getPet().getName() + " has been adopted.");
             }
             return "redirect:/adoption-requests/shelter";

@@ -31,7 +31,7 @@
                 <th>Shelter Name</th>
                 <th>Location</th>
                 <th>Contact Number</th>
-                <th  class="no-sort">Actions</th>
+                <th  class="no-sort no-search">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -55,17 +55,12 @@
                         <input type="hidden" name="shelterId" th:value="${shelter.id}" />
                         <button
                                 type="submit"
-                                class="btn"
+                                class="btn btn-full"
                                 th:disabled="${currentVet.employmentRequests != null && currentVet.employmentRequests.size() > 0 && currentVet.employmentRequests[0].shelter.id == shelter.id}"
                                 th:id="'requestButton_' + ${shelter.id}"
                                 onclick="handleButtonClick(event, 'requestButton_' + ${shelter.id})">
                             Request to Work Here
                         </button>
-
-
-
-
-
                     </form>
                 </td>
             </tr>

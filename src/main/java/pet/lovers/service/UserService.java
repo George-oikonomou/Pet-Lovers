@@ -55,7 +55,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void updateUser(User user) {
-        user = userRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override

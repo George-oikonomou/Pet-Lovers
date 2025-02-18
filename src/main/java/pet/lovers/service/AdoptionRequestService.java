@@ -2,10 +2,7 @@ package pet.lovers.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import pet.lovers.entities.Adopter;
-import pet.lovers.entities.AdoptionRequest;
-import pet.lovers.entities.Pet;
-import pet.lovers.entities.UserStatus;
+import pet.lovers.entities.*;
 import pet.lovers.repositories.AdoptionRequestRepository;
 
 import java.util.List;
@@ -45,8 +42,8 @@ public class AdoptionRequestService {
         return adoptionRequestRepository.findByShelterId(shelterId);
     }
 
-    public Optional<AdoptionRequest> findActiveByPetId(Integer petId) {
-        return adoptionRequestRepository.findByPetId(petId).stream().filter(this::hasApprovedAdopter).findFirst();
+    public List<AdoptionRequest> findActiveByPetId(Integer petId) {
+        return adoptionRequestRepository.findByPetId(petId).stream().filter(this::hasApprovedAdopter).toList();
     }
     public boolean existsPendingRequest(Adopter adopter, Pet pet) {
         List<AdoptionRequest> requests = adoptionRequestRepository.findByAdopterAndPet(adopter, pet);

@@ -39,10 +39,20 @@
 <div layout:fragment="main-content">
     <h1>My Shelters</h1>
 
+    <div th:if="${msg}" class="alert alert-success">
+        <p th:text="${msg}"></p>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+    </div>
+
     <!-- Message if no shelters -->
     <div id="noResultsMessage" th:if="${#lists.isEmpty(shelters)}" style="display: none;">
         <p>No Shelter found for the selected filter.</p>
     </div>
+
+
 
     <!-- Filter Buttons -->
     <div id="myBtnContainer">
@@ -60,6 +70,7 @@
                 <th>Location</th>
                 <th>Status</th>
                 <th>Number of Pets</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -80,6 +91,7 @@
                 <td th:text="${shelter.location}"></td>
                 <td th:text="${shelter.userStatus.toString() != 'APPROVED' ? 'Inactive' : 'Active'}"></td>
                 <td th:text="${#lists.size(shelter.pets)}"></td>
+                <td><a th:href="@{/vet/shelters/{shelterId}/remove(shelterId=${shelter.id})}" class="btn btn-danger btn-full">Leave Shelter</a></td>
             </tr>
             </tbody>
         </table>

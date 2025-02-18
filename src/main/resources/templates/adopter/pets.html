@@ -57,7 +57,7 @@
                 <th>Location</th>
                 <th>Availability</th>
                 <th>Health Status</th>
-                <th  class="no-sort">Actions</th>
+                <th  class="no-sort no-search">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -85,8 +85,8 @@
                 <td th:text="${pet.petStatus}"></td>
                 <td th:text="${pet.healthStatus}"></td>
                 <td>
-                    <a th:href="@{/pets/{id}(id=${pet.id})}" class="btn">View Details</a>
-                    <a th:href="@{/adopter/pets/{id}/request-adoption(id=${pet.id})}" class="btn btn-success" style="margin-top:5px">Request Adoption</a>
+                    <a th:href="@{/pets/{id}(id=${pet.id})}" class="btn btn-full">View Details</a>
+                    <a th:href="@{/adopter/pets/{id}/request-adoption(id=${pet.id})}" class="btn btn-success btn-full" style="margin-top:5px">Request Adoption</a>
                 </td>
             </tr>
             </tbody>

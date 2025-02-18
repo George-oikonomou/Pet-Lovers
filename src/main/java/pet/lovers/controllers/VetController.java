@@ -3,10 +3,7 @@ package pet.lovers.controllers;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pet.lovers.entities.*;
 import pet.lovers.service.EmploymentRequestService;
@@ -110,5 +107,26 @@ public class VetController {
 
         model.addAttribute("shelters", shelters);
         return "vet/shelters";
+    }
+
+    @GetMapping("/shelters/{shelterId}/remove")
+    public String removeShelter(@PathVariable Integer shelterId,RedirectAttributes redirectAttributes) {
+        Vet vet = (Vet) userService.getCurrentUser();
+        try {
+            Shelter shelter = shelterService.findByUserId(shelterId).orElseThrow(IllegalArgumentException::new);
+            EmploymentRequest request = employmentRequestService.findByVetAndShelter(vet, shelter).orElseThrow(IllegalArgumentException::new);
+
+            shelter.setVet(null);
+            vet.getShelters().remove(shelter);
+            employmentRequestService.deleteEmploymentRequest(request);
+
+            vetService.updateVet(vet);
+            shelterService.updateShelter(shelter);
+            redirectAttributes.addFlashAttribute("msg", "Shelter removed successfully");
+        }catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("error", "Shelter not found");
+        }
+
+        return "redirect:/vet/shelters";
     }
 }

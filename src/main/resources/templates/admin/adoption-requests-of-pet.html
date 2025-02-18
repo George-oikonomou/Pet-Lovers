@@ -11,16 +11,15 @@
 <div layout:fragment="main-content">
     <h1>Adoption Request Details</h1>
 
+    <div th:if="${msg}" class="alert alert-success">
+        <p th:text="${msg}" style="margin-bottom: 0;"></p>
+    </div>
+
+    <div th:if="${error}" class="alert alert-success">
+        <p th:text="${error}" style="margin-bottom: 0;"></p>
+    </div>
+
     <div id="tableContainer"  class="container">
-
-        <div th:if="${msg}" class="alert alert-success">
-            <p th:text="${msg}" style="margin-bottom: 0;"></p>
-        </div>
-
-        <div th:if="${error}" class="alert alert-success">
-            <p th:text="${error}" style="margin-bottom: 0;"></p>
-        </div>
-
         <table class="datatable">
             <thead>
             <tr>
@@ -32,11 +31,11 @@
                 <th>Shelter</th>
                 <th>Request Status</th>
                 <th>Request Date</th>
-                <th class="no-sort">Action</th>
+                <th class="no-search">Action</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:object="${adoptionRequest}" th:data-id="${adoptionRequest.id}" class="adoption-request-row">
+            <tr th:each="adoptionRequest : ${adoptionRequests}" th:data-id="${adoptionRequest.id}" class="adoption-request-row">
                 <td>
                     <a th:href="|${adoptionRequest.pet.photoUrl}|"
                        target="_blank">
@@ -44,20 +43,20 @@
                              alt="pet Image" />
                     </a>
                 </td>
-                <td th:text="*{adopter.fullName}"></td>
-                <td th:text="*{adopter.email}"></td>
-                <td th:text="*{pet.name}"></td>
-                <td th:text="*{pet.id}"></td>
-                <td th:text="*{pet.shelter.fullName}"></td>
-                <td th:text="*{requestStatus}"></td>
-                <td th:text="*{getReadableDateTime()}"></td>
+                <td th:text="*{adoptionRequest.adopter.fullName}"></td>
+                <td th:text="*{adoptionRequest.adopter.email}"></td>
+                <td th:text="*{adoptionRequest.pet.name}"></td>
+                <td th:text="*{adoptionRequest.pet.id}"></td>
+                <td th:text="*{adoptionRequest.pet.shelter.fullName}"></td>
+                <td th:text="*{adoptionRequest.requestStatus}"></td>
+                <td th:text="*{adoptionRequest.getReadableDateTime()}"></td>
                 <td>
                     <form  th:action="@{/admin/adoption-request/{id}/notify(id=${adoptionRequest.id})}" method="post">
-                        <button th:if="${adoptionRequest.requestStatus.toString() == 'PENDING'}" type="submit" class="btn btn-success" style="margin-bottom:5px;"
+                        <button th:if="${adoptionRequest.requestStatus.toString() == 'PENDING'}" type="submit" class="btn btn-success btn-full" style="margin-bottom:5px;"
                                 onclick="disableButton(this)">Notify Shelter
                         </button>
 
-                        <button th:unless="${adoptionRequest.requestStatus.toString() == 'PENDING'}" class="btn" style="margin-bottom:5px; background-color: #d3d3d3" disabled>
+                        <button th:unless="${adoptionRequest.requestStatus.toString() == 'PENDING'}" class="btn btn-full" style="margin-bottom:5px; background-color: #d3d3d3" disabled>
                             No Actions
                         </button>
                      </form>
@@ -101,7 +100,13 @@
         height: auto;
     }
 
-</style><script th:src="@{/js/custom.js}"></script>
+</style>
+<script th:src="@{/js/custom.js}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/datatablesCustom.css}">
+<script th:src="@{/js/datatables.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
 <script>
     window.onload = handleAdoptionRequestsOnLoad;
 </script>

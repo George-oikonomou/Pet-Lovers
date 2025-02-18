@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pet.lovers.entities.*;
 import pet.lovers.service.*;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -201,16 +202,20 @@ public class AdminController {
         return "admin/adoption-requests";
     }
 
-    @GetMapping("/adoption-request/{id}")
+    @GetMapping("/adoption-requests/pet/{id}")
     public String viewAdoptionRequest(@PathVariable int id, Model model) {
         try {
-            AdoptionRequest request = adoptionRequestService.findActiveByPetId(id).orElseThrow(IllegalArgumentException::new);
-            model.addAttribute("adoptionRequest", request);
+            List<AdoptionRequest> requests = adoptionRequestService.findActiveByPetId(id);
+
+            if (requests.isEmpty())
+                throw new IllegalArgumentException("No adoption requests found for this pet.");
+
+            model.addAttribute("adoptionRequests", requests);
         } catch (IllegalArgumentException e) {
-            model.addAttribute("error", "Adoption request not found.");
+            model.addAttribute("error", e.getMessage());
         }
 
-        return "admin/adoption-request";
+        return "admin/adoption-requests-of-pet";
     }
 
     @PostMapping("/adoption-request/{id}/notify")
@@ -230,10 +235,10 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("msg", "Successfully sent notification to shelter.");
 
         if (referer != null) {
-            if (referer.contains("/adoption-requests")) {
+            if (referer.contains("/adoption-requests/pet")) {
+                return "redirect:/admin/adoption-requests/pet/" + id;
+            } else if (referer.contains("/adoption-requests")) {
                 return "redirect:/admin/adoption-requests";
-            } else if (referer.contains("/adoption-request")) {
-                return "redirect:/admin/adoption-request/" + id;
             }
         }
 

@@ -54,11 +54,11 @@
                 <td>
                     <form th:action="@{/shelter/vet-review/approve}" method="post">
                         <input type="hidden" name="vetRequestId" th:value="${vetRequest.vet.id}"/>
-                        <button class="btn" type="submit">Select Vet</button>
+                        <button class="btn btn-full" type="submit">Select Vet</button>
                     </form>
                     <form th:action="@{/shelter/vet-review/reject}" method="post">
                         <input type="hidden" name="vetRequestId" th:value="${vetRequest.vet.id}"/>
-                        <button class="btn btn-danger" type="submit">Reject Vet</button>
+                        <button class="btn btn-danger btn-full" style="margin-top: 5px" type="submit">Reject Vet</button>
                     </form>
                 </td>
             </tr>
