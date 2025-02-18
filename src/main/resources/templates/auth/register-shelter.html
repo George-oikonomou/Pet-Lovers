@@ -47,32 +47,34 @@
             <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
         </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" th:field="*{password}" id="password"
-                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d\W_]{8,}$"
-                   title="Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter and one number"
-                   required/>
-            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
-        </div>
+        <div class="form-group row">
+            <div class="col-md-6">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" th:field="*{password}" id="password"
+                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d\W_]{8,}$"
+                       title="Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter and one number"
+                       required/>
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
 
-        <div class="form-group">
+        <div class="col-md-6">
             <label for="contact_number">Contact number</label>
-            <input type="text" class="form-control"
-                   th:field="*{contactNumber}"
-                   id="contact_number"
-                   required
-                   pattern="[0-9]{10}"
-                   title="Contact number must be exactly 10 digits"
-                   maxlength="10"
-                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-            <span th:if="${#fields.hasErrors('contactNumber')}" th:errors="*{contactNumber}"></span>
+                <input type="text" class="form-control"
+                       th:field="*{contactNumber}"
+                       id="contact_number"
+                       required
+                       pattern="[0-9]{10}"
+                       title="Contact number must be exactly 10 digits"
+                       maxlength="10"
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                <span th:if="${#fields.hasErrors('contactNumber')}" th:errors="*{contactNumber}"></span>
+            </div>
         </div>
 
         <div class="form-group">
             <label for="location-autocomplete">Location</label>
             <!-- Binding the input field to the 'location' attribute in the model -->
-            <input type="text" class="form-control" th:field="*{location}" id="location-autocomplete" placeholder="Start typing your address..." required />
+            <input type="text" class="form-control" th:field="*{location}" id="location-autocomplete" style="padding-left: 12px" placeholder="Start typing your address..." required />
 
             <!-- Display error message if validation fails -->
             <small class="form-text">Use the autocomplete field to quickly find your address.</small>
@@ -104,6 +106,20 @@
 
     input[type="number"] {
         -moz-appearance: textfield;
+    }
+
+    .form-group, .col-md-6, .form-group.row, .form {
+        margin-bottom: 1px;
+    }
+
+    label {
+        margin-top: 1px;
+        margin-bottom: 1px;
+    }
+
+    .form-control {
+        padding-right: 1px;
+        padding-left: 1px;
     }
 </style>
 <script>
