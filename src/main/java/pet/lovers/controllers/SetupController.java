@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import pet.lovers.service.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Controller
 public class SetupController {
