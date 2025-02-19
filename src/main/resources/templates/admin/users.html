@@ -32,7 +32,8 @@
           <th>Roles</th>
           <th>Username</th>
           <th>Email</th>
-          <th  class="no-sort">Actions</th>
+          <th>Status</th>
+          <th  class="no-sort no-search">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -42,10 +43,11 @@
           </td>
           <td th:text="${user.username}"></td>
           <td th:text="${user.email}"></td>
+            <td th:text="${user.userStatus}"></td>
           <td th:if="${user.id}">
-            <a class="btn" th:href="@{/admin/user/{id}(id=${user.id})}">Edit</a>
-            <a class="btn btn-danger"
-               style="background-color: red; border-color: red; transition: background-color 0.3s, border-color 0.3s;"
+            <a class="btn btn-full" th:href="@{/admin/user/{id}(id=${user.id})}">Edit</a>
+            <a class="btn btn-full btn-danger"
+               style="background-color: red; margin-top: 5px; border-color: red; transition: background-color 0.3s, border-color 0.3s;"
                onmouseover="this.style.backgroundColor='#cc0000'; this.style.borderColor='#cc0000';"
                onmouseout="this.style.backgroundColor='red'; this.style.borderColor='red';"
                th:href="@{/admin/users/{user_id}/delete(user_id=${user.id})}">

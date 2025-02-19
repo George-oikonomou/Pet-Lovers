@@ -58,7 +58,7 @@
                 <th>Pet ID</th>
                 <th>Shelter</th>
                 <th>Status</th>
-                <th  class="no-sort">Actions</th>
+                <th class="no-sort no-search">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -72,7 +72,7 @@
                 <td th:text="${request.pet.id}"></td>
                 <td th:text="${request.pet.shelter.fullName}"></td>
                 <td th:text="${request.requestStatus}"></td>
-                <td><a th:href="@{/adoption-requests/shelter/{id}(id=${request.id})}" class="btn btn-info" th:text="View"></a></td>
+                <td><a th:href="@{/adoption-requests/shelter/{id}(id=${request.id})}" class="btn btn-info btn-full" th:text="View"></a></td>
             </tr>
             </tbody>
         </table>

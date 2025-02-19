@@ -77,13 +77,22 @@
         </div>
 
         <div th:if="${user.getClass().name == 'pet.lovers.entities.Shelter'}">
-            <div th:if="*{vet}" class="mb-3 d-flex flex-column align-items-center" style="margin-top: 20px;">
-                <label class="form-label" style="margin-bottom: 10px; font-weight: bold;">Current Assigned Vet</label>
-                <div class="d-flex gap-3" style="gap: 15px; justify-content: center; align-items: center;">
-                    <label for="vetFullName">Full Name
-                        <input th:field="*{vet.fullName}" id="vetFullName" type="text" class="form-control" readonly style="width: 200px; padding: 10px; text-align: center;" />
+                <div th:if="*{vet}" class="mb-3 d-flex flex-column align-items-center" style="margin-top: 20px;">
+                <div class="d-flex align-items-center" style="gap: 10px;">
+                    <label class="form-label" style="margin-bottom: 10px; font-weight: 700;">
+                        Current Assigned Vet :
+                        <i>
+                            <span th:text="${user.getVet.fullName}" style="font-weight: 900;">Vet's Name</span>
+                        </i>
                     </label>
-
+                    <a th:href="@{/shelter/vet/remove}" style=" font-size: 14px; text-decoration: none; margin-bottom: 12px">
+                            ❌
+                    </a>
+                </div>
+                <div class="d-flex gap-3" style="gap: 15px; justify-content: center; align-items: center;">
+                    <label for="vetEmail">Email
+                        <input th:field="*{vet.email}" id="vetEmail" type="text" class="form-control" readonly style="width: 200px; padding: 10px; text-align: center;" />
+                    </label>
                     <label for="vetContactNumber">Contact Number
                         <input th:field="*{vet.contactNumber}" id="vetContactNumber" type="text" class="form-control" readonly style="width: 200px; padding: 10px; text-align: center;" />
                     </label><br>
@@ -93,6 +102,7 @@
                 </div>
             </div>
         </div>
+
 
 
         <div class="form-group">

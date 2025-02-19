@@ -92,7 +92,10 @@ td {
     transition: background-color 0.3s;
 }
 
-
+.btn-full {
+    width: 100%;
+    display: block;
+}
 
 
 .btn-danger {

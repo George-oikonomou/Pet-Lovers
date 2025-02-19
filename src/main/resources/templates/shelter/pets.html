@@ -41,7 +41,7 @@
                 <th>Birth Year</th>
                 <th>Health Status</th>
                 <th>Adoption Status</th>
-                <th  class="no-sort">Actions</th>
+                <th class="no-sort no-search">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -62,9 +62,12 @@
                 <td th:text="${pet.healthStatus}"></td>
                 <td th:text="${pet.petStatus}"></td>
                 <td>
-                    <a class="btn" th:href="@{/shelter/pets/{pet_id}/edit(pet_id=${pet.id})}">
+                    <a class="btn btn-full"  th:href="@{/shelter/pets/{pet_id}/edit(pet_id=${pet.id})}">
                         Edit
                     </a>
+                        <a  th:if="${pet.getPetStatus().toString() != 'ADOPTED' and pet.getPetStatus().toString() != 'PENDING_ADOPTION'}" class="btn btn-danger" style="margin-top: 5px; width: inherit" th:href="@{/shelter/pets/{pet_id}/delete(pet_id=${pet.id})}">
+                            Delete
+                        </a>
                 </td>
             </tr>
             </tbody>

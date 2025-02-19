@@ -15,7 +15,7 @@ public interface AdoptionRequestRepository extends JpaRepository<AdoptionRequest
 
     List<AdoptionRequest> findByAdopterId(Integer adopterId);
 
-    Optional<AdoptionRequest> findByPetId(Integer petId);
+    List<AdoptionRequest> findByPetId(Integer petId);
 
     List<AdoptionRequest> findByAdopterAndPet(Adopter adopter, Pet pet);
 }

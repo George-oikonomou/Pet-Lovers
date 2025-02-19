@@ -55,7 +55,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void updateUser(User user) {
-        user = userRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override
@@ -207,6 +207,6 @@ public class UserService implements UserDetailsService {
     }
 
     public long countTotalUsers() {
-        return userRepository.count();
+        return userRepository.count() -1; // -1 for the admin user
     }
 }

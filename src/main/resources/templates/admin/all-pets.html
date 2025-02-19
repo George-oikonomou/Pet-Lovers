@@ -32,7 +32,7 @@
                 <th>User Status</th>
                 <th>Pet Status</th>
                 <th>Vet Phone</th>
-                <th class="no-sort">Actions</th>
+                <th  class="no-search">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -62,8 +62,8 @@
                     th:text="${pet.shelter != null && pet.shelter.vet != null ? pet.shelter.vet.contactNumber : 'N/A'}">
                 </td>
                 <td>
-                    <a th:if="${pet.adoptionRequests.size() > 0}" class="btn btn-info"
-                       th:href="@{/admin/adoption-request/{id}(id=${pet.id})}">View Adoption Request</a>
+                    <a th:if="${pet.adoptionRequests.size() > 0}" class="btn btn-info btn-full"
+                       th:href="@{/admin/adoption-requests/pet/{id}(id=${pet.id})}">View Adoption Requests</a>
                     <span th:if="${pet.adoptionRequests.size() == 0}">No Adoption Requests</span>
                 </td>
             </tr>

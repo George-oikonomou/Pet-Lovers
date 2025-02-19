@@ -97,6 +97,14 @@ public class ShelterController {
         Vet selectedVet = vetService.getVetById(vetRequestId);
 
         try {
+            Vet existingVet = shelter.getVet();
+            if (existingVet != null && employmentRequestService.existsByVetAndShelter(existingVet, shelter)) {
+                EmploymentRequest request = employmentRequestService.findByVetAndShelter(existingVet, shelter).orElseThrow(IllegalArgumentException::new);
+                employmentRequestService.deleteEmploymentRequest(request);
+                existingVet.getShelters().remove(shelter);
+                vetService.updateVet(existingVet);
+            }
+
             shelter.setVet(selectedVet);
             selectedVet.getShelters().add(shelter);
 
@@ -176,6 +184,50 @@ public class ShelterController {
             redirectAttributes.addFlashAttribute("error", "Pet not found!");
             return "redirect:/shelter/pets";
         }
+    }
+
+    @PostMapping("/pets/{petId}/delete")
+    public  String deletePet(@PathVariable String petId, RedirectAttributes redirectAttributes){
+        Shelter shelter = (Shelter) userService.getCurrentUser();
+        try {
+            Pet pet = shelter.getPets().stream()
+                                       .filter(p -> p.getId() == Integer.parseInt(petId))
+                                       .findFirst()
+                                       .orElseThrow(IllegalArgumentException::new);
+
+            if (pet.getPetStatus() == PetStatus.PENDING_ADOPTION || pet.getPetStatus() == PetStatus.ADOPTED){
+                redirectAttributes.addFlashAttribute("error", "Pets under adoption process cannot be deleted!");
+                return "redirect:/shelter/pets";
+            }
+
+            petService.deletePet(pet.getId());
+            redirectAttributes.addFlashAttribute("success", "Pet "+pet.getName()+" deleted successfully!");
+            return "redirect:/shelter/pets";
+        }catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("error", "Pet not found!");
+            return "redirect:/shelter/pets";
+        }
+
+
+    }
+
+    @GetMapping("/vet/remove")
+    public String removeVet(RedirectAttributes redirectAttributes) {
+        Shelter shelter = (Shelter) userService.getCurrentUser();
+        Vet vet = shelter.getVet();
+        EmploymentRequest request = employmentRequestService.findByVetAndShelter(vet, shelter).orElseThrow(IllegalArgumentException::new);
+        employmentRequestService.deleteEmploymentRequest(request);
+        try {
+            shelter.setVet(null);
+            vet.getShelters().remove(shelter);
+
+            shelterService.updateShelter(shelter);
+            vetService.updateVet(vet);
+            redirectAttributes.addFlashAttribute("msg", "Vet Successfully Removed! We recommend you to add a new vet.");
+        }catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("error", "Vet not found!");
+        }
+        return "redirect:/profile";
     }
 
     @GetMapping("/visits")
