@@ -32,6 +32,7 @@
           <th>Roles</th>
           <th>Username</th>
           <th>Email</th>
+          <th>Status</th>
           <th  class="no-sort no-search">Actions</th>
         </tr>
         </thead>
@@ -42,6 +43,7 @@
           </td>
           <td th:text="${user.username}"></td>
           <td th:text="${user.email}"></td>
+            <td th:text="${user.userStatus}"></td>
           <td th:if="${user.id}">
             <a class="btn btn-full" th:href="@{/admin/user/{id}(id=${user.id})}">Edit</a>
             <a class="btn btn-full btn-danger"

@@ -72,20 +72,10 @@ public class SetupController {
             }
         }
 
-        if (!userService.existsByEmail("vet2@gmail.com")) {
-            vet = new Vet("vet2", "vet2@gmail.com", "vet2", "1234567890", "Athens", "Johny Doe",  "https://www.4icu.org/i/programs-courses-degrees/bachelor-of-veterinary-medicine-500x356.png");
-            userService.saveUser(vet);
-        }
-
         if (!userService.existsByEmail("adopter@gmail.com")) {
              adopter = new Adopter("adopter", "adopter@gmail.com", "adopter", "1245678903", "Athens,Tavros", "Jane Doe", LocalDate.now().minusYears(21), "https://t3.ftcdn.net/jpg/03/74/95/16/360_F_374951602_cmtwzq4Erge2HNa94YWDup1QII4IvRpO.jpg");
              adopter.setUserStatus(UserStatus.APPROVED);
              userService.saveUser(adopter);
-        }
-
-        if (!userService.existsByEmail("adopter2@gmail.com")) {
-            adopter = new Adopter("adopter2", "adopter2@gmail.com", "adopter2", "1222228405", "Athens,Zografou", "John Doe", LocalDate.now().minusYears(24), "https://t4.ftcdn.net/jpg/02/32/92/21/360_F_232922178_YCAxIU0vlGoGY2H76ZsATswNrOVbWlUv.jpg");
-            userService.saveUser(adopter);
         }
     }
 }
