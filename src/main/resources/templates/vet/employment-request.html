@@ -56,7 +56,7 @@
                         <button
                                 type="submit"
                                 class="btn btn-full"
-                                th:disabled="${currentVet.employmentRequests != null && currentVet.employmentRequests.size() > 0 && currentVet.employmentRequests[0].shelter.id == shelter.id}"
+                                th:disabled="${currentVet.employmentRequests != null && #sets.contains(currentVet.employmentRequests.![shelter.id], shelter.id)}"
                                 th:id="'requestButton_' + ${shelter.id}"
                                 onclick="handleButtonClick(event, 'requestButton_' + ${shelter.id})">
                             Request to Work Here

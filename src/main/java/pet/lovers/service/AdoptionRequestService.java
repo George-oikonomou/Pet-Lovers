@@ -51,6 +51,16 @@ public class AdoptionRequestService {
         return requests.stream().anyMatch(req -> req.getRequestStatus() == UserStatus.PENDING);
     }
 
+    public void rejectAdoptionRequestsByPetId(Integer petId) {
+        List<AdoptionRequest> requests = findActiveByPetId(petId);
+
+        requests.stream()
+                .filter(request -> request.getRequestStatus() == UserStatus.PENDING)
+                .forEach(request -> request.setRequestStatus(UserStatus.REJECTED));
+
+        adoptionRequestRepository.saveAll(requests);
+    }
+
     public boolean hasApprovedAdopter(AdoptionRequest adoptionRequest){
         return adoptionRequest.getAdopter().getUserStatus().equals(UserStatus.APPROVED);
     }

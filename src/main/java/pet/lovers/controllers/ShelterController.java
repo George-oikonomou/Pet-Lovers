@@ -97,6 +97,14 @@ public class ShelterController {
         Vet selectedVet = vetService.getVetById(vetRequestId);
 
         try {
+            Vet existingVet = shelter.getVet();
+            if (existingVet != null && employmentRequestService.existsByVetAndShelter(existingVet, shelter)) {
+                EmploymentRequest request = employmentRequestService.findByVetAndShelter(existingVet, shelter).orElseThrow(IllegalArgumentException::new);
+                employmentRequestService.deleteEmploymentRequest(request);
+                existingVet.getShelters().remove(shelter);
+                vetService.updateVet(existingVet);
+            }
+
             shelter.setVet(selectedVet);
             selectedVet.getShelters().add(shelter);
 

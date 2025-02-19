@@ -73,20 +73,14 @@ public class AdoptionRequestController {
     @PostMapping("/shelter/{id}/approve")
     public String approveAdoptionRequest(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
-            AdoptionRequest request = adoptionRequestService.findActiveById(id).orElseThrow(IllegalArgumentException::new);
+            AdoptionRequest request = adoptionRequestService.findById(id).orElseThrow(IllegalArgumentException::new);
             if (request.getRequestStatus().equals(UserStatus.PENDING)) {
+                adoptionRequestService.rejectAdoptionRequestsByPetId(request.getPet().getId());
+
                 request.setRequestStatus(UserStatus.APPROVED);
                 request.getPet().setPetStatus(PetStatus.ADOPTED);
                 petService.savePet(request.getPet());
                 adoptionRequestService.updateAdoptionRequest(request);
-
-                List<AdoptionRequest> otherRequests = adoptionRequestService.findActiveByPetId(request.getPet().getId());
-                for (AdoptionRequest otherRequest : otherRequests) {
-                    if (otherRequest.getId() != request.getId() && otherRequest.getRequestStatus().equals(UserStatus.PENDING)) {
-                        otherRequest.setRequestStatus(UserStatus.REJECTED);
-                        adoptionRequestService.updateAdoptionRequest(otherRequest);
-                    }
-                }
 
                 redirectAttributes.addFlashAttribute("msg", "Adoption request approved. " + request.getPet().getName() + " has been adopted.");
             }
