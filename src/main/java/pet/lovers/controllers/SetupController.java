@@ -17,7 +17,7 @@ public class SetupController {
     private final PetService petService;
 
 
-    public SetupController(RoleRepository roleRepository, UserService userService, PetService petService, VetService vetService, AdoptionRequestService adoptionRequestService, VisitService visitService) {
+    public SetupController(RoleRepository roleRepository, UserService userService, PetService petService) {
         this.roleRepository = roleRepository;
         this.userService = userService;
         this.petService = petService;
